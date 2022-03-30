@@ -15,7 +15,7 @@ export const Navigation = () => {
             bg='navigation'
             alignItems='center'
 
-            width={isOpen?'170px':'70px'}
+            width={isOpen?'200px':'70px'}
             transition='width 1s'
             onMouseEnter={() => changeMenuState(true)}
             onMouseLeave={() => changeMenuState(false)}
