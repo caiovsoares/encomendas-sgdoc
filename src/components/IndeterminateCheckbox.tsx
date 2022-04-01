@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import React, { forwardRef, useEffect, useRef } from 'react';
+import { Checkbox } from '@chakra-ui/react'
 
 interface IIndeterminateInputProps {
   indeterminate?: boolean;

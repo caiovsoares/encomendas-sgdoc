@@ -1,4 +1,5 @@
 import { Button, Flex, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { BiChevronLeft, BiChevronRight, BiChevronsLeft, BiChevronsRight } from 'react-icons/bi'
 import { useTable, usePagination, useRowSelect } from 'react-table'
 import IndeterminateCheckbox from './IndeterminateCheckbox'
 
@@ -59,12 +60,12 @@ function ReactTable({ columns, data }) {
     return (
       <Flex height='80vh' width='100%'>
         <Flex width='10%' justifyContent='center' alignItems='center'>
-          <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-            {'<<'}
-          </Button>{' '}
-          <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {'<'}
-          </Button>{' '}
+          <Button borderRightRadius={0} onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+            <BiChevronsLeft size='20px'/>
+          </Button>
+          <Button  borderLeftRadius={0} onClick={() => previousPage()} disabled={!canPreviousPage}>
+            <BiChevronLeft size='20px'/>
+          </Button>
         </Flex>
         <Flex flexDir='column' width='80%' justifyContent='center'>
           <Flex overflowY='auto'>
@@ -126,12 +127,12 @@ function ReactTable({ columns, data }) {
           </Flex>
         </Flex>
         <Flex width='10%' justifyContent='center' alignItems='center'>
-        <Button onClick={() => nextPage()} disabled={!canNextPage}>
-            {'>'}
-          </Button>{' '}
-          <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-            {'>>'}
-          </Button>{' '}
+        <Button borderRightRadius={0} onClick={() => nextPage()} disabled={!canNextPage}>
+            <BiChevronRight size='20px'/>
+          </Button>
+          <Button borderLeftRadius={0} onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+            <BiChevronsRight size='20px'/>
+          </Button>
         </Flex>
       </Flex>
     )
