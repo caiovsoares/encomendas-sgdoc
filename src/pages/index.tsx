@@ -1,6 +1,6 @@
 import  React  from 'react'
 import { Button, Flex, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
-import { exampleMails } from '../utils'
+import { exampleMails, bigExampleMails } from '../utils'
   import ReactTable from '../components/ReactTable'
   import axios from 'axios'
 
@@ -34,7 +34,7 @@ const Index = (props) => {
     []
   )
   
-  const data = React.useMemo(exampleMails, [])
+  const data = React.useMemo(() => props.mails, [])
   
   return(
   <Flex width='100%' flexDir='column'>
@@ -47,18 +47,12 @@ const Index = (props) => {
     <Flex flexDir='row' h='10vh'>
       <Button>oi</Button>
     </Flex>
-    {/*props.exampleMails.map(e => <Button key={e.id}>{e.id+' '+e.destiny.fullName}</Button>)*/}
   </Flex>
 )}
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
 
-  const resultado = (await axios.get('http://localhost:3333/olamundo/')).data;
-  
-
-
-  console.log(resultado)
-  const mails = exampleMails();
+  const mails = bigExampleMails();
 
   return {
     props: {mails},

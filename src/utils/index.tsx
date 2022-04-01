@@ -240,3 +240,22 @@ export const exampleMails = () => [
         },
     },
 ]
+
+export const bigExampleMails = () => {
+
+    let bigMails = exampleMails().concat(exampleMails())
+    bigMails = bigMails.concat(bigMails)
+    bigMails = bigMails.concat(bigMails)
+    bigMails = bigMails.concat(bigMails)
+    bigMails = bigMails.concat(bigMails)
+    bigMails = bigMails.concat(bigMails)
+    bigMails = bigMails.concat(bigMails)
+    bigMails = bigMails.concat(bigMails)
+    bigMails = bigMails.concat(bigMails)
+    bigMails = bigMails.concat(bigMails)
+    bigMails = bigMails.concat(bigMails)
+    bigMails = bigMails.concat(bigMails)
+    bigMails = bigMails.concat(bigMails)
+    console.log(bigMails.length)
+    return bigMails
+}
