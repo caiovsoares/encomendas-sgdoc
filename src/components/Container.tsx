@@ -16,6 +16,7 @@ export const Container = (props: FlexProps) => {
         <Navigation/>
         <Flex
             height='100%'
+            width='100%'
         >
             {props.children}
         </Flex>

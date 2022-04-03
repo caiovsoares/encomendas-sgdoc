@@ -1,10 +1,10 @@
 import  React  from 'react'
 import { Button, Flex, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
-import { bigExampleMails } from '../utils'
+import { bigExampleMails, exampleMails } from '../utils'
 import ReactTable from '../components/ReactTable'
 
 
-const Index = (props) => {
+const Encomendas = (props) => {
 
   const columns = React.useMemo(
     () => [
@@ -48,9 +48,10 @@ export async function getServerSideProps(context) {
 
   const mails = bigExampleMails();
 
+
   return {
     props: {mails},
   }
 }
 
-export default Index
+export default Encomendas
