@@ -1,6 +1,7 @@
 import { Button, Flex, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { BiChevronLeft, BiChevronRight, BiChevronsLeft, BiChevronsRight } from 'react-icons/bi'
-import { useTable, usePagination, useRowSelect } from 'react-table'
+import { useTable, usePagination, useRowSelect, useGlobalFilter } from 'react-table'
+import { GlobalFilter } from './GlobalFilter'
 import IndeterminateCheckbox from './IndeterminateCheckbox'
 
 function ReactTable({ columns, data }) {
@@ -24,11 +25,14 @@ function ReactTable({ columns, data }) {
       setPageSize,
       selectedFlatRows,
       state: { pageIndex, pageSize, selectedRowIds },
+      state,
+      setGlobalFilter
     } = useTable(
       {
         columns,
-        data,
+        data,        
       },
+      useGlobalFilter,
       usePagination,
       useRowSelect,
       hooks => {
@@ -55,10 +59,12 @@ function ReactTable({ columns, data }) {
         ])
       }
     )
+
+    const { globalFilter } = state
   
     // Render the UI for your table
     return (
-      <Flex height='80vh' width='100%'>
+      <Flex height='calc(100% - 20px)' width='100%' mt='10px' mb='10px'>
         <Flex width='10%' justifyContent='center' alignItems='center'>
           <Button borderRightRadius={0} onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
             <BiChevronsLeft size='20px'/>
@@ -71,12 +77,18 @@ function ReactTable({ columns, data }) {
           <Flex overflowY='auto'>
             <Table width='100%' variant="striped"{...getTableProps()}>
               <Thead>
+                <Tr>
+                  <Th colSpan={5}><GlobalFilter filter={globalFilter} setFilter={setGlobalFilter}/></Th>
+                </Tr>
                 {headerGroups.map(headerGroup => (
                   <Tr {...headerGroup.getHeaderGroupProps()}>
+                    
                     {headerGroup.headers.map(column => (
                       <Th {...column.getHeaderProps()}>{column.render('Header')}</Th>
                     ))}
+
                   </Tr>
+                  
                 ))}
               </Thead>
               <Tbody {...getTableBodyProps()}>

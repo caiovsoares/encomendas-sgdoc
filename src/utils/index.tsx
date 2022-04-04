@@ -243,19 +243,34 @@ export const exampleMails = () => [
 
 export const bigExampleMails = () => {
 
-    let bigMails = exampleMails().concat(exampleMails())
-    bigMails = bigMails.concat(bigMails)
-    bigMails = bigMails.concat(bigMails)
-    bigMails = bigMails.concat(bigMails)
-    bigMails = bigMails.concat(bigMails)
-    bigMails = bigMails.concat(bigMails)
-    bigMails = bigMails.concat(bigMails)
-    bigMails = bigMails.concat(bigMails)
-    bigMails = bigMails.concat(bigMails)
-    bigMails = bigMails.concat(bigMails)
-    bigMails = bigMails.concat(bigMails)
-    bigMails = bigMails.concat(bigMails)
-    bigMails = bigMails.concat(bigMails)
-    console.log(bigMails.length)
+    let bigMails = new Array(3000)
+    bigMails.fill(1)
+    bigMails = bigMails.map((e, i) => {return(
+        {id:i,
+            tracking:`BR${(Math.random()*899999999+100000000).toFixed(0)}BR`,
+            type:'Caixa',
+            size:'P',
+            sender:'Mercado Livre',
+            destiny:{
+                id:i,
+                fullName:'Caio Vinicius Amancio Soares',
+                warName:'Amancio',
+                classYear:'2017',
+                cpf:'46077534838',
+                identity:'17YS0241'
+            },
+            created_at:'2021-06-25 12:35:22',
+            received_at:'2021-07-07 17:39:43.894',
+            receiver:{
+                id:i,
+                fullName:'Caio Vinicius Amancio Soares',
+                warName:'Amancio',
+                classYear:'2017',
+                cpf:'46077534838',
+                identity:'17YS0241'
+            },
+        }
+    )})
+
     return bigMails
 }
