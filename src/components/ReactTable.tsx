@@ -1,5 +1,6 @@
-import { Button, Flex, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
-import { BiChevronLeft, BiChevronRight, BiChevronsLeft, BiChevronsRight } from 'react-icons/bi'
+import { Box, Button, ButtonGroup, Flex, Select, Table, Tbody, Td, Text, Th, Thead, Tr, useColorMode } from '@chakra-ui/react'
+import React from 'react'
+import { BiCheck, BiCheckCircle, BiChevronLeft, BiChevronRight, BiChevronsLeft, BiChevronsRight, BiCommentCheck, BiCommentX, BiXCircle } from 'react-icons/bi'
 import { useTable, usePagination, useRowSelect, useGlobalFilter } from 'react-table'
 import { GlobalFilter } from './GlobalFilter'
 import IndeterminateCheckbox from './IndeterminateCheckbox'
@@ -61,20 +62,24 @@ function ReactTable({ columns, data }) {
     )
 
     const { globalFilter } = state
-  
+      
+    const {colorMode} = useColorMode();
+
     // Render the UI for your table
     return (
       <Flex height='calc(100% - 20px)' width='100%' mt='10px' mb='10px'>
         <Flex width='10%' justifyContent='center' alignItems='center'>
-          <Button borderRightRadius={0} onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-            <BiChevronsLeft size='20px'/>
-          </Button>
-          <Button  borderLeftRadius={0} onClick={() => previousPage()} disabled={!canPreviousPage}>
-            <BiChevronLeft size='20px'/>
-          </Button>
+          <Box boxSize='-webkit-fit-content' boxShadow={canPreviousPage?'-3px 4px 10px 0px '+ (colorMode=='light'?'gray':'#333'):''} borderRadius='6px'>
+            <Button bgColor='menuButton' color='menuButtonText' boxShadow='lg' borderRightRadius={0} onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+              <BiChevronsLeft size='20px'/>
+            </Button>
+            <Button bgColor='menuButton' color='menuButtonText' boxShadow='lg' borderLeftRadius={0} onClick={() => previousPage()} disabled={!canPreviousPage}>
+              <BiChevronLeft size='20px'/>
+            </Button>
+          </Box>
         </Flex>
         <Flex flexDir='column' width='80%' justifyContent='center'>
-          <Flex overflowY='auto'>
+          <Flex boxShadow='md' overflowY='auto'>
             <Table width='100%' variant="striped"{...getTableProps()}>
               <Thead>
                 <Tr>
@@ -96,8 +101,16 @@ function ReactTable({ columns, data }) {
                   prepareRow(row)
                   return (
                     <Tr {...row.getRowProps()}>
-                      {row.cells.map(cell => {
-                        return <Td {...cell.getCellProps()}>{cell.render('Cell')}</Td>
+                      {row.cells.map((cell, j) => {
+                        return <Td {...cell.getCellProps()}>
+                          <Flex flexDir='row' alignItems='center'>
+                            {(j==row.cells.length-1)?
+                              (cell.row.original.receiver?.warName?
+                                <Box mr='5px'><BiCheckCircle color='green' size='20px'/></Box>:
+                                <Box mr='5px'><BiXCircle color='red' size='20px'/></Box>):''}
+                            {cell.render('Cell')}
+                          </Flex>
+                        </Td>
                       })}
                     </Tr>
                   )
@@ -105,15 +118,15 @@ function ReactTable({ columns, data }) {
               </Tbody>
             </Table>
           </Flex>
-          <Flex mt='10px' justifyContent='center'>
-            <span>
-              Page{' '}
+          <Flex mt='10px' justifyContent='center' alignItems='center'>
+            <Text mr='10px'>
+              Pagina{' '}
               <strong>
-                {pageIndex + 1} of {pageOptions.length}
+                {pageIndex + 1} de {pageOptions.length}
               </strong>{' '}
-            </span>
-            <span>
-              | Go to page:{' '}
+            </Text>
+            {/* <span>
+              | Ir para a Página:{' '}
               <input
                 type="number"
                 defaultValue={pageIndex + 1}
@@ -123,28 +136,32 @@ function ReactTable({ columns, data }) {
                 }}
                 style={{ width: '100px' }}
               />
-            </span>{' '}
-            <select
+            </span>{' '} */}
+            <Select 
+              w='auto'
+              variant='ghost'
               value={pageSize}
               onChange={e => {
                 setPageSize(Number(e.target.value))
               }}
             >
               {[5, 10, 20, 30, 40, 50].map(pageSize => (
-                <option key={pageSize} value={pageSize}>
-                  Show {pageSize}
+                <option color='text'  key={pageSize} value={pageSize}>
+                  Exibir {pageSize}
                 </option>
               ))}
-            </select>
+            </Select>
           </Flex>
         </Flex>
         <Flex width='10%' justifyContent='center' alignItems='center'>
-        <Button borderRightRadius={0} onClick={() => nextPage()} disabled={!canNextPage}>
-            <BiChevronRight size='20px'/>
-          </Button>
-          <Button borderLeftRadius={0} onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-            <BiChevronsRight size='20px'/>
-          </Button>
+          <Box boxSize='-webkit-fit-content' boxShadow={canNextPage?'3px 4px 10px 0px '+ (colorMode=='light'?'gray':'#333'):''} borderRadius='6px'>
+            <Button bgColor='menuButton' color='menuButtonText' borderRightRadius={0} onClick={() => nextPage()} disabled={!canNextPage}>
+              <BiChevronRight size='20px'/>
+            </Button>
+            <Button bgColor='menuButton' color='menuButtonText' borderLeftRadius={0} onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+              <BiChevronsRight size='20px'/>
+            </Button>
+          </Box>
         </Flex>
       </Flex>
     )

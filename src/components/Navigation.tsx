@@ -11,7 +11,7 @@ export const Navigation = () => {
         <Flex
         direction='column'
             height='100%'
-            borderRightRadius={20}
+            boxShadow='0px 0px 10px 5px #1A365D'
             bg='navigation'
             alignItems='center'
 

@@ -254,21 +254,21 @@ export const bigExampleMails = () => {
             destiny:{
                 id:i,
                 fullName:'Caio Vinicius Amancio Soares',
-                warName:'Amancio',
+                warName:'S1 Amancio',
                 classYear:'2017',
                 cpf:'46077534838',
                 identity:'17YS0241'
             },
             created_at:'2021-06-25 12:35:22',
             received_at:'2021-07-07 17:39:43.894',
-            receiver:{
+            receiver:(i%2==0)?{
                 id:i,
                 fullName:'Caio Vinicius Amancio Soares',
-                warName:'Amancio',
+                warName:'S1 Amancio',
                 classYear:'2017',
                 cpf:'46077534838',
                 identity:'17YS0241'
-            },
+            }:null,
         }
     )})
 

@@ -19,11 +19,11 @@ const theme = extendTheme({
       },      
       menuButton:{
         default:'blue.700',
-        _dark:'blue.500'
+        _dark:'blue.900'
       },
       menuButtonText:{
         default:'white',
-        _dark:'gray.900'
+        _dark:'white'
       },
       background:{
         default:'white',
@@ -31,7 +31,7 @@ const theme = extendTheme({
       },
       navigation:{
         default:'blue.700',
-        _dark:'blue.500'
+        _dark:'blue.900'
       },
     },
   },
