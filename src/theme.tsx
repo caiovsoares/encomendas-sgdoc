@@ -20,6 +20,10 @@ const theme = extendTheme({
       menuButton:{
         default:'blue.700',
         _dark:'blue.900'
+      },      
+      menuButtonHover:{
+        default:'blue.900',
+        _dark:'blue.700'
       },
       menuButtonText:{
         default:'white',

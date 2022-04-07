@@ -9,6 +9,7 @@ export const MenuButton = ({href, children, icon}) => {
             marginTop={4}
             padding={0} 
             variant='ghost'
+            _hover={{bg:'menuButtonHover'}}
             width='calc(100% - 20px)'
             overflow='clip'
             color='menuButtonText'
