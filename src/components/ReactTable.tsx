@@ -80,7 +80,7 @@ function ReactTable({ columns, data }) {
         </Flex>
         <Flex flexDir='column' width='80%' justifyContent='center'>
           <Flex boxShadow='md' overflowY='auto'>
-            <Table width='100%' variant="striped"{...getTableProps()}>
+            <Table width='100%' variant="striped" {...getTableProps()}>
               <Thead>
                 <Tr>
                   <Th colSpan={5}><GlobalFilter filter={globalFilter} setFilter={setGlobalFilter}/></Th>
@@ -103,13 +103,7 @@ function ReactTable({ columns, data }) {
                     <Tr {...row.getRowProps()}>
                       {row.cells.map((cell, j) => {
                         return <Td {...cell.getCellProps()}>
-                          <Flex flexDir='row' alignItems='center'>
-                            {(j==row.cells.length-1)?
-                              (cell.row.original.receiver?.warName?
-                                <Box mr='5px'><BiCheckCircle color='green' size='20px'/></Box>:
-                                <Box mr='5px'><BiXCircle color='red' size='20px'/></Box>):''}
                             {cell.render('Cell')}
-                          </Flex>
                         </Td>
                       })}
                     </Tr>
@@ -125,18 +119,6 @@ function ReactTable({ columns, data }) {
                 {pageIndex + 1} de {pageOptions.length}
               </strong>{' '}
             </Text>
-            {/* <span>
-              | Ir para a Página:{' '}
-              <input
-                type="number"
-                defaultValue={pageIndex + 1}
-                onChange={e => {
-                  const page = e.target.value ? Number(e.target.value) - 1 : 0
-                  gotoPage(page)
-                }}
-                style={{ width: '100px' }}
-              />
-            </span>{' '} */}
             <Select 
               w='auto'
               variant='ghost'
