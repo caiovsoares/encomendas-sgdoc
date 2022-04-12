@@ -30,14 +30,21 @@ export const exampleMails = (q) => {
             },
             created_at:gerador('2021-06-25 14:35:22','2021-06-26 09:35:22','2021-04-12 12:15:22'),
             received_at:gerador('2021-08-03 16:45:22','2021-07-02 14:22:22','2021-11-11 13:05:22'),
-            receiver:(i%2==0)?{
+            receiver:gerador({
                 id:i,
                 fullName:gerador('Caio Vinicius Amancio Soares','Gabriel Silva Ramos','Clarice Outrora Outronome'),
                 warName:gerador('C4 Mariane Mocker','C3 Fagundes','C2 Victoria'),
                 classYear:gerador('2020','2021','2022'),
                 cpf:gerador('126.882.218-33','377.466.108-11','430.103.428-53'),
                 identity:gerador('20YS0162','21YS0241','22YS0121')
-            }:null,
+            },{
+            id:i,
+            fullName:gerador('Caio Vinicius Amancio Soares','Gabriel Silva Ramos','Clarice Outrora Outronome'),
+            warName:gerador('C4 Mariane Mocker','C3 Fagundes','C2 Victoria'),
+            classYear:gerador('2020','2021','2022'),
+            cpf:gerador('126.882.218-33','377.466.108-11','430.103.428-53'),
+            identity:gerador('20YS0162','21YS0241','22YS0121')
+        },null)
         }
     )})
 

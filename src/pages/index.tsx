@@ -1,6 +1,6 @@
 import  React  from 'react'
 import { Button, Flex, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
-import { bigExampleMails } from '../utils'
+import { exampleMails } from '../utils'
 import ReactTable from '../components/ReactTable'
 
 
@@ -40,13 +40,13 @@ const Index = (props) => {
     </Flex>
     <Flex backgroundColor='red' flexDir='row' h='7vh'>
       <Button>oi</Button>
-    </Flex>
+    </Flex>1
   </Flex>
 )}
 
 export async function getServerSideProps(context) {
 
-  const mails = bigExampleMails();
+  const mails = exampleMails(100);
 
   return {
     props: {mails},

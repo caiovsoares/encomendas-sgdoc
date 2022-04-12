@@ -70,10 +70,10 @@ function ReactTable({ columns, data }) {
       <Flex height='calc(100% - 20px)' width='100%' mt='10px' mb='10px'>
         <Flex width='10%' justifyContent='center' alignItems='center'>
           <Box boxSize='-webkit-fit-content' boxShadow={canPreviousPage?'-3px 4px 10px 0px '+ (colorMode=='light'?'gray':'#333'):''} borderRadius='6px'>
-            <Button bgColor='menuButton' _hover={{bg:'menuButtonHover'}} color='menuButtonText' boxShadow='lg' borderRightRadius={0} onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+            <Button bgColor='menuButton' _hover={canPreviousPage && {bg:'menuButtonHover'}} color='menuButtonText' boxShadow='lg' borderRightRadius={0} onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
               <BiChevronsLeft size='20px'/>
             </Button>
-            <Button bgColor='menuButton' _hover={{bg:'menuButtonHover'}} color='menuButtonText' boxShadow='lg' borderLeftRadius={0} onClick={() => previousPage()} disabled={!canPreviousPage}>
+            <Button bgColor='menuButton' _hover={canPreviousPage && {bg:'menuButtonHover'}} color='menuButtonText' boxShadow='lg' borderLeftRadius={0} onClick={() => previousPage()} disabled={!canPreviousPage}>
               <BiChevronLeft size='20px'/>
             </Button>
           </Box>
@@ -137,10 +137,10 @@ function ReactTable({ columns, data }) {
         </Flex>
         <Flex width='10%' justifyContent='center' alignItems='center'>
           <Box boxSize='-webkit-fit-content' boxShadow={canNextPage?'3px 4px 10px 0px '+ (colorMode=='light'?'gray':'#333'):''} borderRadius='6px'>
-            <Button bgColor='menuButton' _hover={{bg:'menuButtonHover'}} color='menuButtonText' borderRightRadius={0} onClick={() => nextPage()} disabled={!canNextPage}>
+            <Button bgColor='menuButton' _hover={canNextPage && {bg:'menuButtonHover'}} color='menuButtonText' borderRightRadius={0} onClick={() => nextPage()} disabled={!canNextPage}>
               <BiChevronRight size='20px'/>
             </Button>
-            <Button bgColor='menuButton' _hover={{bg:'menuButtonHover'}} color='menuButtonText' borderLeftRadius={0} onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+            <Button bgColor='menuButton' _hover={canNextPage && {bg:'menuButtonHover'}} color='menuButtonText' borderLeftRadius={0} onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
               <BiChevronsRight size='20px'/>
             </Button>
           </Box>

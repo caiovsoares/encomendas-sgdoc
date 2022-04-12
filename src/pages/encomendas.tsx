@@ -1,20 +1,47 @@
-import  React  from 'react'
-import {  Box, Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
+import  React, { useState }  from 'react'
+import {  Box, Flex, Text, useDisclosure } from '@chakra-ui/react'
 import { exampleMails } from '../utils'
 import ReactTable from '../components/ReactTable'
 import { PageButton } from '../components/PageButton'
 import { BiCheckCircle, BiInfoCircle, BiXCircle } from 'react-icons/bi'
-
+import MailsModal from '../components/MailsModal'
+import axios from 'axios'
 
 const Encomendas = (props) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [ mail, setMail ] = useState({})
+  const [ modalType, setModalType] = useState('')
+
+  async function HandleDetailItem(mail:{}){
+    onOpen()
+    setMail(mail)
+    setModalType('detail')
+  } 
+
+  function HandleRegisterItem(mail:{}){
+    onOpen()
+    setMail(mail)
+    setModalType('register')
+  } 
+
+  function HandleReceiveItens(mail:{}){
+    onOpen()
+    setMail(mail)
+    setModalType('receive')
+  } 
+
+  function HandleSearchItens(mail:{}){
+    onOpen()
+    setMail(mail)
+    setModalType('search')
+  } 
 
   const columns = React.useMemo(
     () => [
           {
             Header: 'Rastreio',
-            accessor: 'tracking'
+            accessor: 'tracking',
           },
           {
             Header: 'Remetente',
@@ -41,7 +68,7 @@ const Encomendas = (props) => {
             accessor: row => row,
             Cell: ({cell:{ value }}) => { return(
               <Flex alignItems='center' h='20px'>
-                <BiInfoCircle size='30px' onClick={onOpen}/>
+                <BiInfoCircle size='30px' onClick={() => { HandleDetailItem(value)}}/>
               </Flex>
             )
             }
@@ -55,21 +82,7 @@ const Encomendas = (props) => {
   return(
     
   <Flex width='100%' flexDir='column'>
-    <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay backdropFilter='blur(5px)'/>
-        <ModalContent>
-          <ModalHeader>Detalhes</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <strong>titulo</strong>
-            <p>opa bao?</p>
-          </ModalBody>
-          <ModalFooter>
-              <Button mr='10px'>Editar</Button>
-              <Button>Excluir</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+    <MailsModal isOpen={isOpen} onClose={onClose} mail={mail} type={modalType}/>
     <Flex flexDir='row' minH='30px' h='7vh' alignItems='center' justifyContent='center'>
       <PageButton>Novo Cadastro</PageButton>
       <PageButton>Buscar</PageButton>
@@ -81,10 +94,25 @@ const Encomendas = (props) => {
   </Flex>
 )}
 
-export async function getServerSideProps(context) {
+export async function getStaticProps(context) {
 
   const mails = exampleMails(100);
 
+  const ditto = await axios({
+    headers: { Accept: 'text/html, application/json, text/plain, */*' },
+    proxy: {
+      host: 'proxy.gapys.intraer',
+      port: 8080,
+      auth: {
+        username: '46077534838',
+        password: 'Opticom1!'
+      },
+      protocol: 'http'
+    },
+    url: 'https://pokeapi.co/api/v2/pokemon/ditto',
+    method: 'get'
+  });
+  console.log(ditto)
 
   return {
     props: {mails},

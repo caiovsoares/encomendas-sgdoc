@@ -1,7 +1,7 @@
-import { Flex, Img } from "@chakra-ui/react"
+import { Flex, Image, Img } from "@chakra-ui/react"
 import { useState } from "react"
 import { MenuButton } from "./MenuButton";
-import { BiGift, BiHome, BiUserCircle , } from 'react-icons/bi'
+import { BiGift, BiHome, BiLogInCircle, BiLogOutCircle, BiUserCircle , } from 'react-icons/bi'
 
 export const Navigation = () => {
 
@@ -24,6 +24,9 @@ export const Navigation = () => {
             <MenuButton href='/' icon={<BiHome size='30px'/>}>Início </MenuButton>
             <MenuButton href='/encomendas' icon={<BiGift size='30px'/>}>Encomendas</MenuButton>
             <MenuButton href='/' icon={<BiUserCircle size='30px'/>}>Destinatarios </MenuButton>
+            <MenuButton href='/' icon={<BiLogInCircle size='30px'/>}>Login </MenuButton>
+            <MenuButton href='/' icon={<Image src="patentes/G01-FAB_Soldado.svg" minW='30px'/>}>S1 Amancio </MenuButton>
+            <MenuButton href='/' icon={<BiLogOutCircle size='30px'/>}>Logout </MenuButton>
         </Flex>
     )
 }
