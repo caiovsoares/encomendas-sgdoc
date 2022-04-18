@@ -1,5 +1,5 @@
-import { Flex, useColorMode, FlexProps } from '@chakra-ui/react'
-import { Navigation } from './Navigation'
+import { Flex, FlexProps } from '@chakra-ui/react'
+import { Navigation } from '../Navigation'
 
 export const Container = (props: FlexProps) => {
 

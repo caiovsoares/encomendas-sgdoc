@@ -1,7 +1,7 @@
 import { Box, Button} from "@chakra-ui/react"
 import Link from "next/link"
 
-export const MenuButton = ({href, children, icon}) => {
+export const ButtonNavigation = ({href, children, icon}) => {
     return(
     <Link href={href}>
         <Button 
