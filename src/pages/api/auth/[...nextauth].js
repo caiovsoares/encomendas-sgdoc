@@ -20,7 +20,7 @@ export default NextAuth({
         try {
           let user;
 
-          if (process.env.ENVIRONMENT == "DEV")
+          if (process.env.ENVIRONMENT != "DEV")
             user = await axios.post(`${process.env.API_URL}/auth`, credentials);
           else
             user = {

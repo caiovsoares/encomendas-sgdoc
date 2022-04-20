@@ -136,7 +136,7 @@ export async function getServerSideProps(context) {
   const toDate = context.query.to;
 
   let mails;
-  if (process.env.ENVIRONMENT == "DEV")
+  if (process.env.ENVIRONMENT != "DEV")
     mails = await (
       await axios.get(
         `${process.env.API_URL}/mails/findAll?userId=${session.user.id}&from=${fromDate}&to=${toDate}`
