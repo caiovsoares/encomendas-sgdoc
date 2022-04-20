@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Flex, Text, useDisclosure } from '@chakra-ui/react'
-import { exampleMails } from '../utils'
+import { exampleMails, proxyConfig } from '../utils'
 import ReactTable from '../components/ReactTable'
 import { PageButton } from '../components/PageButton'
 import { BiCheckCircle, BiInfoCircle, BiXCircle } from 'react-icons/bi'
@@ -113,7 +113,10 @@ export async function getServerSideProps(context) {
   const fromDate = context.query.from;
   const toDate = context.query.to;
 
-  const mails = await (await axios.get(`http://localhost:3333/mails/findAll?userId=${session.user.id}&from=${fromDate}&to=${toDate}`)).data;
+  //const mails = await (await axios.get(`http://localhost:3333/mails/findAll?userId=${session.user.id}&from=${fromDate}&to=${toDate}`,{proxy:proxyConfig})).data;
+
+  const mails = exampleMails(300);
+  
 
   return {
     props: { mails },

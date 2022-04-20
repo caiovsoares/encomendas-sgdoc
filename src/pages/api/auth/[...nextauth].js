@@ -1,6 +1,9 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+
 import axios from 'axios';
+import { proxyConfig } from '../../../utils';
+
 
 export default NextAuth({
     // Configure one or more authentication providers
@@ -18,7 +21,26 @@ export default NextAuth({
             async authorize(credentials, req) {
 
                 try {
-                    const user = await axios.post('http://localhost:3333/auth', credentials);
+                    //const user = await axios.post('http://localhost:3333/auth', credentials)
+
+                    const user = {
+                        data: {
+                            id: '72526e09-15d7-4667-8b96-773a8e192b4c',
+                            name: 'string',
+                            warName: 'string',
+                            email: 'string',
+                            login: 'string',
+                            permission: {
+                                id: '8eb32656-0f3c-4c12-bc24-828ab687bed3',
+                                name: 'string',
+                                editPermission: true,
+                                editUser: true,
+                                editReceiver: true,
+                                editMail: true
+                            }
+                        }
+                    }
+                    return user.data
 
                     if (user?.data.name)
                         return user.data
