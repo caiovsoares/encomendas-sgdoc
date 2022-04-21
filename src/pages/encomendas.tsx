@@ -1,72 +1,71 @@
-import React, { useState } from "react";
-import { Box, Flex, Text, useDisclosure } from "@chakra-ui/react";
-import { exampleMails } from "../utils";
-import ReactTable from "../components/ReactTable";
-import { PageButton } from "../components/PageButton";
-import { BiCheckCircle, BiInfoCircle, BiXCircle } from "react-icons/bi";
-import MailsModal from "../components/MailsModal";
-import axios from "axios";
-import { getSession } from "next-auth/react";
+import React, { useState } from 'react';
+import { Box, Flex, Text, useDisclosure } from '@chakra-ui/react';
+import { exampleMails, fakeReceivers } from '../utils';
+import ReactTable from '../components/ReactTable';
+import { PageButton } from '../components/PageButton';
+import { BiCheckCircle, BiInfoCircle, BiXCircle } from 'react-icons/bi';
+import MailsModal from '../components/MailsModal';
+import axios from 'axios';
+import { getSession } from 'next-auth/react';
 
-const Encomendas = (props) => {
+const Encomendas = ({ mails, user, receivers }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [mail, setMail] = useState({});
-  const [modalType, setModalType] = useState("");
+  const [modalType, setModalType] = useState('');
 
   async function HandleDetailItem(mail: {}) {
     onOpen();
     setMail(mail);
-    setModalType("detail");
+    setModalType('detail');
   }
 
-  function HandleRegisterItem(mail: {}) {
+  function HandleRegisterItem() {
     onOpen();
-    setMail(mail);
-    setModalType("register");
+    setModalType('register');
   }
 
   function HandleReceiveItens(mail: {}) {
     onOpen();
     setMail(mail);
-    setModalType("receive");
+    setModalType('receive');
   }
 
   function HandleSearchItens(mail: {}) {
     onOpen();
     setMail(mail);
-    setModalType("search");
+    setModalType('search');
   }
 
   const columns = React.useMemo(
     () => [
       {
-        Header: "Rastreio",
-        accessor: "tracking",
+        Header: 'Rastreio',
+        accessor: 'tracking',
       },
       {
-        Header: "Remetente",
-        accessor: "sender",
+        Header: 'Remetente',
+        accessor: 'sender',
       },
       {
-        Header: "Destinatário",
-        accessor: "destiny.warName",
+        Header: 'Destinatário',
+        accessor: 'destiny.warName',
       },
       {
-        Header: "Recebido",
-        accessor: "receiver.warName",
+        Header: 'Recebido',
+        accessor: 'receiver.warName',
         Cell: ({ cell: { value } }) => {
           return (
             <>
               {value ? (
-                <Flex flexDir="row">
-                  <Box mr="5px" flexDir="row">
-                    <BiCheckCircle color="green" size="20px" />
+                <Flex flexDir='row'>
+                  <Box mr='5px' flexDir='row'>
+                    <BiCheckCircle color='green' size='20px' />
                   </Box>
                   {String(value)}
                 </Flex>
               ) : (
-                <Box mr="5px">
-                  <BiXCircle color="red" size="20px" />
+                <Box mr='5px'>
+                  <BiXCircle color='red' size='20px' />
                 </Box>
               )}
             </>
@@ -74,13 +73,13 @@ const Encomendas = (props) => {
         },
       },
       {
-        Header: " ",
+        Header: ' ',
         accessor: (row) => row,
         Cell: ({ cell: { value } }) => {
           return (
-            <Flex alignItems="center" h="20px">
+            <Flex alignItems='center' h='20px'>
               <BiInfoCircle
-                size="30px"
+                size='30px'
                 onClick={() => {
                   HandleDetailItem(value);
                 }}
@@ -93,28 +92,32 @@ const Encomendas = (props) => {
     []
   );
 
-  const data = React.useMemo(() => props.mails, []);
+  const data = React.useMemo(() => mails, []);
 
   return (
-    <Flex width="100%" flexDir="column">
+    <Flex width='100%' flexDir='column'>
       <MailsModal
         isOpen={isOpen}
         onClose={onClose}
         mail={mail}
         type={modalType}
+        user={user}
+        receivers={receivers}
       />
       <Flex
-        flexDir="row"
-        minH="30px"
-        h="7vh"
-        alignItems="center"
-        justifyContent="center"
+        flexDir='row'
+        minH='30px'
+        h='7vh'
+        alignItems='center'
+        justifyContent='center'
       >
-        <PageButton>Novo Cadastro</PageButton>
-        <PageButton>Buscar</PageButton>
-        <PageButton>Registrar Recebimento</PageButton>
+        <PageButton onClick={HandleRegisterItem}>Novo Cadastro</PageButton>
+        <PageButton onClick={HandleSearchItens}>Buscar</PageButton>
+        <PageButton onClick={HandleReceiveItens}>
+          Registrar Recebimento
+        </PageButton>
       </Flex>
-      <Flex flexDir="row" alignItems="center" h="93vh" width="100%">
+      <Flex flexDir='row' alignItems='center' h='93vh' width='100%'>
         <ReactTable columns={columns} data={data} />
       </Flex>
     </Flex>
@@ -123,29 +126,37 @@ const Encomendas = (props) => {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
-
   if (!session || !session.user.permission.editMail)
     return {
       redirect: {
-        destination: "/",
+        destination: '/',
         permanent: false,
       },
     };
 
+  const user = session.user;
+  let receivers;
+  let mails;
   const fromDate = context.query.from;
   const toDate = context.query.to;
 
-  let mails;
-  if (process.env.ENVIRONMENT != "DEV")
+  if (process.env.ENVIRONMENT != 'DEV') {
     mails = await (
       await axios.get(
         `${process.env.API_URL}/mails/findAll?userId=${session.user.id}&from=${fromDate}&to=${toDate}`
       )
     ).data;
-  else mails = exampleMails(300);
+    receivers = await (
+      await axios.get(`${process.env.API_URL}/receivers/findAll/${user.id}`)
+    ).data;
+    `${process.env.API_URL}/receivers/findAll/${user.id}`;
+  } else {
+    mails = exampleMails(300);
+    receivers = fakeReceivers;
+  }
 
   return {
-    props: { mails },
+    props: { mails, user, receivers },
   };
 }
 

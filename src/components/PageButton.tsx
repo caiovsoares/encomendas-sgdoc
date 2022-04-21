@@ -1,14 +1,18 @@
-import { Button } from "@chakra-ui/react"
+import { Button } from '@chakra-ui/react';
 
-export const PageButton = (props) => {
-    return(
-    <Button 
-        boxShadow="lg" 
-        size='sm' 
-        rounded="md" 
-        bgColor='menuButton' 
-        _hover={{bg:'menuButtonHover'}}
-        color='menuButtonText' 
-        marginInline='10px'>{props.children}</Button>
-    )
-}
+export const PageButton = ({ onClick, children }) => {
+  return (
+    <Button
+      onClick={onClick}
+      boxShadow='lg'
+      size='sm'
+      rounded='md'
+      bgColor='menuButton'
+      _hover={{ bg: 'menuButtonHover' }}
+      color='menuButtonText'
+      marginInline='10px'
+    >
+      {children}
+    </Button>
+  );
+};
