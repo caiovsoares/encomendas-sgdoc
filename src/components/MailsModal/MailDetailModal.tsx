@@ -31,7 +31,7 @@ export function MailDetailModal({ mail, user }) {
     let result;
     if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
       result = await (
-        await axios.post(
+        await axios.delete(
           `${process.env.NEXT_PUBLIC_API_URL}/mails/${mail.id}`,
           { data: { userId: user.id } }
         )
