@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useState } from "react";
+import { useRouter } from "next/router";
 import {
   Button,
   ModalContent,
@@ -10,11 +10,11 @@ import {
   FormLabel,
   Input,
   useToast,
-} from '@chakra-ui/react';
-import axios from 'axios';
-import CustomSelect from '../CustomSelect';
-import { useForm, Controller } from 'react-hook-form';
-import { search } from '../../utils';
+} from "@chakra-ui/react";
+import axios from "axios";
+import CustomSelect from "../CustomSelect";
+import { useForm, Controller } from "react-hook-form";
+import { search } from "../../utils";
 
 export function MailRegisterModal({ onClose, user, rec }) {
   const router = useRouter();
@@ -27,7 +27,7 @@ export function MailRegisterModal({ onClose, user, rec }) {
     setValue,
     reset,
     setFocus,
-  } = useForm({ mode: 'onChange' });
+  } = useForm({ mode: "onChange" });
   const toast = useToast();
   const [receivers, setReceivers] = useState(rec);
 
@@ -35,7 +35,7 @@ export function MailRegisterModal({ onClose, user, rec }) {
     data.userId = user.id;
     let result;
 
-    if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
+    if (process.env.NEXT_PUBLIC_ENVIRONMENT != "DEV") {
       result = await (
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/mails`, data)
       ).data;
@@ -45,27 +45,28 @@ export function MailRegisterModal({ onClose, user, rec }) {
 
     if (result.id) {
       toast({
-        title: 'Sucesso',
-        description: 'Encomenda cadastrada com sucesso!',
-        status: 'success',
+        title: "Sucesso",
+        description: "Encomenda cadastrada com sucesso!",
+        status: "success",
         duration: 3000,
         isClosable: true,
       });
       reset({
-        tracking: '',
-        type: 'Pacote',
-        size: 'Pequeno',
-        sender: '',
-        pesquisa_id: '',
+        tracking: "",
+        type: "Pacote",
+        size: "Pequeno",
+        sender: "",
+        pesquisa_id: "",
       });
       e.target.reset(); //não é o indicado pela documentação, mas funciona
-      setFocus('tracking');
+      setFocus("tracking");
+      //o useMemo na ReactTable impede de atualizar os dados
       router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
     } else {
       toast({
-        title: 'Erro',
-        description: 'Houve um problema, verifique os dados e tente novamente!',
-        status: 'error',
+        title: "Erro",
+        description: "Houve um problema, verifique os dados e tente novamente!",
+        status: "error",
         duration: 3000,
         isClosable: true,
       });
@@ -75,13 +76,13 @@ export function MailRegisterModal({ onClose, user, rec }) {
   const customOnBlur = (fieldName, fieldMessage, fField) => {
     if (!fField.value) {
       setError(fieldName, {
-        type: 'manual',
+        type: "manual",
         message: fieldMessage,
       });
       toast({
-        title: 'Atenção',
+        title: "Atenção",
         description: fieldMessage,
-        status: 'warning',
+        status: "warning",
         duration: 3000,
         isClosable: true,
       });
@@ -89,10 +90,10 @@ export function MailRegisterModal({ onClose, user, rec }) {
   };
 
   const pesquisaOnChange = (e) => {
-    setValue('pesquisa_id', e.target.value); //essa linha permite que o valor continue alterando
+    setValue("pesquisa_id", e.target.value); //essa linha permite que o valor continue alterando
 
     const options = rec.filter((receiver) => {
-      return search(getValues('pesquisa_id'), receiver, false);
+      return search(getValues("pesquisa_id"), receiver, false);
     });
 
     setReceivers(options);
@@ -105,23 +106,23 @@ export function MailRegisterModal({ onClose, user, rec }) {
       <ModalBody>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl isRequired>
-            <FormLabel fontWeight='semibold' color='gray.600'>
+            <FormLabel fontWeight="semibold" color="gray.600">
               Rastreamento:
             </FormLabel>
             <Controller
-              name='tracking'
+              name="tracking"
               control={control}
-              defaultValue=''
+              defaultValue=""
               rules={{ required: true }}
               render={({ field }) => (
                 <Input
                   {...field}
                   isInvalid={errors.tracking}
-                  placeholder='Exemplo: BR123123123BR '
+                  placeholder="Exemplo: BR123123123BR "
                   onBlur={() =>
                     customOnBlur(
-                      'tracking',
-                      'Rastreamento é obrigatório',
+                      "tracking",
+                      "Rastreamento é obrigatório",
                       field
                     )
                   }
@@ -130,100 +131,100 @@ export function MailRegisterModal({ onClose, user, rec }) {
             />
           </FormControl>
 
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
+          <FormControl mt="3">
+            <FormLabel fontWeight="semibold" color="gray.600">
               Tipo:
             </FormLabel>
             <Controller
-              name='type'
+              name="type"
               control={control}
-              defaultValue='Pacote'
+              defaultValue="Pacote"
               rules={{ required: false }}
               render={({ field }) => (
                 <CustomSelect
                   field={field}
-                  entities={['Pacote', 'Caixa', 'Envelope', 'Carta']}
-                  placeholder=''
-                  fieldName=''
-                  value='' /*placeholder="Selecione o tamanho"*/
+                  entities={["Pacote", "Caixa", "Envelope", "Carta"]}
+                  placeholder=""
+                  fieldName=""
+                  value="" /*placeholder="Selecione o tamanho"*/
                 />
               )}
             />
           </FormControl>
 
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
+          <FormControl mt="3">
+            <FormLabel fontWeight="semibold" color="gray.600">
               Tamanho:
             </FormLabel>
             <Controller
-              name='size'
+              name="size"
               control={control}
-              defaultValue='Pequeno'
+              defaultValue="Pequeno"
               rules={{ required: false }}
               render={({ field }) => (
                 <CustomSelect
                   field={field}
-                  entities={['Pequeno', 'Medio', 'Grande']}
-                  placeholder=''
-                  fieldName=''
-                  value='' /*placeholder="Selecione o tamanho"*/
+                  entities={["Pequeno", "Medio", "Grande"]}
+                  placeholder=""
+                  fieldName=""
+                  value="" /*placeholder="Selecione o tamanho"*/
                 />
               )}
             />
           </FormControl>
 
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
+          <FormControl mt="3">
+            <FormLabel fontWeight="semibold" color="gray.600">
               Remetente:
             </FormLabel>
             <Controller
-              name='sender'
+              name="sender"
               control={control}
-              defaultValue=''
+              defaultValue=""
               rules={{ required: false }}
               render={({ field }) => (
                 <Input
                   {...field}
-                  placeholder='Exemplo: Fulano da Silva Junior'
+                  placeholder="Exemplo: Fulano da Silva Junior"
                 />
               )}
             />
           </FormControl>
 
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
+          <FormControl mt="3">
+            <FormLabel fontWeight="semibold" color="gray.600">
               Destinatário:
             </FormLabel>
             <Controller
-              name='pesquisa_id'
+              name="pesquisa_id"
               control={control}
-              defaultValue=''
+              defaultValue=""
               rules={{ required: false }}
               render={({ field }) => (
                 <Input
                   {...field}
-                  autoComplete='off'
+                  autoComplete="off"
                   isInvalid={errors.pesquisa_id}
-                  placeholder='Pesquise aqui'
+                  placeholder="Pesquise aqui"
                   onChange={pesquisaOnChange}
                 />
               )}
             />
           </FormControl>
 
-          <FormControl mt='3' isRequired>
+          <FormControl mt="3" isRequired>
             <Controller
-              name='destiny_id'
+              name="destiny_id"
               control={control}
-              defaultValue={getValues('pesquisa_id')}
+              defaultValue={getValues("pesquisa_id")}
               rules={{ required: true }}
               render={({ field }) => (
                 <CustomSelect
                   field={field}
                   entities={receivers}
-                  fieldName={'fullName'}
-                  placeholder='Selecione o destinatário'
-                  value=''
+                  fieldName={"fullName"}
+                  placeholder="Selecione o destinatário"
+                  value=""
                 />
               )}
             />
@@ -231,15 +232,15 @@ export function MailRegisterModal({ onClose, user, rec }) {
 
           <Button
             isLoading={isSubmitting}
-            colorScheme='blue'
-            mb='3'
-            mt='3'
+            colorScheme="blue"
+            mb="3"
+            mt="3"
             mr={3}
-            type='submit'
+            type="submit"
           >
             Save
           </Button>
-          <Button onClick={onClose} mb='3' mt='3'>
+          <Button onClick={onClose} mb="3" mt="3">
             Cancel
           </Button>
         </form>

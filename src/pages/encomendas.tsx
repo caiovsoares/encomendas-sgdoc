@@ -7,11 +7,13 @@ import { BiCheckCircle, BiInfoCircle, BiXCircle } from 'react-icons/bi';
 import MailsModal from '../components/MailsModal';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const Encomendas = ({ mails, user, receivers }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [mail, setMail] = useState({});
   const [modalType, setModalType] = useState('');
+  const router = useRouter();
 
   async function HandleDetailItem(mail: {}) {
     onOpen();
@@ -92,7 +94,7 @@ const Encomendas = ({ mails, user, receivers }) => {
     []
   );
 
-  const data = React.useMemo(() => mails, []);
+  const [data, setData] = React.useState(mails);
 
   return (
     <Flex width='100%' flexDir='column'>
@@ -113,7 +115,7 @@ const Encomendas = ({ mails, user, receivers }) => {
       >
         <PageButton onClick={HandleRegisterItem}>Novo Cadastro</PageButton>
         <PageButton onClick={HandleSearchItens}>Buscar</PageButton>
-        <PageButton onClick={HandleReceiveItens}>
+        <PageButton onClick={() => router.replace(router.asPath)}>
           Registrar Recebimento
         </PageButton>
       </Flex>
@@ -151,6 +153,7 @@ export async function getServerSideProps(context) {
     ).data;
     `${process.env.API_URL}/receivers/findAll/${user.id}`;
   } else {
+    console.log('tudo fake');
     mails = exampleMails(300);
     receivers = fakeReceivers;
   }
