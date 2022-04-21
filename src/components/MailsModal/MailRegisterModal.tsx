@@ -37,7 +37,7 @@ export function MailRegisterModal({ onClose, user, rec }) {
 
     if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
       result = await (
-        await axios.post(`${process.env.API_URL}/mails`, data)
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/mails`, data)
       ).data;
     } else {
       result = {};
