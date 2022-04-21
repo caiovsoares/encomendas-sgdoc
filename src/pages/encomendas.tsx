@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { Box, Flex, useDisclosure } from '@chakra-ui/react';
 import { exampleMails, fakeReceivers } from '../utils';
+import {
+  useTable,
+  usePagination,
+  useRowSelect,
+  useGlobalFilter,
+} from 'react-table';
 import ReactTable from '../components/ReactTable';
 import { PageButton } from '../components/PageButton';
 import { BiCheckCircle, BiInfoCircle, BiXCircle } from 'react-icons/bi';
@@ -8,6 +14,7 @@ import MailsModal from '../components/MailsModal';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import IndeterminateCheckbox from '../components/IndeterminateCheckbox';
 
 const Encomendas = ({ mails, user, receivers }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -96,6 +103,45 @@ const Encomendas = ({ mails, user, receivers }) => {
 
   const data = React.useMemo(() => mails, []);
 
+  const tableOptions = useTable(
+    {
+      columns,
+      data,
+    },
+    useGlobalFilter,
+    usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => [
+        // Let's make a column for selection
+        {
+          id: 'selection',
+          // The header can use the table's getToggleAllRowsSelectedProps method
+          // to render a checkbox
+          Header: ({ getToggleAllPageRowsSelectedProps }) => (
+            <div>
+              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+            </div>
+          ),
+          // The cell can use the individual row's getToggleRowSelectedProps method
+          // to the render a checkbox
+          Cell: ({ row }) =>
+            !row.original.receiver && (
+              <div>
+                <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+              </div>
+            ),
+        },
+        ...columns,
+      ]);
+    }
+  );
+
+  const getReceiveMails = () =>
+    tableOptions.selectedFlatRows
+      .filter((e) => !e.original.receiver)
+      .map((e) => e.original);
+
   return (
     <Flex width='100%' flexDir='column'>
       <MailsModal
@@ -105,6 +151,7 @@ const Encomendas = ({ mails, user, receivers }) => {
         type={modalType}
         user={user}
         receivers={receivers}
+        receiveMails={getReceiveMails()}
       />
       <Flex
         flexDir='row'
@@ -115,12 +162,12 @@ const Encomendas = ({ mails, user, receivers }) => {
       >
         <PageButton onClick={HandleRegisterItem}>Novo Cadastro</PageButton>
         <PageButton onClick={HandleSearchItens}>Buscar</PageButton>
-        <PageButton onClick={() => router.replace(router.asPath)}>
+        <PageButton onClick={HandleReceiveItens}>
           Registrar Recebimento
         </PageButton>
       </Flex>
       <Flex flexDir='row' alignItems='center' h='93vh' width='100%'>
-        <ReactTable columns={columns} data={data} />
+        <ReactTable tableOptions={tableOptions} />
       </Flex>
     </Flex>
   );

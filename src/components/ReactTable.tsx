@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  ButtonGroup,
   Flex,
   Select,
   Table,
@@ -15,15 +14,10 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import {
-  BiCheck,
-  BiCheckCircle,
   BiChevronLeft,
   BiChevronRight,
   BiChevronsLeft,
   BiChevronsRight,
-  BiCommentCheck,
-  BiCommentX,
-  BiXCircle,
 } from 'react-icons/bi';
 import {
   useTable,
@@ -34,7 +28,7 @@ import {
 import { GlobalFilter } from './GlobalFilter';
 import IndeterminateCheckbox from './IndeterminateCheckbox';
 
-function ReactTable({ columns, data }) {
+function ReactTable({ tableOptions }) {
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -53,42 +47,11 @@ function ReactTable({ columns, data }) {
     nextPage,
     previousPage,
     setPageSize,
-    selectedFlatRows,
+    //selectedFlatRows,
     state: { pageIndex, pageSize, selectedRowIds },
     state,
     setGlobalFilter,
-  } = useTable(
-    {
-      columns,
-      data,
-    },
-    useGlobalFilter,
-    usePagination,
-    useRowSelect,
-    (hooks) => {
-      hooks.visibleColumns.push((columns) => [
-        // Let's make a column for selection
-        {
-          id: 'selection',
-          // The header can use the table's getToggleAllRowsSelectedProps method
-          // to render a checkbox
-          Header: ({ getToggleAllPageRowsSelectedProps }) => (
-            <div>
-              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
-            </div>
-          ),
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
-          Cell: ({ row }) => (
-            <div>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-            </div>
-          ),
-        },
-        ...columns,
-      ]);
-    }
-  );
+  } = tableOptions;
 
   const { globalFilter } = state;
 
