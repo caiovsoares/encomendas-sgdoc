@@ -6,15 +6,15 @@ const MailsModal = ({ onClose, isOpen, mail, type, user, receivers }) => {
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay backdropFilter='blur(5px)' />
-      {type === 'detail' && <MailDetailModal mail={mail} />}
+      {type === 'detail' && <MailDetailModal user={user} mail={mail} />}
 
       {type === 'register' && (
         <MailRegisterModal onClose={onClose} user={user} rec={receivers} />
       )}
 
-      {type === 'receive' && <MailDetailModal mail={mail} />}
+      {type === 'receive' && <MailDetailModal user={user} mail={mail} />}
 
-      {type === 'search' && <MailDetailModal mail={mail} />}
+      {type === 'search' && <MailDetailModal user={user} mail={mail} />}
     </Modal>
   );
 };

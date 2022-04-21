@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Flex, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Flex, useDisclosure } from '@chakra-ui/react';
 import { exampleMails, fakeReceivers } from '../utils';
 import ReactTable from '../components/ReactTable';
 import { PageButton } from '../components/PageButton';
@@ -94,7 +94,7 @@ const Encomendas = ({ mails, user, receivers }) => {
     []
   );
 
-  const [data, setData] = React.useState(mails);
+  const data = React.useMemo(() => mails, []);
 
   return (
     <Flex width='100%' flexDir='column'>
@@ -153,7 +153,6 @@ export async function getServerSideProps(context) {
     ).data;
     `${process.env.API_URL}/receivers/findAll/${user.id}`;
   } else {
-    console.log('tudo fake');
     mails = exampleMails(300);
     receivers = fakeReceivers;
   }

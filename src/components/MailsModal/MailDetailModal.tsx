@@ -9,15 +9,59 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   Text,
+  useToast,
 } from '@chakra-ui/react';
-import { Style } from 'util';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { BiEdit, BiTrash } from 'react-icons/bi';
 
-const pStyle = {
-  marginLeft: '40px',
-};
+export function MailDetailModal({ mail, user }) {
+  const router = useRouter();
+  const toast = useToast();
 
-export function MailDetailModal({ mail }) {
+  const onDelete = async (mail) => {
+    let result;
+    if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
+      result = await (
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/mails/${mail.id}`,
+          { data: { userId: user.id } }
+        )
+      ).data;
+    } else {
+      result = {};
+    }
+
+    if (result.id) {
+      toast({
+        title: 'Sucesso',
+        description: 'Encomenda excluída com sucesso!',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      //o useMemo na ReactTable impede de atualizar os dados
+      //router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
+      router.reload();
+    } else {
+      toast({
+        title: 'Erro',
+        description: 'Houve um problema, a encomenda não foi excluída!',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <ModalContent>
       <ModalHeader>Detalhes</ModalHeader>
@@ -58,8 +102,44 @@ export function MailDetailModal({ mail }) {
         )}
       </ModalBody>
       <ModalFooter>
-        <Button mr='10px'>Editar</Button>
-        <Button>Excluir</Button>
+        <Button
+          mr='5px'
+          paddingInline={2}
+          bg='menuButton'
+          color='menuButtonText'
+          _hover={{ bg: 'menuButtonHover' }}
+        >
+          <BiEdit size={20} />
+          Editar
+        </Button>
+        <Popover>
+          <PopoverTrigger>
+            <Button
+              paddingInline={2}
+              bg='alertButton'
+              color='menuButtonText'
+              _hover={{ bg: 'alertButtonHover' }}
+            >
+              <BiTrash size={20} />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <PopoverArrow />
+            <PopoverCloseButton />
+            <PopoverHeader>Tem certeza?</PopoverHeader>
+            <PopoverBody>
+              Essa ação não poderá ser desfeita
+              <Button
+                bg='alertButton'
+                color='menuButtonText'
+                _hover={{ bg: 'alertButtonHover' }}
+                onClick={onDelete}
+              >
+                Confirmar
+              </Button>
+            </PopoverBody>
+          </PopoverContent>
+        </Popover>
       </ModalFooter>
     </ModalContent>
   );
