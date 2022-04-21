@@ -39,6 +39,8 @@ export function MailDetailModal({ mail, user }) {
     } else {
       result = {};
     }
+    console.log(mail);
+    console.log(result);
 
     if (result.id) {
       toast({
