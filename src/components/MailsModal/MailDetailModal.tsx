@@ -27,7 +27,7 @@ export function MailDetailModal({ mail, user }) {
   const router = useRouter();
   const toast = useToast();
 
-  const onDelete = async (mail) => {
+  const onDelete = async () => {
     let result;
     if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
       result = await (
