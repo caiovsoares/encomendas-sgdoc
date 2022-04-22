@@ -2,13 +2,11 @@ import {
   Box,
   Button,
   Heading,
-  Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -23,7 +21,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { BiEdit, BiTrash } from 'react-icons/bi';
 
-export function MailDetailModal({ mail, user }) {
+export function MailDetailModal({ mail, user, setModalType }) {
   const router = useRouter();
   const toast = useToast();
 
@@ -110,6 +108,9 @@ export function MailDetailModal({ mail, user }) {
           bg='menuButton'
           color='menuButtonText'
           _hover={{ bg: 'menuButtonHover' }}
+          onClick={() => {
+            setModalType('edit');
+          }}
         >
           <BiEdit size={20} />
           Editar

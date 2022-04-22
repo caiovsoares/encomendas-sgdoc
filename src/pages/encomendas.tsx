@@ -152,6 +152,7 @@ const Encomendas = ({ mails, user, receivers }) => {
         user={user}
         receivers={receivers}
         receiveMails={getReceiveMails()}
+        setModalType={setModalType}
       />
       <Flex
         flexDir='row'

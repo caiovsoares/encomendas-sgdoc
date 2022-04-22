@@ -17,15 +17,11 @@ export const exampleMails = (q) => {
       id: i,
       tracking: `BR${(Math.random() * 899999999 + 100000000).toFixed(0)}BR`,
       type: gerador('Caixa', 'Pacote', 'Envelope'),
-      size: gerador('P', 'M', 'G'),
+      size: gerador('Pequeno', 'Medio', 'Grande'),
       sender: gerador('Mercado Livre', 'Amazon', 'Shopee'),
       destiny: {
         id: i,
-        fullName: gerador(
-          'Caio Vinicius Amancio Soares',
-          'Gabriel Silva Ramos',
-          'Clarice Outrora Outronome'
-        ),
+        fullName: gerador('Caio Soares', 'Vinicius Amancio', 'Carol Castro'),
         warName: gerador('C4 Mariane Mocker', 'C3 Fagundes', 'C2 Victoria'),
         classYear: gerador('2020', '2021', '2022'),
         cpf: gerador('126.882.218-33', '377.466.108-11', '430.103.428-53'),
