@@ -21,7 +21,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { BiEdit, BiTrash } from 'react-icons/bi';
 
-export function MailDetailModal({ mail, user, setModalType }) {
+export function ReceiverDetailModal({ receiver, user, setModalType }) {
   const router = useRouter();
   const toast = useToast();
 
@@ -30,20 +30,20 @@ export function MailDetailModal({ mail, user, setModalType }) {
     if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
       result = await (
         await axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/mails/${mail.id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/receivers/${receiver.id}`,
           { data: { userId: user.id } }
         )
       ).data;
     } else {
       result = {};
     }
-    console.log(mail);
+    console.log(receiver);
     console.log(result);
 
     if (result.id) {
       toast({
         title: 'Sucesso',
-        description: 'Encomenda excluída com sucesso!',
+        description: 'Destinatário excluído com sucesso!',
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -53,7 +53,7 @@ export function MailDetailModal({ mail, user, setModalType }) {
     } else {
       toast({
         title: 'Erro',
-        description: 'Houve um problema, a encomenda não foi excluída!',
+        description: 'Houve um problema, o destinatário não foi excluído!',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -66,39 +66,13 @@ export function MailDetailModal({ mail, user, setModalType }) {
       <ModalHeader>Detalhes</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
-        <Heading size='sm'>Encomenda</Heading>
-        <Box ml='30px'>
-          <Text>Rastreio: {mail.tracking}</Text>
-          <Text>Tipo: {mail.type}</Text>
-          <Text>Tamanho: {mail.size}</Text>
-          <Text>Remetente: {mail.sender}</Text>
-          <Text>Data de chegada: {mail.created_at}</Text>
-        </Box>
-        <br />
-        <hr />
-        <br />
         <Heading size='sm'>Destinatário</Heading>
         <Box ml='30px'>
-          <Text>Nome Completo: {mail.destiny?.fullName}</Text>
-          <Text>Nome de Guerra: {mail.destiny?.warName}</Text>
-          <Text>CPF: {mail.destiny?.cpf}</Text>
-          <Text>Identidade: {mail.destiny?.identity}</Text>
+          <Text>Nome Completo: {receiver.fullName}</Text>
+          <Text>Nome de Guerra: {receiver.warName}</Text>
+          <Text>Identidade: {receiver.identity}</Text>
+          <Text>CPF: {receiver.cpf}</Text>
         </Box>
-        {mail.receiver && (
-          <>
-            <br />
-            <hr />
-            <br />
-            <Heading size='sm'>Recebedor</Heading>
-            <Box ml='30px'>
-              <Text>Nome Completo: {mail.receiver?.fullName}</Text>
-              <Text>Nome de Guerra: {mail.receiver?.warName}</Text>
-              <Text>CPF: {mail.receiver?.cpf}</Text>
-              <Text>Identidade: {mail.receiver?.identity}</Text>
-              <Text>Data de recebimento: {mail.received_at}</Text>
-            </Box>
-          </>
-        )}
       </ModalBody>
       <ModalFooter>
         <Button

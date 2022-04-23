@@ -2,6 +2,7 @@ import { Button, Flex, Image, Img } from '@chakra-ui/react';
 import { useState } from 'react';
 import { ButtonNavigation } from './ButtonNavigation';
 import { BiGift, BiHome, BiUserCircle } from 'react-icons/bi';
+import { ImTrello } from 'react-icons/im';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { ButtonNavigationSession } from './ButtonNavigationSession';
 
@@ -45,6 +46,12 @@ export const Navigation = () => {
           Destinatarios{' '}
         </ButtonNavigation>
       )}
+      <ButtonNavigation
+        href='https://trello.com/b/lCeNCQcB/encomendas-sgdoc'
+        icon={<ImTrello size='30px' />}
+      >
+        Trello
+      </ButtonNavigation>
       <ButtonNavigationSession
         session={session}
         signIn={signIn}

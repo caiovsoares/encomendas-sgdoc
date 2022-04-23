@@ -77,9 +77,8 @@ export function MailReceiveModal({ onClose, user, receiveMails, rec }) {
             duration: 3000,
             isClosable: true,
           });
-          //router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
-          //onClose(); //ESSA LINHA FECHA A JANELA APÓS A EDIÇÃO
-          router.reload();
+          router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
+          onClose(); //ESSA LINHA FECHA A JANELA APÓS A EDIÇÃO
         } else {
           toast({
             title: 'Erro',

@@ -1,5 +1,4 @@
 import { Modal, ModalOverlay } from '@chakra-ui/react';
-import { useState } from 'react';
 import { MailDetailModal } from './MailDetailModal';
 import { MailEditModal } from './MailEditModal';
 import { MailReceiveModal } from './MailReceiveModal';

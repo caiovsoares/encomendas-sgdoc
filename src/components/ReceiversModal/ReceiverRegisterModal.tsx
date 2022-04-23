@@ -12,11 +12,11 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
-import { useForm, Controller } from 'react-hook-form';
 import CustomSelect from '../CustomSelect';
+import { useForm, Controller } from 'react-hook-form';
 import { search } from '../../utils';
 
-export function MailEditModal({ onClose, user, mail, rec }) {
+export function ReceiverRegisterModal({ onClose, user }) {
   const router = useRouter();
   const {
     handleSubmit,
@@ -29,19 +29,14 @@ export function MailEditModal({ onClose, user, mail, rec }) {
     setFocus,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
-  const [receivers, setReceivers] = useState(rec);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, e) => {
     data.userId = user.id;
-
     let result;
 
     if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
-      result = (
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/mails/${mail.id}`,
-          data
-        )
+      result = await (
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/mails`, data)
       ).data;
     } else {
       result = {};
@@ -50,14 +45,23 @@ export function MailEditModal({ onClose, user, mail, rec }) {
     if (result.id) {
       toast({
         title: 'Sucesso',
-        description: 'Encomenda alterada com sucesso!',
+        description: 'Encomenda cadastrada com sucesso!',
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
+      reset({
+        tracking: '',
+        type: 'Pacote',
+        size: 'Pequeno',
+        sender: '',
+        pesquisa_id: '',
+      });
+      e.target.reset(); //não é o indicado pela documentação, mas funciona
+      setFocus('tracking');
+      //o useMemo na ReactTable impede de atualizar os dados
       router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
-      onClose(); //ESSA LINHA FECHA A JANELA APÓS A EDIÇÃO
-    } else
+    } else {
       toast({
         title: 'Erro',
         description: 'Houve um problema, verifique os dados e tente novamente!',
@@ -65,6 +69,7 @@ export function MailEditModal({ onClose, user, mail, rec }) {
         duration: 3000,
         isClosable: true,
       });
+    }
   };
 
   const customOnBlur = (fieldName, fieldMessage, fField) => {
@@ -83,19 +88,19 @@ export function MailEditModal({ onClose, user, mail, rec }) {
     }
   };
 
-  const pesquisaOnChange = (e) => {
-    setValue('pesquisa_id', e.target.value); //essa linha permite que o valor continue alterando
+  // const pesquisaOnChange = (e) => {
+  //   setValue('pesquisa_id', e.target.value); //essa linha permite que o valor continue alterando
 
-    const options = rec.filter((receiver) => {
-      return search(getValues('pesquisa_id'), receiver, false);
-    });
+  //   const options = rec.filter((receiver) => {
+  //     return search(getValues('pesquisa_id'), receiver, false);
+  //   });
 
-    setReceivers(options);
-  };
+  //   setReceivers(options);
+  // };
 
   return (
     <ModalContent>
-      <ModalHeader>Editando {mail.tracking}</ModalHeader>
+      <ModalHeader>Cadastrar nova Encomenda</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -106,7 +111,7 @@ export function MailEditModal({ onClose, user, mail, rec }) {
             <Controller
               name='tracking'
               control={control}
-              defaultValue={mail.tracking}
+              defaultValue=''
               rules={{ required: true }}
               render={({ field }) => (
                 <Input
@@ -132,7 +137,7 @@ export function MailEditModal({ onClose, user, mail, rec }) {
             <Controller
               name='type'
               control={control}
-              defaultValue={mail.type}
+              defaultValue='Pacote'
               rules={{ required: false }}
               render={({ field }) => (
                 <CustomSelect
@@ -140,7 +145,7 @@ export function MailEditModal({ onClose, user, mail, rec }) {
                   entities={['Pacote', 'Caixa', 'Envelope', 'Carta']}
                   placeholder=''
                   fieldName=''
-                  value=''
+                  value='' /*placeholder="Selecione o tamanho"*/
                 />
               )}
             />
@@ -153,7 +158,7 @@ export function MailEditModal({ onClose, user, mail, rec }) {
             <Controller
               name='size'
               control={control}
-              defaultValue={mail.size}
+              defaultValue='Pequeno'
               rules={{ required: false }}
               render={({ field }) => (
                 <CustomSelect
@@ -161,7 +166,7 @@ export function MailEditModal({ onClose, user, mail, rec }) {
                   entities={['Pequeno', 'Medio', 'Grande']}
                   placeholder=''
                   fieldName=''
-                  value=''
+                  value='' /*placeholder="Selecione o tamanho"*/
                 />
               )}
             />
@@ -174,7 +179,7 @@ export function MailEditModal({ onClose, user, mail, rec }) {
             <Controller
               name='sender'
               control={control}
-              defaultValue={mail.sender}
+              defaultValue=''
               rules={{ required: false }}
               render={({ field }) => (
                 <Input
@@ -200,28 +205,29 @@ export function MailEditModal({ onClose, user, mail, rec }) {
                   autoComplete='off'
                   isInvalid={errors.pesquisa_id}
                   placeholder='Pesquise aqui'
-                  onChange={pesquisaOnChange}
+                  // onChange={pesquisaOnChange}
                 />
               )}
             />
           </FormControl>
 
-          <FormControl mt='3' isRequired>
+          {/* <FormControl mt='3' isRequired>
             <Controller
               name='destiny_id'
               control={control}
+              defaultValue={getValues('pesquisa_id')}
               rules={{ required: true }}
               render={({ field }) => (
                 <CustomSelect
-                  value={mail.destiny.fullName}
                   field={field}
                   entities={receivers}
                   fieldName={'fullName'}
                   placeholder='Selecione o destinatário'
+                  value=''
                 />
               )}
             />
-          </FormControl>
+          </FormControl> */}
 
           <Button
             isLoading={isSubmitting}

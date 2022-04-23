@@ -1,30 +1,24 @@
 import React, { useState } from 'react';
-import { Box, Flex, useDisclosure } from '@chakra-ui/react';
-import { exampleMails, fakeReceivers } from '../utils';
-import {
-  useTable,
-  usePagination,
-  useRowSelect,
-  useGlobalFilter,
-} from 'react-table';
+import { Flex, useDisclosure } from '@chakra-ui/react';
+import { fakeReceivers } from '../utils';
+import { useTable, usePagination, useGlobalFilter } from 'react-table';
 import ReactTable from '../components/ReactTable';
 import { PageButton } from '../components/PageButton';
-import { BiCheckCircle, BiInfoCircle, BiXCircle } from 'react-icons/bi';
-import MailsModal from '../components/MailsModal';
+import { BiInfoCircle } from 'react-icons/bi';
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import IndeterminateCheckbox from '../components/IndeterminateCheckbox';
+import ReceiversModal from '../components/ReceiversModal';
 
 const Destinatarios = ({ user, receivers }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [mail, setMail] = useState({});
+  const [receiver, setReceiver] = useState({});
   const [modalType, setModalType] = useState('');
   const router = useRouter();
 
-  async function HandleDetailItem(mail: {}) {
+  async function HandleDetailItem(receiver: {}) {
     onOpen();
-    setMail(mail);
+    setReceiver(receiver);
     setModalType('detail');
   }
 
@@ -66,6 +60,7 @@ const Destinatarios = ({ user, receivers }) => {
                 size='30px'
                 onClick={() => {
                   HandleDetailItem(value);
+                  console.log(value);
                 }}
               />
             </Flex>
@@ -76,12 +71,10 @@ const Destinatarios = ({ user, receivers }) => {
     []
   );
 
-  const data = React.useMemo(() => receivers, []);
-
   const tableOptions = useTable(
     {
       columns,
-      data,
+      data: receivers,
     },
     useGlobalFilter,
     usePagination
@@ -89,16 +82,14 @@ const Destinatarios = ({ user, receivers }) => {
 
   return (
     <Flex width='100%' flexDir='column'>
-      {/* <MailsModal
+      <ReceiversModal
         isOpen={isOpen}
         onClose={onClose}
-        mail={mail}
+        receiver={receiver}
         type={modalType}
         user={user}
-        receivers={receivers}
-        receiveMails={getReceiveMails()}
         setModalType={setModalType}
-      /> */}
+      />
       <Flex
         flexDir='row'
         minH='30px'
@@ -107,7 +98,9 @@ const Destinatarios = ({ user, receivers }) => {
         justifyContent='center'
       >
         <PageButton onClick={HandleRegisterItem}>Novo Cadastro</PageButton>
-        <PageButton onClick={HandleRegisterItem}>Inserir Diversos</PageButton>
+        <PageButton onClick={HandleRegisterManyItems}>
+          Inserir Diversos
+        </PageButton>
       </Flex>
       <Flex flexDir='row' alignItems='center' h='93vh' width='100%'>
         <ReactTable tableOptions={tableOptions} />
