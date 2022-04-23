@@ -29,6 +29,7 @@ import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import IndeterminateCheckbox from '../components/IndeterminateCheckbox';
+import Link from 'next/link';
 
 const Encomendas = ({ mails, user, receivers }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -219,23 +220,20 @@ const Encomendas = ({ mails, user, receivers }) => {
                 bg='gray.50'
                 h='12'
               />
-              <Button
-                onClick={() => {
-                  router.replace(
-                    router.basePath +
-                      `/encomendas?from=${fromDate}&to=${toDate}`
-                  );
-                  router.reload();
-                }}
-                _hover={{ filter: 'brightness(0.9)' }}
-                background='blue.700'
-                color='gray.50'
-                boxShadow='md'
-                p='6'
-                rounded='md'
+              <Link
+                href={`${router.basePath}${router.pathname}?from=${fromDate}&to=${toDate}`}
               >
-                Atualizar
-              </Button>
+                <Button
+                  _hover={{ filter: 'brightness(0.9)' }}
+                  background='blue.700'
+                  color='gray.50'
+                  boxShadow='md'
+                  p='6'
+                  rounded='md'
+                >
+                  Atualizar
+                </Button>
+              </Link>
             </PopoverBody>
           </PopoverContent>
         </Popover>
