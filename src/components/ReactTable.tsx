@@ -99,7 +99,7 @@ function ReactTable({ tableOptions }) {
           <Table width='100%' variant='striped' {...getTableProps()}>
             <Thead>
               <Tr>
-                <Th colSpan={5}>
+                <Th colSpan={6}>
                   <GlobalFilter
                     filter={globalFilter}
                     setFilter={setGlobalFilter}

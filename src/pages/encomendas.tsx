@@ -1,5 +1,19 @@
 import React, { useState } from 'react';
-import { Box, Flex, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Input,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { exampleMails, fakeReceivers } from '../utils';
 import {
   useTable,
@@ -21,6 +35,8 @@ const Encomendas = ({ mails, user, receivers }) => {
   const [mail, setMail] = useState({});
   const [modalType, setModalType] = useState('');
   const router = useRouter();
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
 
   async function HandleDetailItem(mail: {}) {
     onOpen();
@@ -162,7 +178,68 @@ const Encomendas = ({ mails, user, receivers }) => {
         justifyContent='center'
       >
         <PageButton onClick={HandleRegisterItem}>Novo Cadastro</PageButton>
-        <PageButton onClick={HandleSearchItens}>Buscar</PageButton>
+
+        <Popover>
+          <PopoverTrigger>
+            <Button
+              boxShadow='lg'
+              size='sm'
+              rounded='md'
+              bgColor='menuButton'
+              _hover={{ bg: 'menuButtonHover' }}
+              color='menuButtonText'
+              marginInline='10px'
+            >
+              Buscar
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent w='fit-content'>
+            <PopoverArrow />
+            <PopoverCloseButton />
+            <PopoverBody flexDir='row'>
+              De:
+              <Input
+                onChange={(e) => {
+                  setFromDate(e.target.value);
+                }}
+                type='date'
+                w='45'
+                boxShadow='lg'
+                bg='gray.50'
+                h='12'
+              />
+              Até:
+              <Input
+                onChange={(e) => {
+                  setToDate(e.target.value);
+                }}
+                type='date'
+                w='45'
+                boxShadow='lg'
+                bg='gray.50'
+                h='12'
+              />
+              <Button
+                onClick={() => {
+                  router.replace(
+                    router.basePath +
+                      `/encomendas?from=${fromDate}&to=${toDate}`
+                  );
+                  router.reload();
+                }}
+                _hover={{ filter: 'brightness(0.9)' }}
+                background='blue.700'
+                color='gray.50'
+                boxShadow='md'
+                p='6'
+                rounded='md'
+              >
+                Atualizar
+              </Button>
+            </PopoverBody>
+          </PopoverContent>
+        </Popover>
+
         <PageButton onClick={HandleReceiveItens}>
           Registrar Recebimento
         </PageButton>
@@ -189,6 +266,11 @@ export async function getServerSideProps(context) {
   let mails;
   const fromDate = context.query.from;
   const toDate = context.query.to;
+
+  console.log('Buscando encomendas de: ');
+  console.log(fromDate);
+  console.log('Até: ');
+  console.log(toDate);
 
   if (process.env.ENVIRONMENT != 'DEV') {
     mails = await (

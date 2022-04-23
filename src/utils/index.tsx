@@ -133,6 +133,7 @@ export const fakeReceivers = [
     fullName: 'Caio Soares',
     warName: 'Soares',
     classYear: '2019',
+    identity: '17YS1924',
     cpf: '46077534838',
   },
   {
@@ -140,6 +141,7 @@ export const fakeReceivers = [
     fullName: 'Vinicius Amancio',
     warName: 'Amancio',
     classYear: '2019',
+    identity: '18YS2948',
     cpf: '12345678910',
   },
   {
@@ -147,6 +149,7 @@ export const fakeReceivers = [
     fullName: 'Carol Castro',
     warName: 'Carol',
     classYear: '2019',
+    identity: '19YS2958',
     cpf: '98765432145',
   },
 ];
