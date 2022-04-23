@@ -9,8 +9,8 @@ import {
   useRowSelect,
 } from 'react-table';
 import { GetStaticProps } from 'next';
-import { PageButton } from '../components/PageButton';
 import { BiCheckCircle, BiXCircle } from 'react-icons/bi';
+import axios from 'axios';
 
 const Index = (props) => {
   const columns = React.useMemo(
@@ -58,26 +58,17 @@ const Index = (props) => {
     useRowSelect
   );
 
-  return (
-    <Flex width='100%' flexDir='column'>
-      <Flex
-        flexDir='row'
-        minH='30px'
-        h='7vh'
-        alignItems='center'
-        justifyContent='center'
-      >
-        <PageButton onClick={() => {}}>Buscar</PageButton>
-      </Flex>
-      <Flex flexDir='row' alignItems='center' h='93vh' width='100%'>
-        <ReactTable tableOptions={tableOptions} />
-      </Flex>
-    </Flex>
-  );
+  return <ReactTable tableOptions={tableOptions} />;
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const mails = exampleMails(100);
+  let mails;
+
+  if (process.env.ENVIRONMENT != 'DEV') {
+    mails = await (await axios.get(`${process.env.API_URL}/mails/`)).data;
+  } else {
+    mails = exampleMails(100);
+  }
 
   return {
     props: { mails },

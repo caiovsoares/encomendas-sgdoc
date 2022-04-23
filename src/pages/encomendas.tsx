@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Box,
-  Button,
   Flex,
   Input,
   Popover,
@@ -30,14 +29,13 @@ import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import IndeterminateCheckbox from '../components/IndeterminateCheckbox';
 import Link from 'next/link';
+import { SearchButton } from '../components/SearchButton';
 
 const Encomendas = ({ mails, user, receivers }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [mail, setMail] = useState({});
   const [modalType, setModalType] = useState('');
   const router = useRouter();
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
 
   async function HandleDetailItem(mail: {}) {
     onOpen();
@@ -118,12 +116,12 @@ const Encomendas = ({ mails, user, receivers }) => {
     []
   );
 
-  const data = React.useMemo(() => mails, []);
+  //const data = React.useMemo(() => mails, []);
 
   const tableOptions = useTable(
     {
       columns,
-      data,
+      data: mails,
     },
     useGlobalFilter,
     usePagination,
@@ -179,65 +177,9 @@ const Encomendas = ({ mails, user, receivers }) => {
         justifyContent='center'
       >
         <PageButton onClick={HandleRegisterItem}>Novo Cadastro</PageButton>
-
-        <Popover>
-          <PopoverTrigger>
-            <Button
-              boxShadow='lg'
-              size='sm'
-              rounded='md'
-              bgColor='menuButton'
-              _hover={{ bg: 'menuButtonHover' }}
-              color='menuButtonText'
-              marginInline='10px'
-            >
-              Buscar
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent w='fit-content'>
-            <PopoverArrow />
-            <PopoverCloseButton />
-            <PopoverBody flexDir='row'>
-              De:
-              <Input
-                onChange={(e) => {
-                  setFromDate(e.target.value);
-                }}
-                type='date'
-                w='45'
-                boxShadow='lg'
-                bg='gray.50'
-                h='12'
-              />
-              Até:
-              <Input
-                onChange={(e) => {
-                  setToDate(e.target.value);
-                }}
-                type='date'
-                w='45'
-                boxShadow='lg'
-                bg='gray.50'
-                h='12'
-              />
-              <Link
-                href={`${router.basePath}${router.pathname}?from=${fromDate}&to=${toDate}`}
-              >
-                <Button
-                  _hover={{ filter: 'brightness(0.9)' }}
-                  background='blue.700'
-                  color='gray.50'
-                  boxShadow='md'
-                  p='6'
-                  rounded='md'
-                >
-                  Atualizar
-                </Button>
-              </Link>
-            </PopoverBody>
-          </PopoverContent>
-        </Popover>
-
+        <SearchButton href={`${router.basePath}${router.pathname}`}>
+          Buscar
+        </SearchButton>
         <PageButton onClick={HandleReceiveItens}>
           Registrar Recebimento
         </PageButton>
@@ -279,7 +221,6 @@ export async function getServerSideProps(context) {
     receivers = await (
       await axios.get(`${process.env.API_URL}/receivers/findAll/${user.id}`)
     ).data;
-    `${process.env.API_URL}/receivers/findAll/${user.id}`;
   } else {
     mails = exampleMails(300);
     receivers = fakeReceivers;
