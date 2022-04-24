@@ -15,7 +15,7 @@ import {
 import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 
-export function ReceiverRegisterModal({ onClose, user }) {
+export function ReceiverEditModal({ onClose, user, receiver }) {
   const router = useRouter();
   const {
     handleSubmit,
@@ -27,13 +27,16 @@ export function ReceiverRegisterModal({ onClose, user }) {
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
 
-  const onSubmit = async (data, e) => {
-    data.userId = user.id;
+  const onSubmit = async (data) => {
     let result;
+    data.userId = user.id;
 
     if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
-      result = await (
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/receivers`, data)
+      result = (
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/receivers/${receiver.id}`,
+          data
+        )
       ).data;
     } else {
       result = {};
@@ -42,22 +45,14 @@ export function ReceiverRegisterModal({ onClose, user }) {
     if (result.id) {
       toast({
         title: 'Sucesso',
-        description: 'Destinatário cadastrado com sucesso!',
+        description: 'Destinatário alterado com sucesso!',
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
-      reset({
-        fullName: '',
-        warName: '',
-        classYear: '',
-        cpf: '',
-        identity: '',
-      });
-      e.target.reset(); //não é o indicado pela documentação, mas funciona
-      setFocus('fullName');
       router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
-    } else {
+      onClose(); //ESSA LINHA FECHA A JANELA APÓS A EDIÇÃO
+    } else
       toast({
         title: 'Erro',
         description: 'Houve um problema, verifique os dados e tente novamente!',
@@ -65,7 +60,6 @@ export function ReceiverRegisterModal({ onClose, user }) {
         duration: 3000,
         isClosable: true,
       });
-    }
   };
 
   const customOnBlur = (fieldName, fieldMessage, fField) => {
@@ -86,7 +80,7 @@ export function ReceiverRegisterModal({ onClose, user }) {
 
   return (
     <ModalContent>
-      <ModalHeader>Cadastrar novo Destinatário</ModalHeader>
+      <ModalHeader>Editando {receiver.warName}</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -97,7 +91,7 @@ export function ReceiverRegisterModal({ onClose, user }) {
             <Controller
               name='fullName'
               control={control}
-              defaultValue=''
+              defaultValue={receiver.fullName}
               rules={{ required: true }}
               render={({ field }) => (
                 <Input
@@ -123,7 +117,7 @@ export function ReceiverRegisterModal({ onClose, user }) {
             <Controller
               name='warName'
               control={control}
-              defaultValue=''
+              defaultValue={receiver.warName}
               rules={{ required: true }}
               render={({ field }) => (
                 <Input
@@ -145,11 +139,10 @@ export function ReceiverRegisterModal({ onClose, user }) {
           <FormLabel fontWeight='semibold' color='gray.600'>
             Ano de Entrada:
           </FormLabel>
-
           <Controller
             name='classYear'
             control={control}
-            defaultValue=''
+            defaultValue={receiver.classYear}
             rules={{ required: false }}
             render={({ field }) => (
               <NumberInput
@@ -162,14 +155,14 @@ export function ReceiverRegisterModal({ onClose, user }) {
               </NumberInput>
             )}
           />
+
           <FormLabel fontWeight='semibold' color='gray.600'>
             CPF:
           </FormLabel>
-
           <Controller
             name='cpf'
             control={control}
-            defaultValue=''
+            defaultValue={receiver.cpf}
             rules={{ required: false, maxLength: 11, minLength: 11 }}
             render={({ field }) => (
               <NumberInput isInvalid={errors.cpf} {...field} step={1}>
@@ -193,11 +186,10 @@ export function ReceiverRegisterModal({ onClose, user }) {
           <FormLabel fontWeight='semibold' color='gray.600'>
             Identidade:
           </FormLabel>
-
           <Controller
             name='identity'
             control={control}
-            defaultValue=''
+            defaultValue={receiver.identity}
             rules={{ required: false }}
             render={({ field }) => (
               <Input {...field} placeholder='Exemplo: 12YS1234' />

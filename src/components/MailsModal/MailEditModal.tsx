@@ -25,16 +25,13 @@ export function MailEditModal({ onClose, user, mail, rec }) {
     setError,
     getValues,
     setValue,
-    reset,
-    setFocus,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
   const [receivers, setReceivers] = useState(rec);
 
   const onSubmit = async (data) => {
-    data.userId = user.id;
-
     let result;
+    data.userId = user.id;
 
     if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
       result = (
