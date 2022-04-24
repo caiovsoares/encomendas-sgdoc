@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import { exampleMails } from '../utils';
+import { correctMail, exampleMails } from '../utils';
 import ReactTable from '../components/ReactTable';
 import {
   useTable,
@@ -69,6 +69,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
   } else {
     mails = exampleMails(100);
   }
+
+  mails.forEach(correctMail);
 
   return {
     props: { mails },
