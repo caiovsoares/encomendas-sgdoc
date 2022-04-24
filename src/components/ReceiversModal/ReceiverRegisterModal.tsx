@@ -10,6 +10,8 @@ import {
   FormLabel,
   Input,
   useToast,
+  NumberInput,
+  NumberInputField,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import CustomSelect from '../CustomSelect';
@@ -36,7 +38,7 @@ export function ReceiverRegisterModal({ onClose, user }) {
 
     if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
       result = await (
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/mails`, data)
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/receivers`, data)
       ).data;
     } else {
       result = {};
@@ -45,22 +47,20 @@ export function ReceiverRegisterModal({ onClose, user }) {
     if (result.id) {
       toast({
         title: 'Sucesso',
-        description: 'Encomenda cadastrada com sucesso!',
+        description: 'Destinatário cadastrado com sucesso!',
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
       reset({
-        tracking: '',
-        type: 'Pacote',
-        size: 'Pequeno',
-        sender: '',
-        pesquisa_id: '',
+        fullName: '',
+        warName: '',
+        classYear: '',
+        cpf: '',
+        identity: '',
       });
       e.target.reset(); //não é o indicado pela documentação, mas funciona
-      setFocus('tracking');
-      //o useMemo na ReactTable impede de atualizar os dados
-      router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
+      setFocus('fullName');
     } else {
       toast({
         title: 'Erro',
@@ -88,40 +88,30 @@ export function ReceiverRegisterModal({ onClose, user }) {
     }
   };
 
-  // const pesquisaOnChange = (e) => {
-  //   setValue('pesquisa_id', e.target.value); //essa linha permite que o valor continue alterando
-
-  //   const options = rec.filter((receiver) => {
-  //     return search(getValues('pesquisa_id'), receiver, false);
-  //   });
-
-  //   setReceivers(options);
-  // };
-
   return (
     <ModalContent>
-      <ModalHeader>Cadastrar nova Encomenda</ModalHeader>
+      <ModalHeader>Cadastrar novo Destinatário</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl isRequired>
             <FormLabel fontWeight='semibold' color='gray.600'>
-              Rastreamento:
+              Nome Completo do Destinatário:
             </FormLabel>
             <Controller
-              name='tracking'
+              name='fullName'
               control={control}
               defaultValue=''
               rules={{ required: true }}
               render={({ field }) => (
                 <Input
                   {...field}
-                  isInvalid={errors.tracking}
-                  placeholder='Exemplo: BR123123123BR '
+                  isInvalid={errors.fullName}
+                  placeholder='Exemplo: Fulano Da Silva '
                   onBlur={() =>
                     customOnBlur(
-                      'tracking',
-                      'Rastreamento é obrigatório',
+                      'fullName',
+                      'Nome Completo é Obrigatório',
                       field
                     )
                   }
@@ -130,117 +120,107 @@ export function ReceiverRegisterModal({ onClose, user }) {
             />
           </FormControl>
 
-          <FormControl mt='3'>
+          <FormControl isRequired mt='3'>
             <FormLabel fontWeight='semibold' color='gray.600'>
-              Tipo:
+              Nome de Guerra:
             </FormLabel>
             <Controller
-              name='type'
-              control={control}
-              defaultValue='Pacote'
-              rules={{ required: false }}
-              render={({ field }) => (
-                <CustomSelect
-                  field={field}
-                  entities={['Pacote', 'Caixa', 'Envelope', 'Carta']}
-                  placeholder=''
-                  fieldName=''
-                  value='' /*placeholder="Selecione o tamanho"*/
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
-              Tamanho:
-            </FormLabel>
-            <Controller
-              name='size'
-              control={control}
-              defaultValue='Pequeno'
-              rules={{ required: false }}
-              render={({ field }) => (
-                <CustomSelect
-                  field={field}
-                  entities={['Pequeno', 'Medio', 'Grande']}
-                  placeholder=''
-                  fieldName=''
-                  value='' /*placeholder="Selecione o tamanho"*/
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
-              Remetente:
-            </FormLabel>
-            <Controller
-              name='sender'
+              name='warName'
               control={control}
               defaultValue=''
-              rules={{ required: false }}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder='Exemplo: Fulano da Silva Junior'
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
-              Destinatário:
-            </FormLabel>
-            <Controller
-              name='pesquisa_id'
-              control={control}
-              defaultValue=''
-              rules={{ required: false }}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  autoComplete='off'
-                  isInvalid={errors.pesquisa_id}
-                  placeholder='Pesquise aqui'
-                  // onChange={pesquisaOnChange}
-                />
-              )}
-            />
-          </FormControl>
-
-          {/* <FormControl mt='3' isRequired>
-            <Controller
-              name='destiny_id'
-              control={control}
-              defaultValue={getValues('pesquisa_id')}
               rules={{ required: true }}
               render={({ field }) => (
-                <CustomSelect
-                  field={field}
-                  entities={receivers}
-                  fieldName={'fullName'}
-                  placeholder='Selecione o destinatário'
-                  value=''
+                <Input
+                  {...field}
+                  isInvalid={errors.warName}
+                  placeholder='Exemplo: F. Silva'
+                  onBlur={() =>
+                    customOnBlur(
+                      'warName',
+                      'Nome de Guerra é Obrigatório',
+                      field
+                    )
+                  }
                 />
               )}
             />
-          </FormControl> */}
+          </FormControl>
 
+          <FormLabel fontWeight='semibold' color='gray.600'>
+            Ano de Entrada:
+          </FormLabel>
+
+          <Controller
+            name='classYear'
+            control={control}
+            defaultValue=''
+            rules={{ required: false }}
+            render={({ field }) => (
+              <NumberInput
+                {...field}
+                step={1}
+                min={new Date().getUTCFullYear() - 5}
+                max={new Date().getUTCFullYear() + 1}
+              >
+                <NumberInputField placeholder='Exemplo: 2021 (Somente para Cadetes)' />
+              </NumberInput>
+            )}
+          />
+          <FormLabel fontWeight='semibold' color='gray.600'>
+            CPF:
+          </FormLabel>
+
+          <Controller
+            name='cpf'
+            control={control}
+            defaultValue=''
+            rules={{ required: false, maxLength: 11, minLength: 11 }}
+            render={({ field }) => (
+              <NumberInput isInvalid={errors.cpf} {...field} step={1}>
+                <NumberInputField
+                  onBlur={() => {
+                    if (errors.cpf)
+                      toast({
+                        title: 'Atenção',
+                        description: 'CPF deve ter 11 digitos',
+                        status: 'warning',
+                        duration: 3000,
+                        isClosable: true,
+                      });
+                  }}
+                  placeholder='Exemplo: 12312312312'
+                />
+              </NumberInput>
+            )}
+          />
+
+          <FormLabel fontWeight='semibold' color='gray.600'>
+            Identidade:
+          </FormLabel>
+
+          <Controller
+            name='identity'
+            control={control}
+            defaultValue=''
+            rules={{ required: false }}
+            render={({ field }) => (
+              <Input {...field} placeholder='Exemplo: 12YS1234' />
+            )}
+          />
+
+          <Button onClick={onClose} float='right' mb='3' mt='3'>
+            Cancel
+          </Button>
           <Button
             isLoading={isSubmitting}
             colorScheme='blue'
+            float='right'
             mb='3'
             mt='3'
             mr={3}
             type='submit'
           >
             Save
-          </Button>
-          <Button onClick={onClose} mb='3' mt='3'>
-            Cancel
           </Button>
         </form>
       </ModalBody>

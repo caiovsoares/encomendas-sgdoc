@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, useDisclosure } from '@chakra-ui/react';
+import { Flex, useDisclosure, useToast } from '@chakra-ui/react';
 import { fakeReceivers } from '../utils';
 import { useTable, usePagination, useGlobalFilter } from 'react-table';
 import ReactTable from '../components/ReactTable';
@@ -15,6 +15,7 @@ const Destinatarios = ({ user, receivers }) => {
   const [receiver, setReceiver] = useState({});
   const [modalType, setModalType] = useState('');
   const router = useRouter();
+  const toast = useToast();
 
   async function HandleDetailItem(receiver: {}) {
     onOpen();
@@ -28,8 +29,15 @@ const Destinatarios = ({ user, receivers }) => {
   }
 
   function HandleRegisterManyItems() {
-    onOpen();
-    setModalType('registerMany');
+    toast({
+      title: 'Informação',
+      description: 'Esta funcionalidade ainda será desenvolvida',
+      status: 'info',
+      duration: 3000,
+      isClosable: true,
+    });
+    // onOpen();
+    // setModalType('registerMany');
   }
 
   const columns = React.useMemo(
