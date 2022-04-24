@@ -61,6 +61,7 @@ export function ReceiverRegisterModal({ onClose, user }) {
       });
       e.target.reset(); //não é o indicado pela documentação, mas funciona
       setFocus('fullName');
+      router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
     } else {
       toast({
         title: 'Erro',
