@@ -72,6 +72,7 @@ export function ReceiverDetailModal({ receiver, user, setModalType }) {
           <Text>Nome de Guerra: {receiver.warName}</Text>
           <Text>Identidade: {receiver.identity}</Text>
           <Text>CPF: {receiver.cpf}</Text>
+          <Text>Ano de Entrada: {receiver.classYear}</Text>
         </Box>
       </ModalBody>
       <ModalFooter>

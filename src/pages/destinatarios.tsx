@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Flex, useDisclosure, useToast } from '@chakra-ui/react';
-import { fakeReceivers } from '../utils';
+import { correctReceiver, exampleReceivers } from '../utils';
 import { useTable, usePagination, useGlobalFilter } from 'react-table';
 import ReactTable from '../components/ReactTable';
 import { PageButton } from '../components/PageButton';
@@ -136,8 +136,10 @@ export async function getServerSideProps(context) {
     ).data;
     `${process.env.API_URL}/receivers/findAll/${user.id}`;
   } else {
-    receivers = fakeReceivers;
+    receivers = exampleReceivers(50);
   }
+
+  receivers.forEach(correctReceiver);
 
   return {
     props: { user, receivers },

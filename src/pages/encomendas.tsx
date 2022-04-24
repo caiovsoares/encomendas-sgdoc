@@ -1,19 +1,6 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Flex,
-  Input,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-  Text,
-  useDisclosure,
-} from '@chakra-ui/react';
-import { exampleMails, fakeReceivers } from '../utils';
+import { Box, Flex, useDisclosure } from '@chakra-ui/react';
+import { correctMail, exampleMails, exampleReceivers } from '../utils';
 import {
   useTable,
   usePagination,
@@ -223,8 +210,10 @@ export async function getServerSideProps(context) {
     ).data;
   } else {
     mails = exampleMails(300);
-    receivers = fakeReceivers;
+    receivers = exampleReceivers(50);
   }
+
+  mails.forEach(correctMail);
 
   return {
     props: { mails, user, receivers },

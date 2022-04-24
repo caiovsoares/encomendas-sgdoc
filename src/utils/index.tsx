@@ -22,7 +22,7 @@ export const exampleMails = (q) => {
       destiny: {
         id: i,
         fullName: gerador('Caio Soares', 'Vinicius Amancio', 'Carol Castro'),
-        warName: gerador('C4 Mariane Mocker', 'C3 Fagundes', 'C2 Victoria'),
+        warName: gerador('Mariane Mocker', 'Fagundes', 'Victoria'),
         classYear: gerador('2020', '2021', '2022'),
         cpf: gerador('126.882.218-33', '377.466.108-11', '430.103.428-53'),
         identity: gerador('20YS0162', '21YS0241', '22YS0121'),
@@ -45,7 +45,7 @@ export const exampleMails = (q) => {
             'Gabriel Silva Ramos',
             'Clarice Outrora Outronome'
           ),
-          warName: gerador('C4 Mariane Mocker', 'C3 Fagundes', 'C2 Victoria'),
+          warName: gerador('Mariane Mocker', 'Fagundes', 'Victoria'),
           classYear: gerador('2020', '2021', '2022'),
           cpf: gerador('126.882.218-33', '377.466.108-11', '430.103.428-53'),
           identity: gerador('20YS0162', '21YS0241', '22YS0121'),
@@ -57,7 +57,7 @@ export const exampleMails = (q) => {
             'Gabriel Silva Ramos',
             'Clarice Outrora Outronome'
           ),
-          warName: gerador('C4 Mariane Mocker', 'C3 Fagundes', 'C2 Victoria'),
+          warName: gerador('Mariane Mocker', 'Fagundes', 'Victoria'),
           classYear: gerador('2020', '2021', '2022'),
           cpf: gerador('126.882.218-33', '377.466.108-11', '430.103.428-53'),
           identity: gerador('20YS0162', '21YS0241', '22YS0121'),
@@ -68,6 +68,21 @@ export const exampleMails = (q) => {
   });
 
   return bigMails;
+};
+export const exampleReceivers = (q) => {
+  let bigReceivers = new Array(q);
+  bigReceivers.fill(1);
+  bigReceivers = bigReceivers.map((e, i) => {
+    return {
+      id: i,
+      fullName: gerador('Caio Soares', 'Vinicius Amancio', 'Carol Castro'),
+      warName: gerador('Soares', 'Vinicius', 'Castro'),
+      classYear: gerador('2018', '2019', '2022'),
+      identity: gerador('18YS1920', '19YS0192', '22YS0182'),
+      cpf: gerador('49503940509', '19204958322', '29304958472'),
+    };
+  });
+  return bigReceivers;
 };
 export function removeAccent(newStringComAcento) {
   let string = newStringComAcento || '';
@@ -126,30 +141,69 @@ export function sweepObject(object) {
   lista = lista.flat(5);
   return lista;
 }
+export function correctMail(mail) {
+  const curYear = new Date().getUTCFullYear();
+  //Nota: Apenas cadetes possuem 'classYear'
+  //Transformando cadetes dos ultimos 4 anos em C1 C2 C3 C4, cadetes já formados em FORMADOS
+  // e como militares não pososuem classYear não recebem nada em seus nomes!!
+  if (mail.destiny.classYear) {
+    const dClassYear = mail.destiny.classYear;
+    if (curYear - dClassYear < 4) {
+      //mail.destiny.fullName = "C" + (curYear - dClassYear + 1) + " " + mail.destiny.fullName;
+      mail.destiny.warName =
+        'C' + (curYear - dClassYear + 1) + ' ' + mail.destiny.warName;
+    } else {
+      //mail.destiny.fullName = "FORMADO " + mail.destiny.fullName;
+      mail.destiny.warName = 'FORMADO ' + mail.destiny.warName;
+    }
+  }
+  if (mail.receiver)
+    if (mail.receiver.classYear) {
+      const dClassYear = mail.receiver.classYear;
+      if (curYear - dClassYear < 4) {
+        //mail.receiver.fullName = "C" + (curYear - dClassYear + 1) + " " + mail.receiver.fullName;
+        mail.receiver.warName =
+          'C' + (curYear - dClassYear + 1) + ' ' + mail.receiver.warName;
+      } else {
+        //mail.receiver.fullName = "FORMADO " + mail.receiver.fullName;
+        mail.receiver.warName = 'FORMADO ' + mail.receiver.warName;
+      }
+    }
 
-export const fakeReceivers = [
-  {
-    id: 'a111b111c111',
-    fullName: 'Caio Soares',
-    warName: 'Soares',
-    classYear: '2019',
-    identity: '17YS1924',
-    cpf: '46077534838',
-  },
-  {
-    id: 'a222b222c222',
-    fullName: 'Vinicius Amancio',
-    warName: 'Amancio',
-    classYear: '2019',
-    identity: '18YS2948',
-    cpf: '12345678910',
-  },
-  {
-    id: 'a333b333c333',
-    fullName: 'Carol Castro',
-    warName: 'Carol',
-    classYear: '2019',
-    identity: '19YS2958',
-    cpf: '98765432145',
-  },
-];
+  //transformando a string Date recebida do backend em uma data mais amigável para o usuário
+  const rDate = new Date(mail.received_at);
+  mail.received_at =
+    rDate.getDate().toLocaleString('pt-BR', { minimumIntegerDigits: 2 }) +
+    '/' +
+    (rDate.getMonth() + 1).toLocaleString('pt-BR', {
+      minimumIntegerDigits: 2,
+    }) +
+    '/' +
+    rDate.getFullYear();
+  const cDate = new Date(mail.created_at);
+  mail.created_at =
+    cDate.getDate().toLocaleString('pt-BR', { minimumIntegerDigits: 2 }) +
+    '/' +
+    (cDate.getMonth() + 1).toLocaleString('pt-BR', {
+      minimumIntegerDigits: 2,
+    }) +
+    '/' +
+    cDate.getFullYear();
+}
+export function correctReceiver(receiver) {
+  const curYear = new Date().getUTCFullYear();
+  //Nota: Apenas cadetes possuem 'classYear'
+  //Transformando cadetes dos ultimos 4 anos em C1 C2 C3 C4, cadetes já formados em FORMADOS
+  // e como militares não pososuem classYear não recebem nada em seus nomes!!
+  if (receiver.classYear) {
+    const dClassYear = receiver.classYear;
+    if (curYear - dClassYear < 4) {
+      //mail.destiny.fullName = "C" + (curYear - dClassYear + 1) + " " + mail.destiny.fullName;
+      receiver.warName =
+        'C' + (curYear - dClassYear + 1) + ' ' + receiver.warName;
+    } else {
+      //mail.destiny.fullName = "FORMADO " + mail.destiny.fullName;
+      receiver.warName = 'FORMADO ' + receiver.warName;
+    }
+  }
+}
