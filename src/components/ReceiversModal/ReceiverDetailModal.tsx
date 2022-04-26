@@ -37,8 +37,6 @@ export function ReceiverDetailModal({ receiver, user, setModalType, onClose }) {
     } else {
       result = {};
     }
-    console.log(receiver);
-    console.log(result);
 
     if (result.id) {
       toast({

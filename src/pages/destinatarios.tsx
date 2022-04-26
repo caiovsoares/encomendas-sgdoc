@@ -68,7 +68,6 @@ const Destinatarios = ({ user, receivers }) => {
                 size='30px'
                 onClick={() => {
                   HandleDetailItem(value);
-                  console.log(value);
                 }}
               />
             </Flex>

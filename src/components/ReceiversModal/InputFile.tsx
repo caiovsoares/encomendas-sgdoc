@@ -26,7 +26,6 @@ export const InputFile = ({ onClose, user }) => {
   const router = useRouter();
 
   const processData = (dataString) => {
-    console.log(dataString);
     const dataStringLines = dataString.split(/\r\n|\n/);
     const headers = dataStringLines[0].split(
       /,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
@@ -88,8 +87,6 @@ export const InputFile = ({ onClose, user }) => {
       receiversData,
     };
 
-    console.log(data);
-
     if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
       result = (
         await axios.post(
@@ -97,8 +94,6 @@ export const InputFile = ({ onClose, user }) => {
           data
         )
       ).data;
-
-      console.log(result);
       /*
        **********************************
        GAMBIARRA PARA VERIFICAR SE ALGUM DESTINATARIO NÃO FOI INSERIDO*/
