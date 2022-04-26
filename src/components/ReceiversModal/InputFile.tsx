@@ -19,7 +19,7 @@ import * as XLSX from 'xlsx';
 export const InputFile = ({ user }) => {
   const [canUpload, setCanUpload] = useState(false);
   const [canSubmit, setCanSubmit] = useState(false);
-  const [receivers, setReceivers] = useState([]);
+  const [receiversData, setReceiversData] = useState([]);
   const { isOpen, onToggle } = useDisclosure();
   const toast = useToast();
 
@@ -55,7 +55,7 @@ export const InputFile = ({ user }) => {
       }
     }
 
-    setReceivers(list);
+    setReceiversData(list);
   };
 
   // handle file upload
@@ -83,7 +83,7 @@ export const InputFile = ({ user }) => {
     let result;
     const data = {
       userId: user.id,
-      receivers,
+      receiversData,
     };
 
     console.log(data);
