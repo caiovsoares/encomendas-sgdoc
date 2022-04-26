@@ -5,20 +5,13 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
-  FormControl,
-  FormLabel,
-  Input,
   useToast,
-  FormHelperText,
-  Switch,
   Heading,
   Flex,
   Text,
 } from '@chakra-ui/react';
 import axios from 'axios';
-import { useForm, Controller } from 'react-hook-form';
-import { useState } from 'react';
-import * as XLSX from 'xlsx';
+import { useForm } from 'react-hook-form';
 import { InputFile } from './InputFile';
 import { ShowTutorial } from './ShowTutorial';
 
@@ -33,41 +26,6 @@ export function ReceiverRegisterManyModal({ onClose, user }) {
     setFocus,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
-
-  const onSubmit = async (data) => {
-    let result;
-    data.userId = user.id;
-
-    if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
-      // result = (
-      //   await axios.post(
-      //     `${process.env.NEXT_PUBLIC_API_URL}/receivers/${receiver.id}`,
-      //     data
-      //   )
-      // ).data;
-    } else {
-      result = {};
-    }
-
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Destinatário alterado com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
-      onClose(); //ESSA LINHA FECHA A JANELA APÓS A EDIÇÃO
-    } else
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema, verifique os dados e tente novamente!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-  };
 
   const customOnBlur = (fieldName, fieldMessage, fField) => {
     if (!fField.value) {
@@ -101,7 +59,7 @@ export function ReceiverRegisterManyModal({ onClose, user }) {
             O uso incorreto dessa ferramenta pode comprometer o sistema
           </Text>
           <ShowTutorial />
-          <InputFile />
+          <InputFile user={user} />
         </Flex>
       </ModalBody>
     </ModalContent>

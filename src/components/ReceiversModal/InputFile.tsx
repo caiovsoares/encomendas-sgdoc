@@ -9,15 +9,19 @@ import {
   Switch,
   Text,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
+import axios from 'axios';
+import { userInfo } from 'os';
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 
-export const InputFile = () => {
+export const InputFile = ({ user }) => {
   const [canUpload, setCanUpload] = useState(false);
   const [canSubmit, setCanSubmit] = useState(false);
-  const [data, setData] = useState([]);
+  const [receivers, setReceivers] = useState([]);
   const { isOpen, onToggle } = useDisclosure();
+  const toast = useToast();
 
   const processData = (dataString) => {
     console.log(dataString);
@@ -51,7 +55,7 @@ export const InputFile = () => {
       }
     }
 
-    setData(list);
+    setReceivers(list);
   };
 
   // handle file upload
@@ -74,6 +78,62 @@ export const InputFile = () => {
       setCanSubmit(true);
     } else setCanSubmit(false);
   };
+
+  const onSubmit = async () => {
+    let result;
+    const data = {
+      userId: user.id,
+      receivers,
+    };
+
+    console.log(data);
+
+    if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
+      result = (
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/receivers/registerMany`,
+          data
+        )
+      ).data;
+
+      console.log(result);
+      /*
+       **********************************
+       GAMBIARRA PARA VERIFICAR SE ALGUM DESTINATARIO NÃO FOI INSERIDO*/
+      let mensagemAviso = false;
+      result.forEach((receiver) => {
+        if (receiver.erro) mensagemAviso = true;
+      });
+
+      if (!mensagemAviso)
+        toast({
+          title: 'Sucesso',
+          description: 'Destinatários inseridos com sucesso!',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+      else
+        toast({
+          title: 'Informação',
+          description:
+            'Alguns dos destinatários não foram inseridos, confira o console de seu navegador!',
+          status: 'info',
+          duration: 3000,
+          isClosable: true,
+        });
+    } else {
+      result = {};
+      toast({
+        title: 'Erro',
+        description: 'Você está em ambiente de desenvolvimento!',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <Flex flexDir='column'>
       <Flex alignItems='center' marginY='10px'>
@@ -87,15 +147,10 @@ export const InputFile = () => {
             type='file'
             accept='.csv, .xlsx, .xls'
             onChange={handleFileUpload}
+            isDisabled={!isOpen}
           />
           <FormHelperText>Insira um arquivo .xlsx, .xls ou .csv</FormHelperText>
-          <Button
-            my='10px'
-            disabled={!canSubmit}
-            onClick={() => {
-              console.log(data);
-            }}
-          >
+          <Button my='10px' disabled={!canSubmit} onClick={onSubmit}>
             Enviar
           </Button>
         </FormControl>
