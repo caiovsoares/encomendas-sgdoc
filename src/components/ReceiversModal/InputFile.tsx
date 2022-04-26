@@ -102,7 +102,8 @@ export const InputFile = ({ user }) => {
        GAMBIARRA PARA VERIFICAR SE ALGUM DESTINATARIO NÃO FOI INSERIDO*/
       let mensagemAviso = false;
       result.forEach((receiver) => {
-        if (receiver.erro) mensagemAviso = true;
+        if (receiver.error) mensagemAviso = true;
+        console.log(receiver);
       });
 
       if (!mensagemAviso)
