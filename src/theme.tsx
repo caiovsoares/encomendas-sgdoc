@@ -29,6 +29,14 @@ const theme = extendTheme({
         default: 'red.700',
         _dark: 'red.900',
       },
+      alert: {
+        default: 'red.500',
+        _dark: 'red.500',
+      },
+      tutorial: {
+        default: 'gray.400',
+        _dark: 'gray.600',
+      },
       alertButtonHover: {
         default: 'red.900',
         _dark: 'red.700',

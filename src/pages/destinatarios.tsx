@@ -36,8 +36,8 @@ const Destinatarios = ({ user, receivers }) => {
       duration: 3000,
       isClosable: true,
     });
-    // onOpen();
-    // setModalType('registerMany');
+    onOpen();
+    setModalType('registerMany');
   }
 
   const columns = React.useMemo(
@@ -138,7 +138,6 @@ export async function getServerSideProps(context) {
   } else {
     receivers = exampleReceivers(50);
   }
-
   receivers.forEach(correctReceiver);
 
   return {

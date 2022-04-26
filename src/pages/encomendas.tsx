@@ -15,7 +15,6 @@ import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import IndeterminateCheckbox from '../components/IndeterminateCheckbox';
-import Link from 'next/link';
 import { SearchButton } from '../components/SearchButton';
 
 const Encomendas = ({ mails, user, receivers }) => {

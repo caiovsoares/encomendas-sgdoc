@@ -1,6 +1,7 @@
 import { Modal, ModalOverlay } from '@chakra-ui/react';
 import { ReceiverDetailModal } from './ReceiverDetailModal';
 import { ReceiverEditModal } from './ReceiverEditModal';
+import { ReceiverRegisterManyModal } from './ReceiverRegisterManyModal';
 import { ReceiverRegisterModal } from './ReceiverRegisterModal';
 
 const ReceiversModal = ({
@@ -29,16 +30,9 @@ const ReceiversModal = ({
       {type === 'edit' && (
         <ReceiverEditModal receiver={receiver} onClose={onClose} user={user} />
       )}
-      {/* {type === 'registerMany' && <MailSearchModal mail={mail} />}
-
-      {type === 'edit' && (
-        <MailEditModal
-          mail={mail}
-          onClose={onClose}
-          rec={receivers}
-          user={user}
-        />
-      )} */}
+      {type === 'registerMany' && (
+        <ReceiverRegisterManyModal onClose={onClose} user={user} />
+      )}
     </Modal>
   );
 };
