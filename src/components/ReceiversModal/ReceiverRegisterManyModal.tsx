@@ -59,7 +59,7 @@ export function ReceiverRegisterManyModal({ onClose, user }) {
             O uso incorreto dessa ferramenta pode comprometer o sistema
           </Text>
           <ShowTutorial />
-          <InputFile user={user} />
+          <InputFile onClose={onClose} user={user} />
         </Flex>
       </ModalBody>
     </ModalContent>

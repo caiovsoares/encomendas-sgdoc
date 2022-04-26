@@ -17,6 +17,7 @@ const ReceiversModal = ({
       <ModalOverlay backdropFilter='blur(5px)' />
       {type === 'detail' && (
         <ReceiverDetailModal
+          onClose={onClose}
           user={user}
           receiver={receiver}
           setModalType={setModalType}

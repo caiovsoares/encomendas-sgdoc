@@ -21,7 +21,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { BiEdit, BiTrash } from 'react-icons/bi';
 
-export function ReceiverDetailModal({ receiver, user, setModalType }) {
+export function ReceiverDetailModal({ receiver, user, setModalType, onClose }) {
   const router = useRouter();
   const toast = useToast();
 
@@ -48,6 +48,7 @@ export function ReceiverDetailModal({ receiver, user, setModalType }) {
         duration: 3000,
         isClosable: true,
       });
+      onClose();
       //o useMemo na ReactTable impede de atualizar os dados
       router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
     } else {

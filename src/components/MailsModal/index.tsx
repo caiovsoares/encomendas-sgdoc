@@ -19,7 +19,12 @@ const MailsModal = ({
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay backdropFilter='blur(5px)' />
       {type === 'detail' && (
-        <MailDetailModal user={user} mail={mail} setModalType={setModalType} />
+        <MailDetailModal
+          onClose={onClose}
+          user={user}
+          mail={mail}
+          setModalType={setModalType}
+        />
       )}
 
       {type === 'register' && (

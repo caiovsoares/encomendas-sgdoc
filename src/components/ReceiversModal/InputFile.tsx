@@ -12,16 +12,18 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import { userInfo } from 'os';
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 
-export const InputFile = ({ user }) => {
+export const InputFile = ({ onClose, user }) => {
   const [canUpload, setCanUpload] = useState(false);
   const [canSubmit, setCanSubmit] = useState(false);
   const [receiversData, setReceiversData] = useState([]);
   const { isOpen, onToggle } = useDisclosure();
   const toast = useToast();
+  const router = useRouter();
 
   const processData = (dataString) => {
     console.log(dataString);
@@ -102,8 +104,10 @@ export const InputFile = ({ user }) => {
        GAMBIARRA PARA VERIFICAR SE ALGUM DESTINATARIO NÃO FOI INSERIDO*/
       let mensagemAviso = false;
       result.forEach((receiver) => {
-        if (receiver.error) mensagemAviso = true;
-        console.log(receiver);
+        if (receiver.error) {
+          mensagemAviso = true;
+          console.log(receiver);
+        }
       });
 
       if (!mensagemAviso)
@@ -123,6 +127,8 @@ export const InputFile = ({ user }) => {
           duration: 3000,
           isClosable: true,
         });
+      onClose();
+      router.replace(router.asPath);
     } else {
       result = {};
       toast({
