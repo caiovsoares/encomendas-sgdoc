@@ -109,7 +109,10 @@ function ReactTable({ tableOptions }) {
               {headerGroups.map((headerGroup) => (
                 <Tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
-                    <Th {...column.getHeaderProps()}>
+                    <Th
+                      onClick={column.column.getToggleSortingHandler()}
+                      {...column.getHeaderProps()}
+                    >
                       {column.render('Header')}
                     </Th>
                   ))}

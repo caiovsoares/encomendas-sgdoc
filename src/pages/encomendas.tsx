@@ -6,6 +6,9 @@ import {
   usePagination,
   useRowSelect,
   useGlobalFilter,
+  SortingState,
+  getCoreRowModel,
+  getSortedRowModel,
 } from 'react-table';
 import ReactTable from '../components/ReactTable';
 import { PageButton } from '../components/PageButton';
@@ -45,6 +48,8 @@ const Encomendas = ({ mails, user, receivers }) => {
     setMail(mail);
     setModalType('search');
   }
+
+  const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const columns = React.useMemo(
     () => [
@@ -108,6 +113,12 @@ const Encomendas = ({ mails, user, receivers }) => {
     {
       columns,
       data: mails,
+      state: {
+        sorting,
+      },
+      onSortingChange: setSorting,
+      getCoreRowModel: getCoreRowModel(),
+      getSortedRowModel: getSortedRowModel(),
     },
     useGlobalFilter,
     usePagination,
