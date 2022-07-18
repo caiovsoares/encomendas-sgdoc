@@ -1,12 +1,13 @@
 import React from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import { correctMail, exampleMails } from '../utils';
+import { correctDate, correctMail, exampleMails } from '../utils';
 import ReactTable from '../components/ReactTable';
 import {
   useTable,
   useGlobalFilter,
   usePagination,
   useRowSelect,
+  useSortBy,
 } from 'react-table';
 import { GetStaticProps } from 'next';
 import { BiCheckCircle, BiXCircle } from 'react-icons/bi';
@@ -18,7 +19,11 @@ const Index = (props) => {
       { Header: 'Rastreio', accessor: 'tracking' },
       { Header: 'Remetente', accessor: 'sender' },
       { Header: 'Destinatário', accessor: 'destiny.warName' },
-      { Header: 'Chegada', accessor: 'created_at' },
+      {
+        Header: 'Chegada',
+        accessor: 'created_at',
+        Cell: ({ cell: { value } }) => correctDate(value),
+      },
       {
         Header: 'Recebido',
         accessor: 'receiver.warName',
@@ -41,7 +46,11 @@ const Index = (props) => {
           );
         },
       },
-      { Header: 'Em', accessor: 'received_at' },
+      {
+        Header: 'Em',
+        accessor: 'received_at',
+        Cell: ({ cell: { value } }) => correctDate(value),
+      },
     ],
     []
   );
@@ -54,6 +63,7 @@ const Index = (props) => {
       data,
     },
     useGlobalFilter,
+    useSortBy,
     usePagination,
     useRowSelect
   );

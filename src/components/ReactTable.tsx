@@ -14,19 +14,14 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import {
+  BiChevronDown,
   BiChevronLeft,
   BiChevronRight,
   BiChevronsLeft,
   BiChevronsRight,
+  BiChevronUp,
 } from 'react-icons/bi';
-import {
-  useTable,
-  usePagination,
-  useRowSelect,
-  useGlobalFilter,
-} from 'react-table';
 import { GlobalFilter } from './GlobalFilter';
-import IndeterminateCheckbox from './IndeterminateCheckbox';
 
 function ReactTable({ tableOptions }) {
   // Use the state and functions returned from useTable to build your UI
@@ -112,7 +107,18 @@ function ReactTable({ tableOptions }) {
                     <Th
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                     >
-                      {column.render('Header')}
+                      <Flex flexDir='row' alignItems='center'>
+                        {column.render('Header')}
+                        {column.isSorted ? (
+                          column.isSortedDesc ? (
+                            <BiChevronDown size='15px' />
+                          ) : (
+                            <BiChevronUp size='15px' />
+                          )
+                        ) : (
+                          ''
+                        )}
+                      </Flex>
                     </Th>
                   ))}
                 </Tr>

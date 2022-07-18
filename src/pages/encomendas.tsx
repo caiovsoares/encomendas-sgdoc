@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Box, Flex, useDisclosure } from '@chakra-ui/react';
-import { correctMail, exampleMails, exampleReceivers } from '../utils';
+import {
+  correctDate,
+  correctMail,
+  exampleMails,
+  exampleReceivers,
+} from '../utils';
 import {
   useTable,
   usePagination,
+  useSortBy,
   useRowSelect,
   useGlobalFilter,
-  useSortBy,
 } from 'react-table';
 import ReactTable from '../components/ReactTable';
 import { PageButton } from '../components/PageButton';
@@ -62,6 +67,11 @@ const Encomendas = ({ mails, user, receivers }) => {
         accessor: 'destiny.warName',
       },
       {
+        Header: 'Chegada',
+        accessor: 'created_at',
+        Cell: ({ cell: { value } }) => correctDate(value),
+      },
+      {
         Header: 'Recebido',
         accessor: 'receiver.warName',
         Cell: ({ cell: { value } }) => {
@@ -111,6 +121,7 @@ const Encomendas = ({ mails, user, receivers }) => {
       data: mails,
     },
     useGlobalFilter,
+    useSortBy,
     usePagination,
     useRowSelect,
     (hooks) => {
@@ -136,8 +147,7 @@ const Encomendas = ({ mails, user, receivers }) => {
         },
         ...columns,
       ]);
-    },
-    useSortBy
+    }
   );
 
   const getReceiveMails = () =>

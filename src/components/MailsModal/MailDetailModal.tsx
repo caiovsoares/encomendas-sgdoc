@@ -20,6 +20,7 @@ import {
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { BiEdit, BiTrash } from 'react-icons/bi';
+import { correctDate } from '../../utils';
 
 export function MailDetailModal({ mail, user, setModalType, onClose }) {
   const router = useRouter();
@@ -71,7 +72,7 @@ export function MailDetailModal({ mail, user, setModalType, onClose }) {
           <Text>Tipo: {mail.type}</Text>
           <Text>Tamanho: {mail.size}</Text>
           <Text>Remetente: {mail.sender}</Text>
-          <Text>Data de chegada: {mail.created_at}</Text>
+          <Text>Data de chegada: {correctDate(mail.created_at)}</Text>
         </Box>
         <br />
         <hr />
@@ -94,7 +95,7 @@ export function MailDetailModal({ mail, user, setModalType, onClose }) {
               <Text>Nome de Guerra: {mail.receiver?.warName}</Text>
               <Text>CPF: {mail.receiver?.cpf}</Text>
               <Text>Identidade: {mail.receiver?.identity}</Text>
-              <Text>Data de recebimento: {mail.received_at}</Text>
+              <Text>Data de recebimento: {correctDate(mail.received_at)}</Text>
             </Box>
           </>
         )}

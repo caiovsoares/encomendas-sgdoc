@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { Flex, useDisclosure, useToast } from '@chakra-ui/react';
 import { correctReceiver, exampleReceivers } from '../utils';
-import { useTable, usePagination, useGlobalFilter } from 'react-table';
+import {
+  useTable,
+  useSortBy,
+  usePagination,
+  useGlobalFilter,
+} from 'react-table';
 import ReactTable from '../components/ReactTable';
 import { PageButton } from '../components/PageButton';
 import { BiInfoCircle } from 'react-icons/bi';
@@ -84,6 +89,7 @@ const Destinatarios = ({ user, receivers }) => {
       data: receivers,
     },
     useGlobalFilter,
+    useSortBy,
     usePagination
   );
 

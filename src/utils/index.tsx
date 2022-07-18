@@ -30,7 +30,7 @@ export const exampleMails = (q) => {
       created_at: gerador(
         '2021-06-25 14:35:22',
         '2021-06-26 09:35:22',
-        '2021-04-12 12:15:22'
+        '2021-04-27 12:15:22'
       ),
       received_at: gerador(
         '2021-08-03 16:45:22',
@@ -169,19 +169,12 @@ export function correctMail(mail) {
         mail.receiver.warName = 'FORMADO ' + mail.receiver.warName;
       }
     }
+}
 
+export function correctDate(date) {
   //transformando a string Date recebida do backend em uma data mais amigável para o usuário
-  const rDate = new Date(mail.received_at);
-  mail.received_at =
-    rDate.getDate().toLocaleString('pt-BR', { minimumIntegerDigits: 2 }) +
-    '/' +
-    (rDate.getMonth() + 1).toLocaleString('pt-BR', {
-      minimumIntegerDigits: 2,
-    }) +
-    '/' +
-    rDate.getFullYear();
-  const cDate = new Date(mail.created_at);
-  mail.created_at =
+  const cDate = new Date(date);
+  const newDate =
     cDate.getDate().toLocaleString('pt-BR', { minimumIntegerDigits: 2 }) +
     '/' +
     (cDate.getMonth() + 1).toLocaleString('pt-BR', {
@@ -189,7 +182,9 @@ export function correctMail(mail) {
     }) +
     '/' +
     cDate.getFullYear();
+  return newDate;
 }
+
 export function correctReceiver(receiver) {
   const curYear = new Date().getUTCFullYear();
   //Nota: Apenas cadetes possuem 'classYear'
