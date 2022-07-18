@@ -1,38 +1,39 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
-import axios from "axios";
+import axios from 'axios';
 
 export default NextAuth({
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
-      name: "Credentials",
+      name: 'Credentials',
       // The credentials is used to generate a suitable form on the sign in page.
       // You can specify whatever fields you are expecting to be submitted.
       // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        login: { label: "Login", type: "text", placeholder: "login" },
-        password: { label: "Password", type: "password" },
+        login: { label: 'Login', type: 'text', placeholder: 'login' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
         try {
           let user;
 
-          if (process.env.ENVIRONMENT != "DEV")
+          if (process.env.ENVIRONMENT != 'DEV')
             user = await axios.post(`${process.env.API_URL}/auth`, credentials);
           else
             user = {
               data: {
-                id: "72526e09-15d7-4667-8b96-773a8e192b4c",
-                name: "string",
-                warName: "string",
-                email: "string",
-                login: "string",
+                id: '72526e09-15d7-4667-8b96-773a8e192b4c',
+                name: 'string',
+                warName: 'Celim',
+                rank: 'MAJ',
+                email: 'string',
+                login: 'string',
                 permission: {
-                  id: "8eb32656-0f3c-4c12-bc24-828ab687bed3",
-                  name: "string",
+                  id: '8eb32656-0f3c-4c12-bc24-828ab687bed3',
+                  name: 'string',
                   editPermission: true,
                   editUser: true,
                   editReceiver: true,
