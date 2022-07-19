@@ -26,11 +26,11 @@ export default NextAuth({
             user = {
               data: {
                 id: '72526e09-15d7-4667-8b96-773a8e192b4c',
-                name: 'string',
-                warName: 'Celim',
-                rank: 'CB',
-                email: 'string',
-                login: 'string',
+                name: 'admin',
+                warName: 'admin',
+                rank: 'FAB',
+                email: 'admin',
+                login: 'admin',
                 permission: {
                   id: '8eb32656-0f3c-4c12-bc24-828ab687bed3',
                   name: 'string',

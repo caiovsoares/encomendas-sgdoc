@@ -3,12 +3,13 @@ import { BiLogInCircle, BiLogOutCircle } from 'react-icons/bi';
 
 export const ButtonNavigationSession = ({ session, signIn, signOut }) => {
   const ranks = {
-    S2: 'G00-FAB_Soldado_Segunda_classe.svg',
-    S1: 'soldado.png',
-    CB: 'cabo.png',
-    _3S: 'G03-FAB_Terceiro_Sargento.svg',
-    _2S: 'G04-FAB_Segundo_Sargento.svg',
-    _1S: 'G05-FAB_Primeiro_Sargento.svg',
+    FAB: 'FAB.png',
+    S2: 'S2.png',
+    S1: 'S1.png',
+    CB: '2S.png',
+    _3S: '3S.png',
+    _2S: '2S.png',
+    _1S: '1S.png',
     SO: 'G06-FAB_Suboficial.png',
     ASP: 'G07-FAB_Aspirante.png',
     _2T: 'G08-FAB_Segundo-Tenente.gif',
@@ -33,8 +34,12 @@ export const ButtonNavigationSession = ({ session, signIn, signOut }) => {
           color='menuButtonText'
           justifyContent='left'
         >
-          <Box w='30px' h='30px' margin='10px'>
-            <Image src={`patentes/${ranks[session?.user?.rank]}`} minW='30px' />
+          <Box w='30px' h='30px' margin='10px' justifyContent='center'>
+            <Image
+              src={`patentes/${ranks[session?.user?.rank]}`}
+              h='30px'
+              minW='30px'
+            />
           </Box>
           {session?.user?.warName}
         </Button>
