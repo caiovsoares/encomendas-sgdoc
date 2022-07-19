@@ -4,8 +4,8 @@ import { BiLogInCircle, BiLogOutCircle } from 'react-icons/bi';
 export const ButtonNavigationSession = ({ session, signIn, signOut }) => {
   const ranks = {
     S2: 'G00-FAB_Soldado_Segunda_classe.svg',
-    S1: 'G01-FAB_Soldado.svg',
-    CB: 'G02-FAB_Cabo.svg',
+    S1: 'soldado.png',
+    CB: 'cabo.png',
     _3S: 'G03-FAB_Terceiro_Sargento.svg',
     _2S: 'G04-FAB_Segundo_Sargento.svg',
     _1S: 'G05-FAB_Primeiro_Sargento.svg',

@@ -28,7 +28,7 @@ export default NextAuth({
                 id: '72526e09-15d7-4667-8b96-773a8e192b4c',
                 name: 'string',
                 warName: 'Celim',
-                rank: 'MAJ',
+                rank: 'CB',
                 email: 'string',
                 login: 'string',
                 permission: {
