@@ -40,13 +40,13 @@ export function AuthProvider({ children }) {
 
   async function signIn({ login, password }: SignInData) {
     const { access_token, user } = (
-      await axios.post(`${process.env.API_URL}/auth`, {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth`, {
         login,
         password,
       })
     ).data;
 
-    setCookie(undefined, 'sgdoc.token', undefined, {
+    setCookie(undefined, 'sgdoc.token', access_token, {
       maxAge: 60 * 60 * 24, //24 hours
     });
 
