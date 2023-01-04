@@ -211,16 +211,18 @@ export async function getServerSideProps(context) {
   console.log(toDate);
 
   if (process.env.ENVIRONMENT != 'DEV') {
-    mails = await (
-      await axios.get(
-        `${
-          process.env.API_URL
-        }/mails/findAll?userId=${'session.user.id'}&from=${fromDate}&to=${toDate}`
-      )
-    ).data;
-    receivers = await (
-      await axios.get(`${process.env.API_URL}/receivers/findAll/${user.id}`)
-    ).data;
+    mails = exampleMails(300);
+    receivers = exampleReceivers(50);
+    // mails = await (
+    //   await axios.get(
+    //     `${
+    //       process.env.API_URL
+    //     }/mails/findAll?userId=${'session.user.id'}&from=${fromDate}&to=${toDate}`
+    //   )
+    // ).data;
+    // receivers = await (
+    //   await axios.get(`${process.env.API_URL}/receivers/findAll/${user.id}`)
+    // ).data;
   } else {
     mails = exampleMails(300);
     receivers = exampleReceivers(50);

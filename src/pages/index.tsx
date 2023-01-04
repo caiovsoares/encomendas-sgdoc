@@ -75,7 +75,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
   let mails;
 
   if (process.env.ENVIRONMENT != 'DEV') {
-    mails = await (await axios.get(`${process.env.API_URL}/mails/`)).data;
+    mails = exampleMails(100);
+    // mails = await (await axios.get(`${process.env.API_URL}/mails/`)).data;
   } else {
     mails = exampleMails(100);
   }

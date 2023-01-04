@@ -135,10 +135,11 @@ export async function getServerSideProps(context) {
   let receivers;
 
   if (process.env.ENVIRONMENT != 'DEV') {
-    receivers = await (
-      await axios.get(`${process.env.API_URL}/receivers/findAll/${user.id}`)
-    ).data;
-    `${process.env.API_URL}/receivers/findAll/${user.id}`;
+    receivers = exampleReceivers(50);
+    // receivers = await (
+    //   await axios.get(`${process.env.API_URL}/receivers/findAll/${user.id}`)
+    // ).data;
+    // `${process.env.API_URL}/receivers/findAll/${user.id}`;
   } else {
     receivers = exampleReceivers(50);
   }
