@@ -11,7 +11,9 @@ import {
   ModalContent,
   ModalOverlay,
 } from '@chakra-ui/react';
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export function LoginModal({ onClose, isOpen }) {
   const {
@@ -20,9 +22,10 @@ export function LoginModal({ onClose, isOpen }) {
     formState: { isSubmitting },
   } = useForm({ mode: 'onChange' });
 
+  const { signIn } = useContext(AuthContext);
+
   const onSubmit = async (data) => {
-    await new Promise((r) => setTimeout(r, 10000));
-    console.log(data);
+    await signIn(data);
   };
 
   return (
