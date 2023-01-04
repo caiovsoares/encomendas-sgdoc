@@ -1,23 +1,23 @@
-import { ChakraProvider } from '@chakra-ui/react'
-import { SessionProvider } from "next-auth/react"
+import { ChakraProvider } from '@chakra-ui/react';
 
-import theme from '../theme'
-import { AppProps } from 'next/app'
+import theme from '../theme';
+import { AppProps } from 'next/app';
 
-import { Container } from '../components/DarkMode/Container'
-import { DarkModeSwitch } from '../components/DarkMode/DarkModeSwitch'
+import { Container } from '../components/DarkMode/Container';
+import { DarkModeSwitch } from '../components/DarkMode/DarkModeSwitch';
+import { AuthProvider } from '../contexts/AuthContext';
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider resetCSS theme={theme}>
-      <SessionProvider session={session}>
-        <Container >
+      <AuthProvider>
+        <Container>
           <Component {...pageProps} />
           <DarkModeSwitch />
         </Container>
-      </SessionProvider>
+      </AuthProvider>
     </ChakraProvider>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;

@@ -11,7 +11,6 @@ import ReactTable from '../components/ReactTable';
 import { PageButton } from '../components/PageButton';
 import { BiInfoCircle } from 'react-icons/bi';
 import axios from 'axios';
-import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import ReceiversModal from '../components/ReceiversModal';
 
@@ -123,16 +122,16 @@ const Destinatarios = ({ user, receivers }) => {
 };
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  if (!session || !session.user.permission.editReceiver)
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
+  // if (!session || !session.user.permission.editReceiver)
+  //   return {
+  //     redirect: {
+  //       destination: '/',
+  //       permanent: false,
+  //     },
+  //   };
 
-  const user = session.user;
+  // const user = session.user;
+  const user = null;
   let receivers;
 
   if (process.env.ENVIRONMENT != 'DEV') {

@@ -1,7 +1,8 @@
-import { Box, Button, Image } from '@chakra-ui/react';
+import { Box, Button, Image, useDisclosure } from '@chakra-ui/react';
 import { BiLogInCircle, BiLogOutCircle } from 'react-icons/bi';
+import { LoginModal } from './LoginModal';
 
-export const ButtonNavigationSession = ({ session, signIn, signOut }) => {
+export const ButtonNavigationSession = () => {
   const ranks = {
     FAB: 'FAB.png',
     S2: 'S2.png',
@@ -20,52 +21,49 @@ export const ButtonNavigationSession = ({ session, signIn, signOut }) => {
     CEL: 'G13-FAB_Coronel.png',
   };
 
-  if (session)
-    return (
-      <>
-        <Button
-          margin={2}
-          marginTop={4}
-          padding={0}
-          variant='ghost'
-          _hover={{ bg: 'menuButtonHover' }}
-          width='calc(100% - 20px)'
-          overflow='clip'
-          color='menuButtonText'
-          justifyContent='left'
-        >
-          <Box w='30px' h='30px' margin='10px' justifyContent='center'>
-            <Image
-              src={`patentes/${ranks[session?.user?.rank]}`}
-              h='30px'
-              minW='30px'
-            />
-          </Box>
-          {session?.user?.warName}
-        </Button>
-        <Button
-          onClick={signOut}
-          margin={2}
-          marginTop={4}
-          padding={0}
-          variant='ghost'
-          _hover={{ bg: 'menuButtonHover' }}
-          width='calc(100% - 20px)'
-          overflow='clip'
-          color='menuButtonText'
-          justifyContent='left'
-        >
-          <Box w='30px' h='30px' margin='10px'>
-            <BiLogOutCircle size='30px' />
-          </Box>
-          Logout
-        </Button>
-      </>
-    );
-  else
-    return (
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // return (
+  //   <>
+  //     <Button
+  //       margin={2}
+  //       marginTop={4}
+  //       padding={0}
+  //       variant='ghost'
+  //       _hover={{ bg: 'menuButtonHover' }}
+  //       width='calc(100% - 20px)'
+  //       overflow='clip'
+  //       color='menuButtonText'
+  //       justifyContent='left'
+  //     >
+  //       <Box w='30px' h='30px' margin='10px' justifyContent='center'>
+  //         <Image src={`patentes/${ranks['FAB']}`} h='30px' minW='30px' />
+  //       </Box>
+  //       {'session?.user?.warName'}
+  //     </Button>
+  //     <Button
+  //       // onClick={}
+  //       margin={2}
+  //       marginTop={4}
+  //       padding={0}
+  //       variant='ghost'
+  //       _hover={{ bg: 'menuButtonHover' }}
+  //       width='calc(100% - 20px)'
+  //       overflow='clip'
+  //       color='menuButtonText'
+  //       justifyContent='left'
+  //     >
+  //       <Box w='30px' h='30px' margin='10px'>
+  //         <BiLogOutCircle size='30px' />
+  //       </Box>
+  //       Logout
+  //     </Button>
+  //   </>
+  // );
+  return (
+    <>
       <Button
-        onClick={signIn}
+        onClick={onOpen}
         margin={2}
         marginTop={4}
         padding={0}
@@ -81,5 +79,7 @@ export const ButtonNavigationSession = ({ session, signIn, signOut }) => {
         </Box>
         Login
       </Button>
-    );
+      <LoginModal onClose={onClose} isOpen={isOpen} />
+    </>
+  );
 };

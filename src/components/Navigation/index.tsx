@@ -3,12 +3,10 @@ import { useState } from 'react';
 import { ButtonNavigation } from './ButtonNavigation';
 import { BiGift, BiHome, BiUserCircle } from 'react-icons/bi';
 import { ImTrello } from 'react-icons/im';
-import { useSession, signIn, signOut } from 'next-auth/react';
 import { ButtonNavigationSession } from './ButtonNavigationSession';
 
 export const Navigation = () => {
   const [isOpen, changeMenuState] = useState(false);
-  const { data: session, status } = useSession();
 
   return (
     <Flex
@@ -33,30 +31,22 @@ export const Navigation = () => {
       <ButtonNavigation href='/' icon={<BiHome size='30px' />}>
         Início{' '}
       </ButtonNavigation>
-      {session?.user?.permission?.editMail && (
-        <ButtonNavigation href='/encomendas' icon={<BiGift size='30px' />}>
-          Encomendas
-        </ButtonNavigation>
-      )}
-      {session?.user?.permission?.editReceiver && (
-        <ButtonNavigation
-          href='/destinatarios'
-          icon={<BiUserCircle size='30px' />}
-        >
-          Destinatarios{' '}
-        </ButtonNavigation>
-      )}
+      <ButtonNavigation href='/encomendas' icon={<BiGift size='30px' />}>
+        Encomendas
+      </ButtonNavigation>
+      <ButtonNavigation
+        href='/destinatarios'
+        icon={<BiUserCircle size='30px' />}
+      >
+        Destinatarios{' '}
+      </ButtonNavigation>
       <ButtonNavigation
         href='https://trello.com/b/lCeNCQcB/encomendas-sgdoc'
         icon={<ImTrello size='30px' />}
       >
         Trello
       </ButtonNavigation>
-      <ButtonNavigationSession
-        session={session}
-        signIn={signIn}
-        signOut={signOut}
-      />
+      <ButtonNavigationSession />
     </Flex>
   );
 };

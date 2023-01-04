@@ -18,7 +18,6 @@ import { PageButton } from '../components/PageButton';
 import { BiCheckCircle, BiInfoCircle, BiXCircle } from 'react-icons/bi';
 import MailsModal from '../components/MailsModal';
 import axios from 'axios';
-import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import IndeterminateCheckbox from '../components/IndeterminateCheckbox';
 import { SearchButton } from '../components/SearchButton';
@@ -190,16 +189,17 @@ const Encomendas = ({ mails, user, receivers }) => {
 };
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context);
-  if (!session || !session.user.permission.editMail)
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
+  // const session = await getSession(context);
+  // if (!session || !session.user.permission.editMail)
+  //   return {
+  //     redirect: {
+  //       destination: '/',
+  //       permanent: false,
+  //     },
+  //   };
 
-  const user = session.user;
+  // const user = session.user;
+  const user = null;
   let receivers;
   let mails;
   const fromDate = context.query.from;
@@ -213,7 +213,9 @@ export async function getServerSideProps(context) {
   if (process.env.ENVIRONMENT != 'DEV') {
     mails = await (
       await axios.get(
-        `${process.env.API_URL}/mails/findAll?userId=${session.user.id}&from=${fromDate}&to=${toDate}`
+        `${
+          process.env.API_URL
+        }/mails/findAll?userId=${'session.user.id'}&from=${fromDate}&to=${toDate}`
       )
     ).data;
     receivers = await (
