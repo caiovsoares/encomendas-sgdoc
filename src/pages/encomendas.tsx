@@ -25,7 +25,8 @@ import { getAPIClient } from '../services/apiClient';
 import { parseCookies } from 'nookies';
 import { GetServerSideProps } from 'next';
 
-const Encomendas = ({ mails, user, receivers }) => {
+const Encomendas = ({ cook, mails, user, receivers }) => {
+  console.log(cook);
   // const { isOpen, onOpen, onClose } = useDisclosure();
   // const [mail, setMail] = useState({});
   // const [modalType, setModalType] = useState('');
@@ -250,7 +251,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   mails.forEach(correctMail);
 
   return {
-    props: { mails, user, receivers },
+    props: { cook: context.req.cookies, mails, user, receivers },
   };
 };
 
