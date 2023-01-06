@@ -1,13 +1,14 @@
 import { Button, Flex, Image, Img } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ButtonNavigation } from './ButtonNavigation';
 import { BiGift, BiHome, BiUserCircle } from 'react-icons/bi';
 import { ImTrello } from 'react-icons/im';
 import { ButtonNavigationSession } from './ButtonNavigationSession';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export const Navigation = () => {
   const [isOpen, changeMenuState] = useState(false);
-
+  const { user } = useContext(AuthContext);
   return (
     <Flex
       direction='column'
@@ -31,15 +32,20 @@ export const Navigation = () => {
       <ButtonNavigation href='/' icon={<BiHome size='30px' />}>
         Início{' '}
       </ButtonNavigation>
-      <ButtonNavigation href='/encomendas' icon={<BiGift size='30px' />}>
-        Encomendas
-      </ButtonNavigation>
-      <ButtonNavigation
-        href='/destinatarios'
-        icon={<BiUserCircle size='30px' />}
-      >
-        Destinatarios{' '}
-      </ButtonNavigation>
+      {user?.permission?.editMail && (
+        <ButtonNavigation href='/encomendas' icon={<BiGift size='30px' />}>
+          Encomendas
+        </ButtonNavigation>
+      )}
+
+      {user?.permission?.editReceiver && (
+        <ButtonNavigation
+          href='/destinatarios'
+          icon={<BiUserCircle size='30px' />}
+        >
+          Destinatarios{' '}
+        </ButtonNavigation>
+      )}
       <ButtonNavigation
         href='https://trello.com/b/lCeNCQcB/encomendas-sgdoc'
         icon={<ImTrello size='30px' />}

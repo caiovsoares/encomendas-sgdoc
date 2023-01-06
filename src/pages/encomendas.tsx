@@ -25,8 +25,7 @@ import { getAPIClient } from '../services/apiClient';
 import { parseCookies } from 'nookies';
 import { GetServerSideProps } from 'next';
 
-const Encomendas = ({ cook, mails, user, receivers }) => {
-  console.log(cook);
+const Encomendas = ({ mails, user, receivers }) => {
   // const { isOpen, onOpen, onClose } = useDisclosure();
   // const [mail, setMail] = useState({});
   // const [modalType, setModalType] = useState('');
@@ -194,10 +193,9 @@ const Encomendas = ({ cook, mails, user, receivers }) => {
 
 // export async function getServerSideProps(context) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  console.log(context.req.cookies);
   const apiClient = getAPIClient(context);
-  const opa = parseCookies(context);
-  console.log(opa);
+  const { 'sgdoc.token': access_token } = parseCookies(context);
+  console.log(access_token);
   try {
     //await apiClient('/user/auth');
     // await axios.get(`${process.env.API_URL}/user/auth`, {
@@ -251,7 +249,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   mails.forEach(correctMail);
 
   return {
-    props: { cook: context.req.cookies, mails, user, receivers },
+    props: { mails, user, receivers },
   };
 };
 
