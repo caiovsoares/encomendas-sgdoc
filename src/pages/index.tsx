@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Button, Flex } from '@chakra-ui/react';
-import { correctDate, correctMail, exampleMails } from '../utils';
+import { Box, Flex } from '@chakra-ui/react';
+import { correctDate, findReceiverName } from '../utils';
 import ReactTable from '../components/ReactTable';
 import {
   useTable,
@@ -11,22 +11,19 @@ import {
 } from 'react-table';
 import { GetStaticProps } from 'next';
 import { BiCheckCircle, BiXCircle } from 'react-icons/bi';
-import axios from 'axios';
+import { getAPIClient } from '../services/apiClient';
+import { PublicMail } from '../@types';
 
 const Index = (props) => {
   const columns = React.useMemo(
     () => [
       { Header: 'Rastreio', accessor: 'tracking' },
       { Header: 'Remetente', accessor: 'sender' },
-      { Header: 'Destinatário', accessor: 'destiny.warName' },
-      {
-        Header: 'Chegada',
-        accessor: 'created_at',
-        Cell: ({ cell: { value } }) => correctDate(value),
-      },
+      { Header: 'Destinatário', accessor: 'destiny' },
+      { Header: 'Chegada', accessor: 'created_at' },
       {
         Header: 'Recebido',
-        accessor: 'receiver.warName',
+        accessor: 'receiver',
         Cell: ({ cell: { value } }) => {
           return (
             <>
@@ -46,11 +43,7 @@ const Index = (props) => {
           );
         },
       },
-      {
-        Header: 'Em',
-        accessor: 'received_at',
-        Cell: ({ cell: { value } }) => correctDate(value),
-      },
+      { Header: 'Em', accessor: 'received_at' },
     ],
     []
   );
@@ -72,16 +65,19 @@ const Index = (props) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  let mails;
-
-  if (process.env.ENVIRONMENT != 'DEV') {
-    mails = exampleMails(100);
-    // mails = await (await axios.get(`${process.env.API_URL}/mails/`)).data;
-  } else {
-    mails = exampleMails(100);
+  const apiClient = getAPIClient(context);
+  const data = await (await apiClient.get('')).data;
+  const mails: PublicMail[] = [];
+  for (const element of data) {
+    mails.push({
+      tracking: element.tracking,
+      sender: element.sender,
+      created_at: correctDate(element.created_at),
+      destiny: findReceiverName(element.destiny),
+      received_at: correctDate(element.received_at),
+      receiver: findReceiverName(element.receiver),
+    });
   }
-
-  mails.forEach(correctMail);
 
   return {
     props: { mails },

@@ -1,7 +1,14 @@
 import { Button, Flex, Image, Img } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { ButtonNavigation } from './ButtonNavigation';
-import { BiGift, BiHome, BiUserCircle } from 'react-icons/bi';
+import {
+  BiGift,
+  BiHome,
+  BiUserCircle,
+  BiWorld,
+  BiSmile,
+  BiClipboard,
+} from 'react-icons/bi';
 import { ImTrello } from 'react-icons/im';
 import { ButtonNavigationSession } from './ButtonNavigationSession';
 import { AuthContext } from '../../contexts/AuthContext';
@@ -39,11 +46,26 @@ export const Navigation = () => {
       )}
 
       {user?.permission?.editReceiver && (
-        <ButtonNavigation
-          href='/destinatarios'
-          icon={<BiUserCircle size='30px' />}
-        >
+        <ButtonNavigation href='/destinatarios' icon={<BiSmile size='30px' />}>
           Destinatarios{' '}
+        </ButtonNavigation>
+      )}
+
+      {user?.permission?.editExpedition && (
+        <ButtonNavigation href='/expedicoes' icon={<BiWorld size='30px' />}>
+          Expedições{' '}
+        </ButtonNavigation>
+      )}
+
+      {user?.permission?.editUser && (
+        <ButtonNavigation href='/usuarios' icon={<BiUserCircle size='30px' />}>
+          Usuários{' '}
+        </ButtonNavigation>
+      )}
+
+      {user?.permission?.editPermission && (
+        <ButtonNavigation href='/permissoes' icon={<BiClipboard size='30px' />}>
+          Permissões{' '}
         </ButtonNavigation>
       )}
       <ButtonNavigation

@@ -1,3 +1,5 @@
+import { ReceiverRegisterManyModal } from '../components/ReceiversModal/ReceiverRegisterManyModal';
+
 const gerador = (str1, str2, str3) => {
   const n = ((Math.random() * 10 + 1) % 2).toFixed(0);
   switch (n) {
@@ -141,6 +143,82 @@ export function sweepObject(object) {
   lista = lista.flat(5);
   return lista;
 }
+
+export function findReceiverName(receiver) {
+  if (receiver.person?.cadet) {
+    //se for cadete
+    const currentYear = new Date().getUTCFullYear();
+    const classYear = receiver.person.cadet.classYear;
+    if (currentYear - classYear < 4) {
+      //cadete
+      return `C${currentYear - classYear + 1} ${receiver.person.warName}`;
+    } else {
+      //cadete formado
+      return `FORMADO ${classYear + 3} ${receiver.destiny.warName}`;
+    }
+  } else if (receiver.person?.staff)
+    //se for funcionário
+    return `${receiver.person.staff.rank} ${receiver.person.warName}`;
+  else return receiver.workPlace.abbreviation; //se for seção
+}
+
+export function findCadetName(cadet) {
+  const currentYear = new Date().getUTCFullYear();
+  const classYear = cadet.classYear;
+  if (currentYear - classYear < 4) {
+    //cadete
+    return `C${currentYear - classYear + 1} ${cadet.person.warName}`;
+  } else {
+    //cadete formado
+    return `FORMADO ${classYear + 3} ${cadet.person.warName}`;
+  }
+}
+
+export function findReceiverData(receiver) {
+  if (receiver.person?.cadet) {
+    //se for cadete
+    const currentYear = new Date().getUTCFullYear();
+    const classYear = receiver.person.cadet.classYear;
+    if (currentYear - classYear < 4) {
+      //cadete
+      return {
+        id: receiver.id,
+        fullName: receiver.person.fullName,
+        warName: `C${currentYear - classYear + 1} ${receiver.person.warName}`,
+        cpf: receiver.person.cpf,
+        identity: receiver.person.identity,
+        classYear: receiver.person.cadet.classYear,
+      };
+    } else {
+      //cadete formado
+      return {
+        id: receiver.id,
+        fullName: receiver.person.fullName,
+        warName: `FORMADO ${classYear + 3} ${receiver.destiny.warName}`,
+        cpf: receiver.person.cpf,
+        identity: receiver.person.identity,
+        classYear: receiver.person.cadet.classYear,
+      };
+    }
+  } else if (receiver.person?.staff)
+    //se for funcionário
+    return {
+      id: receiver.id,
+      fullName: receiver.person.fullName,
+      warName: `${receiver.person.staff.rank} ${receiver.person.warName}`,
+      cpf: receiver.person.cpf,
+      identity: receiver.person.identity,
+      rank: receiver.person.staff.rank,
+    };
+  else
+    return {
+      //se for seção
+      id: receiver.id,
+      abbreviation: receiver.workPlace.abbreviation,
+      name: receiver.workPlace.name,
+    };
+}
+
 export function correctMail(mail) {
   const curYear = new Date().getUTCFullYear();
   //Nota: Apenas cadetes possuem 'classYear'

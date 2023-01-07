@@ -19,10 +19,24 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { stringify } from 'querystring';
 import { BiEdit, BiTrash } from 'react-icons/bi';
+import { Mail, User, WorkPlace } from '../../@types';
 import { correctDate } from '../../utils';
 
-export function MailDetailModal({ mail, user, setModalType, onClose }) {
+interface MailDetailProps {
+  mail: Mail;
+  user: User;
+  setModalType: Function;
+  onClose: Function;
+}
+
+export function MailDetailModal({
+  mail,
+  user,
+  setModalType,
+  onClose,
+}: MailDetailProps) {
   const router = useRouter();
   const toast = useToast();
 
@@ -69,20 +83,28 @@ export function MailDetailModal({ mail, user, setModalType, onClose }) {
         <Heading size='sm'>Encomenda</Heading>
         <Box ml='30px'>
           <Text>Rastreio: {mail.tracking}</Text>
-          <Text>Tipo: {mail.type}</Text>
-          <Text>Tamanho: {mail.size}</Text>
           <Text>Remetente: {mail.sender}</Text>
-          <Text>Data de chegada: {correctDate(mail.created_at)}</Text>
+          <Text>Data de chegada: {mail.created_at}</Text>
         </Box>
         <br />
         <hr />
         <br />
         <Heading size='sm'>Destinatário</Heading>
         <Box ml='30px'>
-          <Text>Nome Completo: {mail.destiny?.fullName}</Text>
-          <Text>Nome de Guerra: {mail.destiny?.warName}</Text>
-          <Text>CPF: {mail.destiny?.cpf}</Text>
-          <Text>Identidade: {mail.destiny?.identity}</Text>
+          {'warName' in mail.destiny && ( //caso seja um staff ou cadet
+            <>
+              <Text>Nome Completo: {mail.destiny?.fullName}</Text>
+              <Text>Nome de Guerra: {mail.destiny?.warName}</Text>
+              <Text>CPF: {mail.destiny?.cpf}</Text>
+              <Text>Identidade: {mail.destiny?.identity}</Text>
+            </>
+          )}
+          {'name' in mail.destiny && ( //caso seja um setor
+            <>
+              <Text>Nome do Setor: {mail.destiny?.name}</Text>
+              <Text>Sigla: {mail.destiny?.abbreviation}</Text>
+            </>
+          )}
         </Box>
         {mail.receiver && (
           <>
@@ -91,11 +113,20 @@ export function MailDetailModal({ mail, user, setModalType, onClose }) {
             <br />
             <Heading size='sm'>Recebedor</Heading>
             <Box ml='30px'>
-              <Text>Nome Completo: {mail.receiver?.fullName}</Text>
-              <Text>Nome de Guerra: {mail.receiver?.warName}</Text>
-              <Text>CPF: {mail.receiver?.cpf}</Text>
-              <Text>Identidade: {mail.receiver?.identity}</Text>
-              <Text>Data de recebimento: {correctDate(mail.received_at)}</Text>
+              {'warName' in mail.receiver && ( //caso seja um staff ou cadet
+                <>
+                  <Text>Nome Completo: {mail.receiver?.fullName}</Text>
+                  <Text>Nome de Guerra: {mail.receiver?.warName}</Text>
+                  <Text>CPF: {mail.receiver?.cpf}</Text>
+                  <Text>Identidade: {mail.receiver?.identity}</Text>
+                </>
+              )}
+              {'name' in mail.receiver && ( //caso seja um setor
+                <>
+                  <Text>Nome do Setor: {mail.receiver?.name}</Text>
+                  <Text>Sigla: {mail.receiver?.abbreviation}</Text>
+                </>
+              )}
             </Box>
           </>
         )}

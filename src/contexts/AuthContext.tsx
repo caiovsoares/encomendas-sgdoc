@@ -3,23 +3,7 @@ import { createContext, useEffect, useState } from 'react';
 import { setCookie, parseCookies } from 'nookies';
 import Router from 'next/router';
 import { api } from '../services/api';
-
-type User = {
-  fullName: string;
-  warName: string;
-  cpf: string;
-  identity: string;
-  rank: string;
-  email: string;
-  permission: {
-    name: string;
-    editPermission: boolean;
-    editUser: boolean;
-    editReceiver: boolean;
-    editExpedition: boolean;
-    editMail: boolean;
-  };
-};
+import { User } from '../@types';
 
 type AuthContextType = {
   isAuthenticated: boolean;

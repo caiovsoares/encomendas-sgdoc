@@ -11,6 +11,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider resetCSS theme={theme}>
       <AuthProvider>
+        <head>
+          <title>SGDOC</title>
+        </head>
         <Container>
           <Component {...pageProps} />
           <DarkModeSwitch />
