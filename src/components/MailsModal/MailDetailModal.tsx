@@ -17,12 +17,10 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
-import { stringify } from 'querystring';
 import { BiEdit, BiTrash } from 'react-icons/bi';
-import { Mail, User, WorkPlace } from '../../@types';
-import { correctDate } from '../../utils';
+import { Mail, User } from '../../@types';
+import { api } from '../../services/api';
 
 interface MailDetailProps {
   mail: Mail;
@@ -33,7 +31,6 @@ interface MailDetailProps {
 
 export function MailDetailModal({
   mail,
-  user,
   setModalType,
   onClose,
 }: MailDetailProps) {
@@ -41,17 +38,9 @@ export function MailDetailModal({
   const toast = useToast();
 
   const onDelete = async () => {
-    let result;
-    if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
-      result = await (
-        await axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/mails/${mail.id}`,
-          { data: { userId: user.id } }
-        )
-      ).data;
-    } else {
-      result = {};
-    }
+    const result = await (
+      await api.delete('mail', { data: { id: mail.id } })
+    ).data;
 
     if (result.id) {
       toast({
