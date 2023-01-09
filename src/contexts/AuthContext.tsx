@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createContext, useEffect, useState } from 'react';
-import { setCookie, parseCookies } from 'nookies';
+import { setCookie, parseCookies, destroyCookie } from 'nookies';
 import Router from 'next/router';
 import { api } from '../services/api';
 import { User } from '../@types';
@@ -8,7 +8,8 @@ import { User } from '../@types';
 type AuthContextType = {
   isAuthenticated: boolean;
   user: User;
-  signIn: (data: SignInData) => Promise<void>;
+  signIn: (data: SignInData) => Promise<boolean>;
+  signOut: () => Promise<void>;
 };
 
 type SignInData = {
@@ -49,26 +50,29 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function signIn({ login, password }: SignInData) {
-    const { access_token, user } = (
-      await api.post(`/auth`, {
-        login,
-        password,
-      })
-    ).data;
+    try {
+      const result = await api.post('auth', { login, password });
+      const { access_token, user } = result.data;
 
-    setCookie(undefined, 'sgdoc.token', access_token, {
-      maxAge: 60 * 60 * 24, //24 hours
-    });
+      api.defaults.headers['Authorization'] = `Bearer ${access_token}`;
+      setUser(user);
+      setCookie(undefined, 'sgdoc.token', access_token, {
+        maxAge: 60 * 60 * 24, //24 hours
+      });
 
-    api.defaults.headers['Authorization'] = `Bearer ${access_token}`;
+      return result.status == 201;
+    } catch (error) {}
+    return false;
+  }
 
-    setUser(user);
-
-    Router.push('/');
+  async function signOut() {
+    api.defaults.headers['Authorization'] = undefined;
+    destroyCookie(undefined, 'sgdoc.token');
+    setUser(null);
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, signIn }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );

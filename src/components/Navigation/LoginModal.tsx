@@ -24,8 +24,9 @@ export function LoginModal({ onClose, isOpen }) {
 
   const { signIn } = useContext(AuthContext);
 
-  const onSubmit = async (data) => {
-    await signIn(data);
+  const onSubmit = async (data: { login: string; password: string }) => {
+    const loginSuccess = await signIn(data);
+    if (loginSuccess) onClose();
   };
 
   return (
