@@ -221,7 +221,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       sender: mail.sender,
       destiny: findReceiverData(mail.destiny),
       created_at: correctDate(mail.created_at),
-      receiver: findReceiverData(mail.receiver),
+      receiver: mail.receiver ? findReceiverData(mail.receiver) : null,
       received_at: correctDate(mail.received_at),
       details: mail.details,
     });
