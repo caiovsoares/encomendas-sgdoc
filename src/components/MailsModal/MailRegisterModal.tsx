@@ -180,7 +180,7 @@ export function MailRegisterModal({
               render={({ field }) => (
                 <CustomSelect
                   field={field}
-                  entities={[] /*receivers*/}
+                  entities={receivers}
                   fieldName={'fullName'}
                   placeholder='Selecione o destinatário'
                   value=''
