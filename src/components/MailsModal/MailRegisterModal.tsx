@@ -10,19 +10,14 @@ import {
   FormLabel,
   Input,
   useToast,
+  Textarea,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import CustomSelect from '../CustomSelect';
 import { useForm, Controller } from 'react-hook-form';
 import { search } from '../../utils';
 
-export function MailRegisterModal({
-  onClose,
-  user,
-  workPlaces,
-  cadets,
-  staffs,
-}) {
+export function MailRegisterModal({ onClose, workPlaces, cadets, staffs }) {
   const router = useRouter();
   const {
     handleSubmit,
@@ -41,7 +36,6 @@ export function MailRegisterModal({
   );
 
   const onSubmit = async (data, e) => {
-    data.userId = user.id;
     const result = await (await axios.post('mail', data)).data;
 
     if (result.id) {
@@ -173,7 +167,7 @@ export function MailRegisterModal({
 
           <FormControl mt='3' isRequired>
             <Controller
-              name='destiny_id'
+              name='destinyId'
               control={control}
               defaultValue={getValues('pesquisa_id')}
               rules={{ required: true }}
@@ -184,6 +178,20 @@ export function MailRegisterModal({
                   fieldName={'fullName'}
                   placeholder='Selecione o destinatário'
                   value=''
+                />
+              )}
+            />
+          </FormControl>
+
+          <FormControl mt='3'>
+            <Controller
+              name='details'
+              control={control}
+              render={({ field }) => (
+                <Textarea
+                  {...field}
+                  isInvalid={errors.details}
+                  placeholder='Observações'
                 />
               )}
             />

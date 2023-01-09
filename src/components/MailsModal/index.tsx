@@ -32,7 +32,6 @@ const MailsModal = ({
       {type === 'register' && (
         <MailRegisterModal
           onClose={onClose}
-          user={user}
           cadets={cadets}
           workPlaces={workPlaces}
           staffs={staffs}
