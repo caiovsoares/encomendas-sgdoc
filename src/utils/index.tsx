@@ -159,7 +159,7 @@ export function findReceiverName(receiver) {
   } else if (receiver?.person?.staff)
     //se for funcionário
     return `${receiver.person.staff.rank} ${receiver.person.warName}`;
-  else return receiver.workPlace.abbreviation; //se for seção
+  else return receiver?.workPlace.abbreviation; //se for seção
 }
 
 export function findCadetName(cadet) {
@@ -213,9 +213,9 @@ export function findReceiverData(receiver) {
   else
     return {
       //se for seção
-      id: receiver.id,
-      abbreviation: receiver.workPlace.abbreviation,
-      name: receiver.workPlace.name,
+      id: receiver?.id,
+      abbreviation: receiver?.workPlace.abbreviation,
+      name: receiver?.workPlace.name,
     };
 }
 
