@@ -75,9 +75,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       created_at: correctDate(element.created_at),
       destiny: findReceiverName(element.destiny),
       received_at: correctDate(element.received_at),
-      receiver: element.receiver
-        ? findReceiverName(element.receiver)
-        : undefined,
+      receiver: element.receiver ? findReceiverName(element.receiver) : null,
     });
   }
 
