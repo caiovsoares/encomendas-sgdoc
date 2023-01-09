@@ -12,10 +12,10 @@ import {
   useToast,
   Textarea,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import CustomSelect from '../CustomSelect';
 import { useForm, Controller } from 'react-hook-form';
 import { search } from '../../utils';
+import { api } from '../../services/api';
 
 export function MailRegisterModal({ onClose, workPlaces, cadets, staffs }) {
   const router = useRouter();
@@ -36,7 +36,7 @@ export function MailRegisterModal({ onClose, workPlaces, cadets, staffs }) {
   );
 
   const onSubmit = async (data, e) => {
-    const result = await (await axios.post('mail', data)).data;
+    const result = await (await api.post('mail', data)).data;
 
     if (result.id) {
       toast({
