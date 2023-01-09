@@ -25,7 +25,7 @@ import { getAPIClient } from '../services/apiClient';
 import { GetServerSideProps } from 'next';
 import { Cadet, Mail, Staff, WorkPlace } from '../@types';
 
-const Encomendas = ({ mails, user, receivers }) => {
+const Encomendas = ({ mails, user, cadets, workPlaces, staffs }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [mail, setMail] = useState({});
   const [modalType, setModalType] = useState('');
@@ -150,7 +150,9 @@ const Encomendas = ({ mails, user, receivers }) => {
         mail={mail}
         type={modalType}
         user={user}
-        receivers={receivers}
+        cadets={cadets}
+        staffs={staffs}
+        workPlaces={workPlaces}
         receiveMails={getReceiveMails()}
         setModalType={setModalType}
       />

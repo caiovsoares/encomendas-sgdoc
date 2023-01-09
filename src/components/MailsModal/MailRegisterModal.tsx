@@ -16,7 +16,13 @@ import CustomSelect from '../CustomSelect';
 import { useForm, Controller } from 'react-hook-form';
 import { search } from '../../utils';
 
-export function MailRegisterModal({ onClose, user, rec }) {
+export function MailRegisterModal({
+  onClose,
+  user,
+  workPlaces,
+  cadets,
+  staffs,
+}) {
   const router = useRouter();
   const {
     handleSubmit,
@@ -29,7 +35,10 @@ export function MailRegisterModal({ onClose, user, rec }) {
     setFocus,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
-  const [receivers, setReceivers] = useState(rec);
+  const rec = workPlaces.concat(cadets).concat(staffs);
+  const [receivers, setReceivers] = useState(
+    workPlaces.concat(cadets).concat(staffs)
+  );
 
   const onSubmit = async (data, e) => {
     data.userId = user.id;

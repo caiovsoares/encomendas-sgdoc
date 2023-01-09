@@ -11,7 +11,9 @@ const MailsModal = ({
   mail,
   type,
   user,
-  receivers,
+  cadets,
+  workPlaces,
+  staffs,
   receiveMails,
   setModalType,
 }) => {
@@ -28,7 +30,13 @@ const MailsModal = ({
       )}
 
       {type === 'register' && (
-        <MailRegisterModal onClose={onClose} user={user} rec={receivers} />
+        <MailRegisterModal
+          onClose={onClose}
+          user={user}
+          cadets={cadets}
+          workPlaces={workPlaces}
+          staffs={staffs}
+        />
       )}
 
       {type === 'receive' && (
@@ -36,19 +44,14 @@ const MailsModal = ({
           onClose={onClose}
           user={user}
           receiveMails={receiveMails}
-          rec={receivers}
+          rec={[]}
         />
       )}
 
       {type === 'search' && <MailSearchModal mail={mail} />}
 
       {type === 'edit' && (
-        <MailEditModal
-          mail={mail}
-          onClose={onClose}
-          rec={receivers}
-          user={user}
-        />
+        <MailEditModal mail={mail} onClose={onClose} rec={[]} user={user} />
       )}
     </Modal>
   );
