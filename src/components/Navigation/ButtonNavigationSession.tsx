@@ -9,7 +9,7 @@ export const ButtonNavigationSession = () => {
     FAB: 'FAB.png',
     S2: 'S2.png',
     S1: 'S1.png',
-    CB: '2S.png',
+    CB: 'CB.png',
     _3S: '3S.png',
     _2S: '2S.png',
     _1S: '1S.png',
@@ -42,7 +42,7 @@ export const ButtonNavigationSession = () => {
           justifyContent='left'
         >
           <Box w='30px' h='30px' margin='10px' justifyContent='center'>
-            <Image src={`patentes/${ranks['FAB']}`} h='30px' minW='30px' />
+            <Image src={`patentes/${ranks[user.rank]}`} h='30px' minW='30px' />
           </Box>
           {`${user.rank} ${user.warName}`}
         </Button>
