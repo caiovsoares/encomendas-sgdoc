@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Flex, useDisclosure } from '@chakra-ui/react';
-import {
-  correctDate,
-  correctMail,
-  findCadetName,
-  findReceiverData,
-  findReceiverName,
-} from '../utils';
+import { correctDate, findCadetName, findReceiverData } from '../utils';
 import {
   useTable,
   usePagination,
@@ -23,15 +17,22 @@ import IndeterminateCheckbox from '../components/IndeterminateCheckbox';
 import { SearchButton } from '../components/SearchButton';
 import { getAPIClient } from '../services/apiClient';
 import { GetServerSideProps } from 'next';
-import { Cadet, Mail, Staff, WorkPlace } from '../@types';
+import { Cadet, Mail, Staff, User, WorkPlace } from '../@types';
 
-const Encomendas = ({ mails, user, cadets, workPlaces, staffs }) => {
+type encomendasProps = {
+  mails: Mail[];
+  cadets: Cadet[];
+  workPlaces: WorkPlace[];
+  staffs: Staff[];
+};
+
+const Encomendas = ({ mails, cadets, workPlaces, staffs }: encomendasProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [mail, setMail] = useState({});
+  const [mail, setMail] = useState<Mail>();
   const [modalType, setModalType] = useState('');
   const router = useRouter();
 
-  async function HandleDetailItem(mail: {}) {
+  function HandleDetailItem(mail: Mail) {
     onOpen();
     setMail(mail);
     setModalType('detail');
@@ -42,16 +43,10 @@ const Encomendas = ({ mails, user, cadets, workPlaces, staffs }) => {
     setModalType('register');
   }
 
-  function HandleReceiveItens(mail: {}) {
+  function HandleReceiveItens(mail: Mail) {
     onOpen();
     setMail(mail);
     setModalType('receive');
-  }
-
-  function HandleSearchItens(mail: {}) {
-    onOpen();
-    setMail(mail);
-    setModalType('search');
   }
 
   const columns = React.useMemo(
@@ -149,7 +144,6 @@ const Encomendas = ({ mails, user, cadets, workPlaces, staffs }) => {
         onClose={onClose}
         mail={mail}
         type={modalType}
-        user={user}
         cadets={cadets}
         staffs={staffs}
         workPlaces={workPlaces}
@@ -180,12 +174,9 @@ const Encomendas = ({ mails, user, cadets, workPlaces, staffs }) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const apiClient = getAPIClient(context);
-  let user = null;
-  try {
-    user = await (await apiClient.get('/user/auth')).data;
-  } catch (error) {}
+  const user: User = await (await apiClient.get('/user/auth')).data;
 
-  if (!user?.permission.editMail)
+  if (!user?.permission?.editMail)
     return {
       redirect: {
         destination: '/',
@@ -258,7 +249,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   return {
-    props: { mails, user, cadets, workPlaces, staffs },
+    props: { mails, cadets, workPlaces, staffs },
   };
 };
 

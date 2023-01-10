@@ -10,13 +10,29 @@ import {
   FormLabel,
   Input,
   useToast,
+  Textarea,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import CustomSelect from '../CustomSelect';
 import { search } from '../../utils';
+import { api } from '../../services/api';
+import { Cadet, Mail, Staff, WorkPlace } from '../../@types';
 
-export function MailEditModal({ onClose, user, mail, rec }) {
+type MailEditProps = {
+  onClose: () => void;
+  mail: Mail;
+  workPlaces: WorkPlace[];
+  cadets: Cadet[];
+  staffs: Staff[];
+};
+
+export function MailEditModal({
+  onClose,
+  mail,
+  workPlaces,
+  cadets,
+  staffs,
+}: MailEditProps) {
   const router = useRouter();
   const {
     handleSubmit,
@@ -27,22 +43,13 @@ export function MailEditModal({ onClose, user, mail, rec }) {
     setValue,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
+  const rec: (WorkPlace | Cadet | Staff)[] = [];
+  rec.push(...workPlaces, ...cadets, ...staffs);
   const [receivers, setReceivers] = useState(rec);
 
   const onSubmit = async (data) => {
-    let result;
-    data.userId = user.id;
-
-    if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
-      result = (
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/mails/${mail.id}`,
-          data
-        )
-      ).data;
-    } else {
-      result = {};
-    }
+    data.id = mail.id;
+    const result = await (await api.put('mail', data)).data;
 
     if (result.id) {
       toast({
@@ -124,48 +131,6 @@ export function MailEditModal({ onClose, user, mail, rec }) {
 
           <FormControl mt='3'>
             <FormLabel fontWeight='semibold' color='gray.600'>
-              Tipo:
-            </FormLabel>
-            <Controller
-              name='type'
-              control={control}
-              defaultValue={mail.type}
-              rules={{ required: false }}
-              render={({ field }) => (
-                <CustomSelect
-                  field={field}
-                  entities={['Pacote', 'Caixa', 'Envelope', 'Carta']}
-                  placeholder=''
-                  fieldName=''
-                  value=''
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
-              Tamanho:
-            </FormLabel>
-            <Controller
-              name='size'
-              control={control}
-              defaultValue={mail.size}
-              rules={{ required: false }}
-              render={({ field }) => (
-                <CustomSelect
-                  field={field}
-                  entities={['Pequeno', 'Medio', 'Grande']}
-                  placeholder=''
-                  fieldName=''
-                  value=''
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
               Remetente:
             </FormLabel>
             <Controller
@@ -205,16 +170,38 @@ export function MailEditModal({ onClose, user, mail, rec }) {
 
           <FormControl mt='3' isRequired>
             <Controller
-              name='destiny_id'
+              name='destinyId'
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
                 <CustomSelect
-                  value={mail.destiny.fullName}
+                  value={
+                    'warName' in mail.destiny
+                      ? mail.destiny.warName
+                      : mail.destiny.name
+                  }
                   field={field}
                   entities={receivers}
                   fieldName={'fullName'}
                   placeholder='Selecione o destinatário'
+                />
+              )}
+            />
+          </FormControl>
+
+          <FormControl mt='3'>
+            <FormLabel fontWeight='semibold' color='gray.600'>
+              Observações:
+            </FormLabel>
+            <Controller
+              name='details'
+              control={control}
+              defaultValue={mail.details}
+              render={({ field }) => (
+                <Textarea
+                  {...field}
+                  isInvalid={errors.details}
+                  placeholder='Algo a acrescentar?'
                 />
               )}
             />
@@ -228,10 +215,10 @@ export function MailEditModal({ onClose, user, mail, rec }) {
             mr={3}
             type='submit'
           >
-            Save
+            Salvar
           </Button>
           <Button onClick={onClose} mb='3' mt='3'>
-            Cancel
+            Cancelar
           </Button>
         </form>
       </ModalBody>

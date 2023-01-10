@@ -29,7 +29,7 @@ import { useForm, Controller } from 'react-hook-form';
 import CustomSelect from '../CustomSelect';
 import { search } from '../../utils';
 
-export function MailReceiveModal({ onClose, user, receiveMails, rec }) {
+export function MailReceiveModal({ onClose, receiveMails, rec }) {
   const router = useRouter();
   const {
     handleSubmit,
@@ -49,7 +49,6 @@ export function MailReceiveModal({ onClose, user, receiveMails, rec }) {
   //Mas minha falta de prática com promisses me impede de entender o que o google sugeriu
 
   const onSubmit = async (data) => {
-    data.userId = user.id;
     data.received_at = new Date();
 
     const result = [];

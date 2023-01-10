@@ -16,8 +16,21 @@ import CustomSelect from '../CustomSelect';
 import { useForm, Controller } from 'react-hook-form';
 import { search } from '../../utils';
 import { api } from '../../services/api';
+import { Cadet, Staff, WorkPlace } from '../../@types';
 
-export function MailRegisterModal({ onClose, workPlaces, cadets, staffs }) {
+interface MailRegisterProps {
+  workPlaces: WorkPlace[];
+  cadets: Cadet[];
+  staffs: Staff[];
+  onClose: () => void;
+}
+
+export function MailRegisterModal({
+  onClose,
+  workPlaces,
+  cadets,
+  staffs,
+}: MailRegisterProps) {
   const router = useRouter();
   const {
     handleSubmit,
@@ -30,10 +43,9 @@ export function MailRegisterModal({ onClose, workPlaces, cadets, staffs }) {
     setFocus,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
-  const rec = workPlaces.concat(cadets).concat(staffs);
-  const [receivers, setReceivers] = useState(
-    workPlaces.concat(cadets).concat(staffs)
-  );
+  const rec: (WorkPlace | Cadet | Staff)[] = [];
+  rec.push(...workPlaces, ...cadets, ...staffs);
+  const [receivers, setReceivers] = useState(rec);
 
   const onSubmit = async (data, e) => {
     const result = await (await api.post('mail', data)).data;
@@ -48,10 +60,9 @@ export function MailRegisterModal({ onClose, workPlaces, cadets, staffs }) {
       });
       reset({
         tracking: '',
-        type: 'Pacote',
-        size: 'Pequeno',
         sender: '',
         pesquisa_id: '',
+        details: '',
       });
       e.target.reset(); //não é o indicado pela documentação, mas funciona
       setFocus('tracking');
@@ -184,6 +195,9 @@ export function MailRegisterModal({ onClose, workPlaces, cadets, staffs }) {
           </FormControl>
 
           <FormControl mt='3'>
+            <FormLabel fontWeight='semibold' color='gray.600'>
+              Observações:
+            </FormLabel>
             <Controller
               name='details'
               control={control}
@@ -191,7 +205,7 @@ export function MailRegisterModal({ onClose, workPlaces, cadets, staffs }) {
                 <Textarea
                   {...field}
                   isInvalid={errors.details}
-                  placeholder='Observações'
+                  placeholder='Algo a acrescentar?'
                 />
               )}
             />
@@ -205,10 +219,10 @@ export function MailRegisterModal({ onClose, workPlaces, cadets, staffs }) {
             mr={3}
             type='submit'
           >
-            Save
+            Salvar
           </Button>
           <Button onClick={onClose} mb='3' mt='3'>
-            Cancel
+            Cancelar
           </Button>
         </form>
       </ModalBody>

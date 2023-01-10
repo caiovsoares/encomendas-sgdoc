@@ -14,7 +14,11 @@ import { BiCheckCircle, BiXCircle } from 'react-icons/bi';
 import { getAPIClient } from '../services/apiClient';
 import { PublicMail } from '../@types';
 
-const Index = (props) => {
+type indexProps = {
+  mails: PublicMail[];
+};
+
+const Index = ({ mails }: indexProps) => {
   const columns = React.useMemo(
     () => [
       { Header: 'Rastreio', accessor: 'tracking' },
@@ -48,7 +52,7 @@ const Index = (props) => {
     []
   );
 
-  const data = React.useMemo(() => props.mails, []);
+  const data = React.useMemo(() => mails, []);
 
   const tableOptions = useTable(
     {

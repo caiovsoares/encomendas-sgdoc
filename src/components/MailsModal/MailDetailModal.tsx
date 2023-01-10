@@ -19,15 +19,14 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { BiEdit, BiTrash } from 'react-icons/bi';
-import { Mail, User } from '../../@types';
+import { Mail } from '../../@types';
 import { api } from '../../services/api';
 
-interface MailDetailProps {
+type MailDetailProps = {
   mail: Mail;
-  user: User;
-  setModalType: Function;
-  onClose: Function;
-}
+  setModalType: React.Dispatch<React.SetStateAction<string>>;
+  onClose: () => void;
+};
 
 export function MailDetailModal({
   mail,
@@ -116,6 +115,17 @@ export function MailDetailModal({
                   <Text>Sigla: {mail.receiver?.abbreviation}</Text>
                 </>
               )}
+            </Box>
+          </>
+        )}
+        {mail.details && (
+          <>
+            <br />
+            <hr />
+            <br />
+            <Heading size='sm'>Observações</Heading>
+            <Box ml='30px'>
+              <Text>{mail.details}</Text>
             </Box>
           </>
         )}
