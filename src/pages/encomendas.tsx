@@ -132,10 +132,12 @@ const Encomendas = ({ mails, cadets, workPlaces, staffs }: encomendasProps) => {
     }
   );
 
-  const getReceiveMails = () =>
-    tableOptions.selectedFlatRows
+  const getReceiveMails = () => {
+    const ReceiveMails: Mail[] = tableOptions.selectedFlatRows
       .filter((e) => !e.original.receiver)
       .map((e) => e.original);
+    return ReceiveMails;
+  };
 
   return (
     <Flex width='100%' flexDir='column'>

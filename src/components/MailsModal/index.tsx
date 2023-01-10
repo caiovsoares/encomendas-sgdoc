@@ -13,7 +13,7 @@ type MailsModalProps = {
   cadets: Cadet[];
   workPlaces: WorkPlace[];
   staffs: Staff[];
-  receiveMails: () => any;
+  receiveMails: Mail[];
   setModalType: React.Dispatch<React.SetStateAction<string>>;
 };
 
@@ -52,7 +52,9 @@ const MailsModal = ({
         <MailReceiveModal
           onClose={onClose}
           receiveMails={receiveMails}
-          rec={[]}
+          cadets={cadets}
+          workPlaces={workPlaces}
+          staffs={staffs}
         />
       )}
 
