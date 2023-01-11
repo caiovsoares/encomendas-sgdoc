@@ -17,16 +17,14 @@ import IndeterminateCheckbox from '../components/IndeterminateCheckbox';
 import { SearchButton } from '../components/SearchButton';
 import { getAPIClient } from '../services/apiClient';
 import { GetServerSideProps } from 'next';
-import { Cadet, Mail, Staff, User, WorkPlace } from '../@types';
+import { Mail, Cadet, WorkPlace, Staff, User } from '../interfaces';
 
 type encomendasProps = {
   mails: Mail[];
-  cadets: Cadet[];
-  workPlaces: WorkPlace[];
-  staffs: Staff[];
+  receivers: (Staff | Cadet | WorkPlace)[];
 };
 
-const Encomendas = ({ mails, cadets, workPlaces, staffs }: encomendasProps) => {
+const Encomendas = ({ mails, receivers }: encomendasProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [mail, setMail] = useState<Mail>();
   const [modalType, setModalType] = useState('');
@@ -146,9 +144,7 @@ const Encomendas = ({ mails, cadets, workPlaces, staffs }: encomendasProps) => {
         onClose={onClose}
         mail={mail}
         type={modalType}
-        cadets={cadets}
-        staffs={staffs}
-        workPlaces={workPlaces}
+        receivers={receivers}
         receiveMails={getReceiveMails()}
         setModalType={setModalType}
       />
@@ -198,15 +194,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           await apiClient.get('mail')
         ).data;
 
-  const cadetsData = await (await apiClient.get('cadet')).data;
-  const workPlacesData = await (await apiClient.get('work-place')).data;
-  const staffsData = await (await apiClient.get('staff')).data;
-
   const mails: Mail[] = [];
-  const cadets: Cadet[] = [];
-  const workPlaces: WorkPlace[] = [];
-  const staffs: Staff[] = [];
-
   for (const mail of mailsData) {
     mails.push({
       id: mail.id,
@@ -220,38 +208,50 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     });
   }
 
-  for (const cadet of cadetsData) {
-    cadets.push({
-      id: cadet.id,
-      warName: findCadetName(cadet),
-      fullName: cadet.person.fullName,
-      cpf: cadet.person.cpf,
-      identity: cadet.person.identity,
-      classYear: cadet.classYear,
-    });
-  }
+  // const cadetsData = await (await apiClient.get('cadet')).data;
+  // const workPlacesData = await (await apiClient.get('work-place')).data;
+  // const staffsData = await (await apiClient.get('staff')).data;
 
-  for (const workPlace of workPlacesData) {
-    workPlaces.push({
-      abbreviation: workPlace.abbreviation,
-      id: workPlace.id,
-      name: workPlace.name,
-    });
-  }
+  // const cadets: Cadet[] = [];
+  // const workPlaces: WorkPlace[] = [];
+  // const staffs: Staff[] = [];
 
-  for (const staff of staffsData) {
-    staffs.push({
-      id: staff.id,
-      warName: `${staff.rank} ${staff.warName}`,
-      fullName: staff.person.fullName,
-      cpf: staff.person.cpf,
-      identity: staff.person.identity,
-      rank: staff.rank,
-    });
-  }
+  // for (const cadet of cadetsData) {
+  //   cadets.push({
+  //     id: cadet.id,
+  //     warName: findCadetName(cadet),
+  //     fullName: cadet.person.fullName,
+  //     cpf: cadet.person.cpf,
+  //     identity: cadet.person.identity,
+  //     classYear: cadet.classYear,
+  //   });
+  // }
+
+  // for (const workPlace of workPlacesData) {
+  //   workPlaces.push({
+  //     abbreviation: workPlace.abbreviation,
+  //     id: workPlace.id,
+  //     name: workPlace.name,
+  //   });
+  // }
+
+  // for (const staff of staffsData) {
+  //   staffs.push({
+  //     id: staff.id,
+  //     warName: `${staff.rank} ${staff.warName}`,
+  //     fullName: staff.person.fullName,
+  //     cpf: staff.person.cpf,
+  //     identity: staff.person.identity,
+  //     rank: staff.rank,
+  //   });
+  // }
+
+  const receivers: (Staff | Cadet | WorkPlace)[] = await (
+    await apiClient.get('receiver')
+  ).data;
 
   return {
-    props: { mails, cadets, workPlaces, staffs },
+    props: { mails, receivers },
   };
 };
 

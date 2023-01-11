@@ -1,5 +1,5 @@
 import { Modal, ModalOverlay } from '@chakra-ui/react';
-import { Cadet, Mail, Staff, WorkPlace } from '../../@types';
+import { Mail, Cadet, WorkPlace, Staff } from '../../interfaces';
 import { MailDetailModal } from './MailDetailModal';
 import { MailEditModal } from './MailEditModal';
 import { MailReceiveModal } from './MailReceiveModal';
@@ -10,9 +10,7 @@ type MailsModalProps = {
   isOpen: boolean;
   mail: Mail;
   type: string;
-  cadets: Cadet[];
-  workPlaces: WorkPlace[];
-  staffs: Staff[];
+  receivers: (Staff | Cadet | WorkPlace)[];
   receiveMails: Mail[];
   setModalType: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -22,9 +20,7 @@ const MailsModal = ({
   isOpen,
   mail,
   type,
-  cadets,
-  workPlaces,
-  staffs,
+  receivers,
   receiveMails,
   setModalType,
 }: MailsModalProps) => {
@@ -40,32 +36,19 @@ const MailsModal = ({
       )}
 
       {type === 'register' && (
-        <MailRegisterModal
-          onClose={onClose}
-          cadets={cadets}
-          workPlaces={workPlaces}
-          staffs={staffs}
-        />
+        <MailRegisterModal onClose={onClose} receivers={receivers} />
       )}
 
       {type === 'receive' && (
         <MailReceiveModal
           onClose={onClose}
           receiveMails={receiveMails}
-          cadets={cadets}
-          workPlaces={workPlaces}
-          staffs={staffs}
+          receivers={receivers}
         />
       )}
 
       {type === 'edit' && (
-        <MailEditModal
-          mail={mail}
-          onClose={onClose}
-          cadets={cadets}
-          workPlaces={workPlaces}
-          staffs={staffs}
-        />
+        <MailEditModal mail={mail} onClose={onClose} receivers={receivers} />
       )}
     </Modal>
   );

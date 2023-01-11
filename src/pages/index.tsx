@@ -12,7 +12,7 @@ import {
 import { GetStaticProps } from 'next';
 import { BiCheckCircle, BiXCircle } from 'react-icons/bi';
 import { getAPIClient } from '../services/apiClient';
-import { PublicMail } from '../@types';
+import { PublicMail } from '../interfaces';
 
 type indexProps = {
   mails: PublicMail[];
@@ -70,18 +70,7 @@ const Index = ({ mails }: indexProps) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const apiClient = getAPIClient(context);
-  const data = await (await apiClient.get('')).data;
-  const mails: PublicMail[] = [];
-  for (const element of data) {
-    mails.push({
-      tracking: element.tracking,
-      sender: element.sender,
-      created_at: correctDate(element.created_at),
-      destiny: findReceiverName(element.destiny),
-      received_at: correctDate(element.received_at),
-      receiver: element.receiver ? findReceiverName(element.receiver) : null,
-    });
-  }
+  const mails: PublicMail[] = await (await apiClient.get('')).data;
 
   return {
     props: { mails },

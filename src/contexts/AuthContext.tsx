@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from 'react';
 import { setCookie, parseCookies, destroyCookie } from 'nookies';
 import { api } from '../services/api';
-import { User } from '../@types';
+import { User } from '../interfaces';
 import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 

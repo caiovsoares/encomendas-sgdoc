@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { BiEdit, BiTrash } from 'react-icons/bi';
-import { Mail } from '../../@types';
+import { Mail } from '../../interfaces';
 import { api } from '../../services/api';
 
 type MailDetailProps = {

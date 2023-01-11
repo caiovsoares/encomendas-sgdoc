@@ -17,27 +17,22 @@ import {
   Th,
   Td,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { useForm, Controller } from 'react-hook-form';
 import CustomSelect from '../CustomSelect';
 import { search } from '../../utils';
-import { Cadet, Mail, Staff, WorkPlace } from '../../@types';
+import { Cadet, Mail, Staff, WorkPlace } from '../../interfaces';
 import { api } from '../../services/api';
 
 type MailReceiveProps = {
   onClose: () => void;
   receiveMails: Mail[];
-  workPlaces: WorkPlace[];
-  cadets: Cadet[];
-  staffs: Staff[];
+  receivers: (Staff | Cadet | WorkPlace)[];
 };
 
 export function MailReceiveModal({
   onClose,
   receiveMails,
-  cadets,
-  staffs,
-  workPlaces,
+  receivers: rec,
 }: MailReceiveProps) {
   const router = useRouter();
   const {
@@ -51,8 +46,6 @@ export function MailReceiveModal({
     setFocus,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
-  const rec: (WorkPlace | Cadet | Staff)[] = [];
-  rec.push(...workPlaces, ...cadets, ...staffs);
   const [receivers, setReceivers] = useState(rec);
 
   //Aqui se encontra uma das maiores gambiarras do código

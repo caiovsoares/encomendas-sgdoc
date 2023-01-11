@@ -16,20 +16,16 @@ import CustomSelect from '../CustomSelect';
 import { useForm, Controller } from 'react-hook-form';
 import { search } from '../../utils';
 import { api } from '../../services/api';
-import { Cadet, Staff, WorkPlace } from '../../@types';
+import { Cadet, Staff, WorkPlace } from '../../interfaces';
 
 interface MailRegisterProps {
-  workPlaces: WorkPlace[];
-  cadets: Cadet[];
-  staffs: Staff[];
+  receivers: (Staff | Cadet | WorkPlace)[];
   onClose: () => void;
 }
 
 export function MailRegisterModal({
   onClose,
-  workPlaces,
-  cadets,
-  staffs,
+  receivers: rec,
 }: MailRegisterProps) {
   const router = useRouter();
   const {
@@ -43,8 +39,6 @@ export function MailRegisterModal({
     setFocus,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
-  const rec: (WorkPlace | Cadet | Staff)[] = [];
-  rec.push(...workPlaces, ...cadets, ...staffs);
   const [receivers, setReceivers] = useState(rec);
 
   const onSubmit = async (data, e) => {

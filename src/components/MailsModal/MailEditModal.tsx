@@ -16,22 +16,18 @@ import { useForm, Controller } from 'react-hook-form';
 import CustomSelect from '../CustomSelect';
 import { search } from '../../utils';
 import { api } from '../../services/api';
-import { Cadet, Mail, Staff, WorkPlace } from '../../@types';
+import { Cadet, Mail, Staff, WorkPlace } from '../../interfaces';
 
 type MailEditProps = {
   onClose: () => void;
   mail: Mail;
-  workPlaces: WorkPlace[];
-  cadets: Cadet[];
-  staffs: Staff[];
+  receivers: (Staff | Cadet | WorkPlace)[];
 };
 
 export function MailEditModal({
   onClose,
   mail,
-  workPlaces,
-  cadets,
-  staffs,
+  receivers: rec,
 }: MailEditProps) {
   const router = useRouter();
   const {
@@ -43,8 +39,6 @@ export function MailEditModal({
     setValue,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
-  const rec: (WorkPlace | Cadet | Staff)[] = [];
-  rec.push(...workPlaces, ...cadets, ...staffs);
   const [receivers, setReceivers] = useState(rec);
 
   const onSubmit = async (data) => {
