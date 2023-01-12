@@ -42,35 +42,38 @@ export function MailRegisterModal({
   const [receivers, setReceivers] = useState(rec);
 
   const onSubmit = async (data, e) => {
-    const result = await (await api.post('mail', data)).data;
+    api.post('mail', data).then((res) => {
+      if (res.status < 300) {
+        toast({
+          title: 'Sucesso',
+          description: 'Encomenda cadastrada com sucesso!',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+        //o useMemo na ReactTable impede de atualizar os dados
+        router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
+      } else {
+        toast({
+          title: 'Erro',
+          description:
+            'Houve um problema, verifique os dados e tente novamente!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    });
 
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Encomenda cadastrada com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      reset({
-        tracking: '',
-        sender: '',
-        pesquisa_id: '',
-        details: '',
-      });
-      e.target.reset(); //não é o indicado pela documentação, mas funciona
-      setFocus('tracking');
-      //o useMemo na ReactTable impede de atualizar os dados
-      router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
-    } else {
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema, verifique os dados e tente novamente!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
+    //resetar formulário
+    reset({
+      tracking: '',
+      sender: '',
+      pesquisa_id: '',
+      details: '',
+    });
+    e.target.reset(); //não é o indicado pela documentação, mas funciona
+    setFocus('tracking');
   };
 
   const customOnBlur = (fieldName, fieldMessage, fField) => {
