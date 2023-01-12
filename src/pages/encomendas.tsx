@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Box, Flex, useDisclosure } from '@chakra-ui/react';
-import { correctDate, findReceiverData } from '../utils';
 import {
   useTable,
   usePagination,
@@ -191,9 +190,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     mailsPromise,
     receiversPromise,
   ]);
+  const mails: Mail[] = mailsRes.data;
+  const receivers: (Staff | Cadet | WorkPlace)[] = receiversRes.data;
 
   return {
-    props: { mails: mailsRes.data, receivers: receiversRes.data },
+    props: { mails, receivers },
   };
 };
 
