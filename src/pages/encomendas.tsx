@@ -171,12 +171,12 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const from = context.query.from;
-  const to = context.query.to;
+  const { from, to } = context.query;
   const apiClient = getAPIClient(context);
-  const user: User = await (await apiClient.get('/user/auth')).data;
+  const userRes = await apiClient.get('/user/auth');
+  const user = userRes.data;
 
-  if (!user?.permission?.editMail)
+  if (userRes.status > 299 || !user?.permission?.editMail)
     return {
       redirect: {
         destination: '/',
@@ -184,15 +184,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
 
-  const mails: Mail[] = await (
-    await apiClient.post('mail', { data: { from, to } })
-  ).data;
-  const receivers: (Staff | Cadet | WorkPlace)[] = await (
-    await apiClient.get('receiver')
-  ).data;
+  const mailsPromise = apiClient.post('mail', { data: { from, to } });
+  const receiversPromise = apiClient.get('receiver');
+
+  const [mailsRes, receiversRes] = await Promise.all([
+    mailsPromise,
+    receiversPromise,
+  ]);
 
   return {
-    props: { mails, receivers },
+    props: { mails: mailsRes.data, receivers: receiversRes.data },
   };
 };
 
