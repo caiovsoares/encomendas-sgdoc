@@ -6,14 +6,15 @@ import { AppProps } from 'next/app';
 import { Container } from '../components/DarkMode/Container';
 import { DarkModeSwitch } from '../components/DarkMode/DarkModeSwitch';
 import { AuthProvider } from '../contexts/AuthContext';
+import Head from 'next/head';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider resetCSS theme={theme}>
       <AuthProvider>
-        <head>
+        <Head>
           <title>SGDOC</title>
-        </head>
+        </Head>
         <Container>
           <Component {...pageProps} />
           <DarkModeSwitch />
