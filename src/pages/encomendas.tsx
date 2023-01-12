@@ -183,7 +183,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
 
-  const mailsPromise = apiClient.post('mail', { data: { from, to } });
+  console.log({ from, to });
+  const mailsPromise = apiClient.post('mail', { from, to });
   const receiversPromise = apiClient.get('receiver');
 
   const [mailsRes, receiversRes] = await Promise.all([
