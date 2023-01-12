@@ -241,5 +241,5 @@ export function correctReceiver(receiver) {
 }
 
 export function invertStringDate(date: string) {
-  return date.split('/').reverse().join('/');
+  return date ? date.split('/').reverse().join('/') : '';
 }
