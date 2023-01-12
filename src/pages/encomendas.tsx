@@ -17,6 +17,7 @@ import { SearchButton } from '../components/SearchButton';
 import { getAPIClient } from '../services/apiClient';
 import { GetServerSideProps } from 'next';
 import { Mail, Cadet, WorkPlace, Staff, User } from '../interfaces';
+import { invertStringDate } from '../utils';
 
 type encomendasProps = {
   mails: Mail[];
@@ -51,7 +52,11 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
       { Header: 'Rastreio', accessor: 'tracking' },
       { Header: 'Remetente', accessor: 'sender' },
       { Header: 'Destinatário', accessor: 'destiny.warName' },
-      { Header: 'Chegada', accessor: 'created_at' },
+      {
+        Header: 'Chegada',
+        accessor: 'created_at',
+        Cell: ({ cell: { value } }) => invertStringDate(value),
+      },
       {
         Header: 'Recebido',
         accessor: 'receiver.warName',

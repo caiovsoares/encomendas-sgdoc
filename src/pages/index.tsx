@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
-import { correctDate, findReceiverName } from '../utils';
+import { correctDate, findReceiverName, invertStringDate } from '../utils';
 import ReactTable from '../components/ReactTable';
 import {
   useTable,
@@ -24,7 +24,11 @@ const Index = ({ mails }: indexProps) => {
       { Header: 'Rastreio', accessor: 'tracking' },
       { Header: 'Remetente', accessor: 'sender' },
       { Header: 'Destinatário', accessor: 'destiny' },
-      { Header: 'Chegada', accessor: 'created_at' },
+      {
+        Header: 'Chegada',
+        accessor: 'created_at',
+        Cell: ({ cell: { value } }) => invertStringDate(value),
+      },
       {
         Header: 'Recebido',
         accessor: 'receiver',
@@ -47,7 +51,11 @@ const Index = ({ mails }: indexProps) => {
           );
         },
       },
-      { Header: 'Em', accessor: 'received_at' },
+      {
+        Header: 'Em',
+        accessor: 'received_at',
+        Cell: ({ cell: { value } }) => invertStringDate(value),
+      },
     ],
     []
   );
