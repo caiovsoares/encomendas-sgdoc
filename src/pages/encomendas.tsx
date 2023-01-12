@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Flex, useDisclosure } from '@chakra-ui/react';
-import { correctDate, findCadetName, findReceiverData } from '../utils';
+import { correctDate, findReceiverData } from '../utils';
 import {
   useTable,
   usePagination,
@@ -171,6 +171,8 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const from = context.query.from;
+  const to = context.query.to;
   const apiClient = getAPIClient(context);
   const user: User = await (await apiClient.get('/user/auth')).data;
 
@@ -182,70 +184,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
 
-  const from = context.query.from;
-  const to = context.query.to;
-
-  const mailsData =
-    from && to
-      ? await (
-          await apiClient.get('mail/range', { data: { from, to } })
-        ).data
-      : await (
-          await apiClient.get('mail')
-        ).data;
-
-  const mails: Mail[] = [];
-  for (const mail of mailsData) {
-    mails.push({
-      id: mail.id,
-      tracking: mail.tracking,
-      sender: mail.sender,
-      destiny: findReceiverData(mail.destiny),
-      created_at: correctDate(mail.created_at),
-      receiver: mail.receiver ? findReceiverData(mail.receiver) : null,
-      received_at: correctDate(mail.received_at),
-      details: mail.details,
-    });
-  }
-
-  // const cadetsData = await (await apiClient.get('cadet')).data;
-  // const workPlacesData = await (await apiClient.get('work-place')).data;
-  // const staffsData = await (await apiClient.get('staff')).data;
-
-  // const cadets: Cadet[] = [];
-  // const workPlaces: WorkPlace[] = [];
-  // const staffs: Staff[] = [];
-
-  // for (const cadet of cadetsData) {
-  //   cadets.push({
-  //     id: cadet.id,
-  //     warName: findCadetName(cadet),
-  //     fullName: cadet.person.fullName,
-  //     cpf: cadet.person.cpf,
-  //     identity: cadet.person.identity,
-  //     classYear: cadet.classYear,
-  //   });
-  // }
-
-  // for (const workPlace of workPlacesData) {
-  //   workPlaces.push({
-  //     abbreviation: workPlace.abbreviation,
-  //     id: workPlace.id,
-  //     name: workPlace.name,
-  //   });
-  // }
-
-  // for (const staff of staffsData) {
-  //   staffs.push({
-  //     id: staff.id,
-  //     warName: `${staff.rank} ${staff.warName}`,
-  //     fullName: staff.person.fullName,
-  //     cpf: staff.person.cpf,
-  //     identity: staff.person.identity,
-  //     rank: staff.rank,
-  //   });
-  // }
-
+  const mails: Mail[] = await (
+    await apiClient.post('mail', { data: { from, to } })
+  ).data;
   const receivers: (Staff | Cadet | WorkPlace)[] = await (
     await apiClient.get('receiver')
   ).data;

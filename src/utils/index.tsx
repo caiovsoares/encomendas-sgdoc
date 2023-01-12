@@ -1,5 +1,3 @@
-import { ReceiverRegisterManyModal } from '../components/ReceiversModal/ReceiverRegisterManyModal';
-
 const gerador = (str1, str2, str3) => {
   const n = ((Math.random() * 10 + 1) % 2).toFixed(0);
   switch (n) {
@@ -163,28 +161,8 @@ export function findReceiverName(receiver) {
   else return receiver.workPlace.abbreviation; //se for seção
 }
 
-export function findCadetName(cadet) {
-  const currentYear = new Date().getUTCFullYear();
-  const classYear = cadet.classYear;
-  if (currentYear - classYear < 4) {
-    //cadete
-    return `C${currentYear - classYear + 1} ${cadet.person.warName}`;
-  } else {
-    //cadete formado
-    return `FORMADO ${classYear + 3} ${cadet.person.warName}`;
-  }
-}
-
 export function findReceiverData(receiver) {
-  if (!receiver)
-    return {
-      id: 'id',
-      fullName: 'fullName',
-      warName: 'warName',
-      cpf: 'cpf',
-      identity: 'identity',
-      classYear: 'classYear',
-    };
+  if (!receiver) return undefined;
   if (receiver.person?.cadet) {
     //se for cadete
     const currentYear = new Date().getUTCFullYear();
@@ -229,37 +207,8 @@ export function findReceiverData(receiver) {
     };
 }
 
-export function correctMail(mail) {
-  const curYear = new Date().getUTCFullYear();
-  //Nota: Apenas cadetes possuem 'classYear'
-  //Transformando cadetes dos ultimos 4 anos em C1 C2 C3 C4, cadetes já formados em FORMADOS
-  // e como militares não pososuem classYear não recebem nada em seus nomes!!
-  if (mail.destiny.classYear) {
-    const dClassYear = mail.destiny.classYear;
-    if (curYear - dClassYear < 4) {
-      //mail.destiny.fullName = "C" + (curYear - dClassYear + 1) + " " + mail.destiny.fullName;
-      mail.destiny.warName =
-        'C' + (curYear - dClassYear + 1) + ' ' + mail.destiny.warName;
-    } else {
-      //mail.destiny.fullName = "FORMADO " + mail.destiny.fullName;
-      mail.destiny.warName = 'FORMADO ' + mail.destiny.warName;
-    }
-  }
-  if (mail.receiver)
-    if (mail.receiver.classYear) {
-      const dClassYear = mail.receiver.classYear;
-      if (curYear - dClassYear < 4) {
-        //mail.receiver.fullName = "C" + (curYear - dClassYear + 1) + " " + mail.receiver.fullName;
-        mail.receiver.warName =
-          'C' + (curYear - dClassYear + 1) + ' ' + mail.receiver.warName;
-      } else {
-        //mail.receiver.fullName = "FORMADO " + mail.receiver.fullName;
-        mail.receiver.warName = 'FORMADO ' + mail.receiver.warName;
-      }
-    }
-}
-
 export function correctDate(date) {
+  if (!date) return undefined;
   //transformando a string Date recebida do backend em uma data mais amigável para o usuário
   const cDate = new Date(date);
   const newDate =
