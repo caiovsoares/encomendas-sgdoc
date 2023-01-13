@@ -67,7 +67,7 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
       },
       {
         Header: 'Recebido',
-        accessor: (mail: Mail) => findReceiverName(mail.receiver),
+        accessor: (mail: Mail) => findReceiverShortName(mail.receiver),
         id: 'receiver',
         Cell: ({ cell: { value } }) => {
           return (
