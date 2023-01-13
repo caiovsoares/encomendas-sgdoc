@@ -1,3 +1,5 @@
+import { Cadet, Staff, WorkPlace } from '../interfaces';
+
 const gerador = (str1, str2, str3) => {
   const n = ((Math.random() * 10 + 1) % 2).toFixed(0);
   switch (n) {
@@ -142,23 +144,27 @@ export function sweepObject(object) {
   return lista;
 }
 
-export function findReceiverName(receiver) {
+export function findReceiverName(receiver: Staff | WorkPlace | Cadet) {
   if (!receiver) return '';
-  if (receiver.person?.cadet) {
+  if ('classYear' in receiver) {
     //se for cadete
     const currentYear = new Date().getUTCFullYear();
-    const classYear = receiver.person.cadet.classYear;
+    const classYear = receiver.classYear;
     if (currentYear - classYear < 4) {
       //cadete
-      return `C${currentYear - classYear + 1} ${receiver.person.warName}`;
+      return `C${currentYear - classYear + 1} ${receiver.warName} - ${
+        receiver.fullName
+      }`;
     } else {
       //cadete formado
-      return `FORMADO ${classYear + 3} ${receiver.destiny.warName}`;
+      return `FORMADO ${classYear + 3} ${receiver.warName} - ${
+        receiver.fullName
+      }`;
     }
-  } else if (receiver.person?.staff)
+  } else if ('rank' in receiver)
     //se for funcionário
-    return `${receiver.person.staff.rank} ${receiver.person.warName}`;
-  else return receiver.workPlace.abbreviation; //se for seção
+    return `${receiver.rank} ${receiver.warName} - ${receiver.fullName}`;
+  else return `${receiver.abbreviation} - ${receiver.name}`; //se for seção
 }
 
 export function findReceiverData(receiver) {

@@ -18,7 +18,7 @@ import {
   Td,
 } from '@chakra-ui/react';
 import { useForm, Controller } from 'react-hook-form';
-import CustomSelect from '../CustomSelect';
+import ReceiverSelectInput from '../ReceiverSelectInput';
 import { search } from '../../utils';
 import { Cadet, Mail, Staff, WorkPlace } from '../../interfaces';
 import { api } from '../../services/api';
@@ -143,7 +143,7 @@ export function MailReceiveModal({
               defaultValue={getValues('pesquisa_id')}
               rules={{ required: true }}
               render={({ field }) => (
-                <CustomSelect
+                <ReceiverSelectInput
                   field={field}
                   entities={receivers}
                   fieldName={'fullName'}

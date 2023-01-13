@@ -12,7 +12,7 @@ import {
   useToast,
   Textarea,
 } from '@chakra-ui/react';
-import CustomSelect from '../CustomSelect';
+import ReceiverSelectInput from '../ReceiverSelectInput';
 import { useForm, Controller } from 'react-hook-form';
 import { search } from '../../utils';
 import { api } from '../../services/api';
@@ -180,10 +180,9 @@ export function MailRegisterModal({
               defaultValue={getValues('pesquisa_id')}
               rules={{ required: true }}
               render={({ field }) => (
-                <CustomSelect
+                <ReceiverSelectInput
                   field={field}
-                  entities={receivers}
-                  fieldName={'fullName'}
+                  receivers={receivers}
                   placeholder='Selecione o destinatário'
                   value=''
                 />

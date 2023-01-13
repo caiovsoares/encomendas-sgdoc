@@ -13,7 +13,7 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 import { useForm, Controller } from 'react-hook-form';
-import CustomSelect from '../CustomSelect';
+import ReceiverSelectInput from '../ReceiverSelectInput';
 import { search } from '../../utils';
 import { api } from '../../services/api';
 import { Cadet, Mail, Staff, WorkPlace } from '../../interfaces';
@@ -168,7 +168,7 @@ export function MailEditModal({
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
-                <CustomSelect
+                <ReceiverSelectInput
                   value={
                     'warName' in mail.destiny
                       ? mail.destiny.warName
