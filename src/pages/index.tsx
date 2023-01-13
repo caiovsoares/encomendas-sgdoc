@@ -26,8 +26,8 @@ const Index = ({ mails }: indexProps) => {
       { Header: 'Destinatário', accessor: 'destiny' },
       {
         Header: 'Chegada',
-        accessor: 'created_at',
-        Cell: ({ cell: { value } }) => invertStringDate(value),
+        accessor: (mail: PublicMail) => invertStringDate(mail.created_at),
+        id: 'created_at',
       },
       {
         Header: 'Recebido',
@@ -53,8 +53,8 @@ const Index = ({ mails }: indexProps) => {
       },
       {
         Header: 'Em',
-        accessor: 'received_at',
-        Cell: ({ cell: { value } }) => invertStringDate(value),
+        accessor: (mail: PublicMail) => invertStringDate(mail.received_at),
+        id: 'received_at',
       },
     ],
     []

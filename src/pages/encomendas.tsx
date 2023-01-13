@@ -58,16 +58,17 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
       {
         Header: 'Destinatário',
         accessor: (mail: Mail) => findReceiverName(mail.destiny),
-        id: mail.id,
+        id: 'destiny',
       },
       {
         Header: 'Chegada',
         accessor: (mail: Mail) => invertStringDate(mail.created_at),
-        id: mail.id,
+        id: 'created_at',
       },
       {
         Header: 'Recebido',
-        accessor: 'receiver',
+        accessor: (mail: Mail) => findReceiverName(mail.receiver),
+        id: 'receiver',
         Cell: ({ cell: { value } }) => {
           return (
             <>
@@ -76,7 +77,7 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
                   <Box mr='5px' flexDir='row'>
                     <BiCheckCircle color='green' size='20px' />
                   </Box>
-                  {findReceiverShortName(value)}
+                  {String(value)}
                 </Flex>
               ) : (
                 <Box mr='5px'>
