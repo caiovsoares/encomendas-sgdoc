@@ -86,119 +86,38 @@ export const exampleReceivers = (q) => {
   });
   return bigReceivers;
 };
-export function removeAccent(newStringComAcento) {
-  let string = newStringComAcento || '';
-  let mapaAcentosHex = {
-    a: /[\xE0-\xE6]/g,
-    e: /[\xE8-\xEB]/g,
-    i: /[\xEC-\xEF]/g,
-    o: /[\xF2-\xF6]/g,
-    u: /[\xF9-\xFC]/g,
-    c: /\xE7/g,
-    n: /\xF1/g,
-  };
-
-  for (let letra in mapaAcentosHex) {
-    let expressaoRegular = mapaAcentosHex[letra];
-    string = string.replace(expressaoRegular, letra);
-  }
-
-  return string;
-}
-export function search(value, object, checkVoid) {
-  //value = a string a ser pesquisada
-  //item = o objeto que esta sendo comparado no momento
-  //...campos = os nomes dos campos que queremos comparar
-
-  //inicializamos o valor sem acentos em maiusculo
-  value = removeAccent(value).toUpperCase();
-
-  //criamos a lista de campos que serão comparados sem acentos e em maiusculo
-  const fields = sweepObject(object).map((e) =>
-    removeAccent(e?.toString()).toUpperCase()
-  );
-
-  //verificamos se o valor esta vazio
-  const valorVazio = value.length < 3; //(value == "") || (value == " ")
-
-  //retornamos o resultado
-  return (
-    (checkVoid ? !valorVazio : true) &&
-    fields.reduce((pV, cV) => (pV ? true : cV?.includes(value)), false)
-  );
-}
-export function sweepObject(object) {
-  let lista = Object.values(object);
-  lista = lista.map((e) =>
-    typeof e === 'object' && e !== null ? Object.values(e) : e
-  );
-  lista = lista.flat(5);
-  lista = lista.map((e) =>
-    typeof e === 'object' && e !== null ? Object.values(e) : e
-  );
-  lista = lista.flat(5);
-  lista = lista.map((e) =>
-    typeof e === 'object' && e !== null ? Object.values(e) : e
-  );
-  lista = lista.flat(5);
-  return lista;
-}
 
 export function findReceiverName(receiver: Staff | WorkPlace | Cadet) {
-  console.log(receiver);
   if (!receiver) return '';
   if ('classYear' in receiver) {
-    //se for cadete
     const currentYear = new Date().getUTCFullYear();
     const classYear = receiver.classYear;
     if (currentYear - classYear < 4) {
-      //cadete
       return `C${currentYear - classYear + 1} ${receiver.warName} - ${
         receiver.fullName
       }`;
     } else {
-      //cadete formado
       return `FORMADO ${classYear + 3} ${receiver.warName} - ${
         receiver.fullName
       }`;
     }
   } else if ('rank' in receiver)
-    //se for funcionário
     return `${receiver.rank} ${receiver.warName} - ${receiver.fullName}`;
   else return `${receiver.abbreviation} - ${receiver.name}`; //se for seção
 }
 
-export function correctDate(date) {
-  if (!date) return undefined;
-  //transformando a string Date recebida do backend em uma data mais amigável para o usuário
-  const cDate = new Date(date);
-  const newDate =
-    cDate.getDate().toLocaleString('pt-BR', { minimumIntegerDigits: 2 }) +
-    '/' +
-    (cDate.getMonth() + 1).toLocaleString('pt-BR', {
-      minimumIntegerDigits: 2,
-    }) +
-    '/' +
-    cDate.getFullYear();
-  return newDate;
-}
-
-export function correctReceiver(receiver) {
-  const curYear = new Date().getUTCFullYear();
-  //Nota: Apenas cadetes possuem 'classYear'
-  //Transformando cadetes dos ultimos 4 anos em C1 C2 C3 C4, cadetes já formados em FORMADOS
-  // e como militares não pososuem classYear não recebem nada em seus nomes!!
-  if (receiver.classYear) {
-    const dClassYear = receiver.classYear;
-    if (curYear - dClassYear < 4) {
-      //mail.destiny.fullName = "C" + (curYear - dClassYear + 1) + " " + mail.destiny.fullName;
-      receiver.warName =
-        'C' + (curYear - dClassYear + 1) + ' ' + receiver.warName;
+export function findReceiverShortName(receiver: Staff | WorkPlace | Cadet) {
+  if (!receiver) return '';
+  if ('classYear' in receiver) {
+    const currentYear = new Date().getUTCFullYear();
+    const classYear = receiver.classYear;
+    if (currentYear - classYear < 4) {
+      return `C${currentYear - classYear + 1} ${receiver.warName}`;
     } else {
-      //mail.destiny.fullName = "FORMADO " + mail.destiny.fullName;
-      receiver.warName = 'FORMADO ' + receiver.warName;
+      return `FORMADO ${classYear + 3} ${receiver.warName}`;
     }
-  }
+  } else if ('rank' in receiver) return `${receiver.rank} ${receiver.warName}`;
+  else return `${receiver.abbreviation}`; //se for seção
 }
 
 export function invertStringDate(date: string) {

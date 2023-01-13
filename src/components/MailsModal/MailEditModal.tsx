@@ -13,8 +13,6 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 import { useForm, Controller } from 'react-hook-form';
-import ReceiverSelectInput from '../ReceiverSelectInput';
-import { search } from '../../utils';
 import { api } from '../../services/api';
 import { Cadet, Mail, Staff, WorkPlace } from '../../interfaces';
 
@@ -81,16 +79,6 @@ export function MailEditModal({
     }
   };
 
-  const pesquisaOnChange = (e) => {
-    setValue('pesquisa_id', e.target.value); //essa linha permite que o valor continue alterando
-
-    const options = rec.filter((receiver) => {
-      return search(getValues('pesquisa_id'), receiver, false);
-    });
-
-    setReceivers(options);
-  };
-
   return (
     <ModalContent>
       <ModalHeader>Editando {mail.tracking}</ModalHeader>
@@ -136,48 +124,6 @@ export function MailEditModal({
                 <Input
                   {...field}
                   placeholder='Exemplo: Fulano da Silva Junior'
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
-              Destinatário:
-            </FormLabel>
-            <Controller
-              name='pesquisa_id'
-              control={control}
-              defaultValue=''
-              rules={{ required: false }}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  autoComplete='off'
-                  isInvalid={errors.pesquisa_id}
-                  placeholder='Pesquise aqui'
-                  onChange={pesquisaOnChange}
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl mt='3' isRequired>
-            <Controller
-              name='destinyId'
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <ReceiverSelectInput
-                  value={
-                    'warName' in mail.destiny
-                      ? mail.destiny.warName
-                      : mail.destiny.name
-                  }
-                  field={field}
-                  entities={receivers}
-                  fieldName={'fullName'}
-                  placeholder='Selecione o destinatário'
                 />
               )}
             />

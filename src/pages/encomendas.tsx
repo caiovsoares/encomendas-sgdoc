@@ -17,7 +17,11 @@ import { SearchButton } from '../components/SearchButton';
 import { getAPIClient } from '../services/apiClient';
 import { GetServerSideProps } from 'next';
 import { Mail, Cadet, WorkPlace, Staff } from '../interfaces';
-import { findReceiverName, invertStringDate } from '../utils';
+import {
+  findReceiverName,
+  findReceiverShortName,
+  invertStringDate,
+} from '../utils';
 
 type encomendasProps = {
   mails: Mail[];
@@ -72,7 +76,7 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
                   <Box mr='5px' flexDir='row'>
                     <BiCheckCircle color='green' size='20px' />
                   </Box>
-                  {findReceiverName(value)}
+                  {findReceiverShortName(value)}
                 </Flex>
               ) : (
                 <Box mr='5px'>
@@ -192,7 +196,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
 
-  console.log({ from, to });
   const mailsPromise = apiClient.get('mail', { data: { from, to } });
   const receiversPromise = apiClient.get('receiver');
 
@@ -202,7 +205,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   ]);
   const mails: Mail[] = mailsRes.data;
   const receivers: (Staff | Cadet | WorkPlace)[] = receiversRes.data;
-  console.log(receivers);
   return {
     props: { mails, receivers },
   };

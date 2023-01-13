@@ -13,7 +13,7 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 import { useForm, Controller } from 'react-hook-form';
-import { findReceiverName, search } from '../../utils';
+import { findReceiverName } from '../../utils';
 import { api } from '../../services/api';
 import { Cadet, Staff, WorkPlace } from '../../interfaces';
 import Select from 'react-select';

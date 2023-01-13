@@ -16,7 +16,7 @@ import {
   Td,
 } from '@chakra-ui/react';
 import { useForm, Controller } from 'react-hook-form';
-import { findReceiverName, search } from '../../utils';
+import { findReceiverName } from '../../utils';
 import { Cadet, Mail, Staff, WorkPlace } from '../../interfaces';
 import { api } from '../../services/api';
 import Select from 'react-select';

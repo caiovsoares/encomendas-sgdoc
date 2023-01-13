@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Flex, useDisclosure, useToast } from '@chakra-ui/react';
-import { correctReceiver, exampleReceivers } from '../utils';
+import { exampleReceivers } from '../utils';
 import {
   useTable,
   useSortBy,
@@ -134,16 +134,7 @@ export async function getServerSideProps(context) {
   const user = null;
   let receivers;
 
-  if (process.env.ENVIRONMENT != 'DEV') {
-    receivers = exampleReceivers(50);
-    // receivers = await (
-    //   await axios.get(`${process.env.API_URL}/receivers/findAll/${user.id}`)
-    // ).data;
-    // `${process.env.API_URL}/receivers/findAll/${user.id}`;
-  } else {
-    receivers = exampleReceivers(50);
-  }
-  receivers.forEach(correctReceiver);
+  receivers = exampleReceivers(50);
 
   return {
     props: { user, receivers },
