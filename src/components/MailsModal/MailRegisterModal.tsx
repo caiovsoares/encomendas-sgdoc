@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   Button,
@@ -23,24 +22,17 @@ interface MailRegisterProps {
   onClose: () => void;
 }
 
-export function MailRegisterModal({
-  onClose,
-  receivers: rec,
-}: MailRegisterProps) {
+export function MailRegisterModal({ onClose, receivers }: MailRegisterProps) {
   const router = useRouter();
   const {
     handleSubmit,
     formState: { errors, isSubmitting },
     control,
     setError,
-    getValues,
-    setValue,
     reset,
     setFocus,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
-  const [receivers, setReceivers] = useState(rec);
-  const [selectValue, setSelectValue] = useState(null);
 
   const onSubmit = async (data, e) => {
     data.destinyId = data.destinySelect.value;
@@ -53,8 +45,7 @@ export function MailRegisterModal({
           duration: 3000,
           isClosable: true,
         });
-        //o useMemo na ReactTable impede de atualizar os dados
-        router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
+        router.replace(router.asPath);
       } else {
         toast({
           title: 'Erro',
@@ -67,7 +58,6 @@ export function MailRegisterModal({
       }
     });
 
-    //resetar formulário
     reset({
       tracking: '',
       sender: '',
@@ -75,8 +65,7 @@ export function MailRegisterModal({
       details: '',
       destinySelect: '',
     });
-    //setSelectValue(null);
-    e.target.reset(); //não é o indicado pela documentação, mas funciona
+    e.target.reset();
     setFocus('tracking');
   };
 
@@ -157,7 +146,6 @@ export function MailRegisterModal({
               render={({ field }) => (
                 <Select
                   {...field}
-                  //value={selectValue}
                   options={receivers.map((receiver) => ({
                     value: receiver.id,
                     label: findReceiverName(receiver),

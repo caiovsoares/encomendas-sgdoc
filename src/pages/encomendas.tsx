@@ -45,9 +45,8 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
     setModalType('register');
   }
 
-  function HandleReceiveItens(mail: Mail) {
-    onOpen();
-    setMail(mail);
+  function HandleReceiveItens() {
+    if (getReceiveMails().length > 0) onOpen();
     setModalType('receive');
   }
 
@@ -119,18 +118,13 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
     useRowSelect,
     (hooks) => {
       hooks.visibleColumns.push((columns) => [
-        // Let's make a column for selection
         {
           id: 'selection',
-          // The header can use the table's getToggleAllRowsSelectedProps method
-          // to render a checkbox
           Header: ({ getToggleAllPageRowsSelectedProps }) => (
             <div>
               <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
             </div>
           ),
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
           Cell: ({ row }) =>
             !row.original.receiver && (
               <div>

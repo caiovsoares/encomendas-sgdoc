@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   Button,
@@ -14,9 +13,10 @@ import {
   Tr,
   Th,
   Td,
+  FormLabel,
 } from '@chakra-ui/react';
 import { useForm, Controller } from 'react-hook-form';
-import { findReceiverName } from '../../utils';
+import { findReceiverName, findReceiverShortName } from '../../utils';
 import { Cadet, Mail, Staff, WorkPlace } from '../../interfaces';
 import { api } from '../../services/api';
 import Select from 'react-select';
@@ -30,25 +30,15 @@ type MailReceiveProps = {
 export function MailReceiveModal({
   onClose,
   receiveMails,
-  receivers: rec,
+  receivers,
 }: MailReceiveProps) {
   const router = useRouter();
   const {
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
     control,
-    setError,
-    getValues,
-    setValue,
-    reset,
-    setFocus,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
-  const [receivers, setReceivers] = useState(rec);
-
-  //Aqui se encontra uma das maiores gambiarras do código
-  //Talvez não seja tão gambiarra assim
-  //Mas minha falta de prática com promisses me impede de entender o que o google sugeriu
 
   const onSubmit = async (data) => {
     const ids: string[] = receiveMails.map((mail) => mail.id);
@@ -62,8 +52,8 @@ export function MailReceiveModal({
         duration: 3000,
         isClosable: true,
       });
-      router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
-      onClose(); //ESSA LINHA FECHA A JANELA APÓS A EDIÇÃO
+      router.replace(router.asPath);
+      onClose();
     } else {
       toast({
         title: 'Erro',
@@ -92,17 +82,19 @@ export function MailReceiveModal({
               {receiveMails.map((mail) => (
                 <Tr>
                   <Td>{mail.tracking}</Td>
-                  <Td>{findReceiverName(mail.destiny)}</Td>
+                  <Td>{findReceiverShortName(mail.destiny)}</Td>
                 </Tr>
               ))}
             </Tbody>
           </Table>
 
           <FormControl mt='3' isRequired>
+            <FormLabel fontWeight='semibold' color='gray.600'>
+              Recebedor:
+            </FormLabel>
             <Controller
               name='destinySelect'
               control={control}
-              defaultValue={getValues('pesquisa_id')}
               rules={{ required: true }}
               render={({ field }) => (
                 <Select
@@ -111,6 +103,7 @@ export function MailReceiveModal({
                     value: receiver.id,
                     label: findReceiverName(receiver),
                   }))}
+                  placeholder='Selecione...'
                 />
               )}
             />
