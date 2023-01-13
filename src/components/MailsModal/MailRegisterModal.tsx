@@ -12,11 +12,11 @@ import {
   useToast,
   Textarea,
 } from '@chakra-ui/react';
-import ReceiverSelectInput from '../ReceiverSelectInput';
 import { useForm, Controller } from 'react-hook-form';
-import { search } from '../../utils';
+import { findReceiverName, search } from '../../utils';
 import { api } from '../../services/api';
 import { Cadet, Staff, WorkPlace } from '../../interfaces';
+import Select from 'react-select';
 
 interface MailRegisterProps {
   receivers: (Staff | Cadet | WorkPlace)[];
@@ -42,6 +42,7 @@ export function MailRegisterModal({
   const [receivers, setReceivers] = useState(rec);
 
   const onSubmit = async (data, e) => {
+    data.destinyId = data.destinySelect.value;
     api.post('mail', data).then((res) => {
       if (res.status < 300) {
         toast({
@@ -90,16 +91,6 @@ export function MailRegisterModal({
         isClosable: true,
       });
     }
-  };
-
-  const pesquisaOnChange = (e) => {
-    setValue('pesquisa_id', e.target.value); //essa linha permite que o valor continue alterando
-
-    const options = rec.filter((receiver) => {
-      return search(getValues('pesquisa_id'), receiver, false);
-    });
-
-    setReceivers(options);
   };
 
   return (
@@ -152,39 +143,19 @@ export function MailRegisterModal({
             />
           </FormControl>
 
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
-              Destinatário:
-            </FormLabel>
-            <Controller
-              name='pesquisa_id'
-              control={control}
-              defaultValue=''
-              rules={{ required: false }}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  autoComplete='off'
-                  isInvalid={errors.pesquisa_id}
-                  placeholder='Pesquise aqui'
-                  onChange={pesquisaOnChange}
-                />
-              )}
-            />
-          </FormControl>
-
           <FormControl mt='3' isRequired>
             <Controller
-              name='destinyId'
+              name='destinySelect'
               control={control}
               defaultValue={getValues('pesquisa_id')}
               rules={{ required: true }}
               render={({ field }) => (
-                <ReceiverSelectInput
-                  field={field}
-                  receivers={receivers}
-                  placeholder='Selecione o destinatário'
-                  value=''
+                <Select
+                  {...field}
+                  options={receivers.map((receiver) => ({
+                    value: receiver.id,
+                    label: findReceiverName(receiver),
+                  }))}
                 />
               )}
             />

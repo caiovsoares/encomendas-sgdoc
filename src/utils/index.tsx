@@ -145,6 +145,7 @@ export function sweepObject(object) {
 }
 
 export function findReceiverName(receiver: Staff | WorkPlace | Cadet) {
+  console.log(receiver);
   if (!receiver) return '';
   if ('classYear' in receiver) {
     //se for cadete
@@ -165,52 +166,6 @@ export function findReceiverName(receiver: Staff | WorkPlace | Cadet) {
     //se for funcionário
     return `${receiver.rank} ${receiver.warName} - ${receiver.fullName}`;
   else return `${receiver.abbreviation} - ${receiver.name}`; //se for seção
-}
-
-export function findReceiverData(receiver) {
-  if (!receiver) return undefined;
-  if (receiver.person?.cadet) {
-    //se for cadete
-    const currentYear = new Date().getUTCFullYear();
-    const classYear = receiver.person.cadet.classYear;
-    if (currentYear - classYear < 4) {
-      //cadete
-      return {
-        id: receiver.id,
-        fullName: receiver.person.fullName,
-        warName: `C${currentYear - classYear + 1} ${receiver.person.warName}`,
-        cpf: receiver.person.cpf,
-        identity: receiver.person.identity,
-        classYear: receiver.person.cadet.classYear,
-      };
-    } else {
-      //cadete formado
-      return {
-        id: receiver.id,
-        fullName: receiver.person.fullName,
-        warName: `FORMADO ${classYear + 3} ${receiver.destiny.warName}`,
-        cpf: receiver.person.cpf,
-        identity: receiver.person.identity,
-        classYear: receiver.person.cadet.classYear,
-      };
-    }
-  } else if (receiver.person?.staff)
-    //se for funcionário
-    return {
-      id: receiver.id,
-      fullName: receiver.person.fullName,
-      warName: `${receiver.person.staff.rank} ${receiver.person.warName}`,
-      cpf: receiver.person.cpf,
-      identity: receiver.person.identity,
-      rank: receiver.person.staff.rank,
-    };
-  else
-    return {
-      //se for seção
-      id: receiver.id,
-      abbreviation: receiver.workPlace.abbreviation,
-      name: receiver.workPlace.name,
-    };
 }
 
 export function correctDate(date) {

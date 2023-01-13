@@ -16,8 +16,8 @@ import IndeterminateCheckbox from '../components/IndeterminateCheckbox';
 import { SearchButton } from '../components/SearchButton';
 import { getAPIClient } from '../services/apiClient';
 import { GetServerSideProps } from 'next';
-import { Mail, Cadet, WorkPlace, Staff, User } from '../interfaces';
-import { invertStringDate } from '../utils';
+import { Mail, Cadet, WorkPlace, Staff } from '../interfaces';
+import { findReceiverName, invertStringDate } from '../utils';
 
 type encomendasProps = {
   mails: Mail[];
@@ -51,7 +51,11 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
     () => [
       { Header: 'Rastreio', accessor: 'tracking' },
       { Header: 'Remetente', accessor: 'sender' },
-      { Header: 'Destinatário', accessor: 'destiny.warName' },
+      {
+        Header: 'Destinatário',
+        accessor: 'destiny',
+        Cell: ({ cell: { value } }) => findReceiverName(value),
+      },
       {
         Header: 'Chegada',
         accessor: 'created_at',
@@ -59,7 +63,7 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
       },
       {
         Header: 'Recebido',
-        accessor: 'receiver.warName',
+        accessor: 'receiver',
         Cell: ({ cell: { value } }) => {
           return (
             <>
@@ -68,7 +72,7 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
                   <Box mr='5px' flexDir='row'>
                     <BiCheckCircle color='green' size='20px' />
                   </Box>
-                  {String(value)}
+                  {findReceiverName(value)}
                 </Flex>
               ) : (
                 <Box mr='5px'>
@@ -198,7 +202,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   ]);
   const mails: Mail[] = mailsRes.data;
   const receivers: (Staff | Cadet | WorkPlace)[] = receiversRes.data;
-
+  console.log(receivers);
   return {
     props: { mails, receivers },
   };

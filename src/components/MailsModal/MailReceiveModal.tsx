@@ -7,8 +7,6 @@ import {
   ModalBody,
   ModalCloseButton,
   FormControl,
-  FormLabel,
-  Input,
   useToast,
   Table,
   Thead,
@@ -18,10 +16,10 @@ import {
   Td,
 } from '@chakra-ui/react';
 import { useForm, Controller } from 'react-hook-form';
-import ReceiverSelectInput from '../ReceiverSelectInput';
-import { search } from '../../utils';
+import { findReceiverName, search } from '../../utils';
 import { Cadet, Mail, Staff, WorkPlace } from '../../interfaces';
 import { api } from '../../services/api';
+import Select from 'react-select';
 
 type MailReceiveProps = {
   onClose: () => void;
@@ -54,10 +52,9 @@ export function MailReceiveModal({
 
   const onSubmit = async (data) => {
     const ids: string[] = receiveMails.map((mail) => mail.id);
-    const { receiverId } = data;
-    const result = await await api.patch('/mail', { ids, receiverId });
-    console.log(result);
-    if (result) {
+    const receiverId = data.destinySelect.value;
+    const result = await api.patch('/mail', { ids, receiverId });
+    if (result.status < 300) {
       toast({
         title: 'Sucesso',
         description: 'Recebimento(s) registrado(s) com sucesso!',
@@ -78,16 +75,6 @@ export function MailReceiveModal({
     }
   };
 
-  const pesquisaOnChange = (e) => {
-    setValue('pesquisa_id', e.target.value); //essa linha permite que o valor continue alterando
-
-    const options = rec.filter((receiver) => {
-      return search(getValues('pesquisa_id'), receiver, false);
-    });
-
-    setReceivers(options);
-  };
-
   return (
     <ModalContent>
       <ModalHeader>Registrar Recebimento</ModalHeader>
@@ -105,69 +92,29 @@ export function MailReceiveModal({
               {receiveMails.map((mail) => (
                 <Tr>
                   <Td>{mail.tracking}</Td>
-                  <Td>
-                    {'warName' in mail.destiny
-                      ? mail.destiny.warName
-                      : mail.destiny.name}
-                  </Td>
+                  <Td>{findReceiverName(mail.destiny)}</Td>
                 </Tr>
               ))}
             </Tbody>
           </Table>
 
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
-              Recebedor:
-            </FormLabel>
-            <Controller
-              name='pesquisa_id'
-              control={control}
-              defaultValue=''
-              rules={{ required: false }}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  autoComplete='off'
-                  isInvalid={errors.pesquisa_id}
-                  placeholder='Pesquise aqui'
-                  onChange={pesquisaOnChange}
-                />
-              )}
-            />
-          </FormControl>
-
           <FormControl mt='3' isRequired>
             <Controller
-              name='receiverId'
+              name='destinySelect'
               control={control}
               defaultValue={getValues('pesquisa_id')}
               rules={{ required: true }}
               render={({ field }) => (
-                <ReceiverSelectInput
-                  field={field}
-                  entities={receivers}
-                  fieldName={'fullName'}
-                  placeholder='Selecione o recebedor'
-                  value=''
+                <Select
+                  {...field}
+                  options={receivers.map((receiver) => ({
+                    value: receiver.id,
+                    label: findReceiverName(receiver),
+                  }))}
                 />
               )}
             />
           </FormControl>
-
-          {/* <FormControl mt='3' isRequired>
-            <FormLabel fontWeight='semibold' color='gray.600'>
-              Identidade:
-            </FormLabel>
-            <Controller
-              name='identity'
-              control={control}
-              defaultValue=''
-              rules={{ required: false }}
-              render={({ field }) => (
-                <Input {...field} placeholder='Exemplo: 12YS1234' />
-              )}
-            />
-          </FormControl> */}
 
           <Button
             isLoading={isSubmitting}
