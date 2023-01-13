@@ -57,13 +57,13 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
       { Header: 'Remetente', accessor: 'sender' },
       {
         Header: 'Destinatário',
-        accessor: 'destiny',
-        Cell: ({ cell: { value } }) => findReceiverName(value),
+        accessor: (mail: Mail) => findReceiverName(mail.destiny),
+        id: mail.id,
       },
       {
         Header: 'Chegada',
-        accessor: 'created_at',
-        Cell: ({ cell: { value } }) => invertStringDate(value),
+        accessor: (mail: Mail) => invertStringDate(mail.created_at),
+        id: mail.id,
       },
       {
         Header: 'Recebido',
