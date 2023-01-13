@@ -40,6 +40,7 @@ export function MailRegisterModal({
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
   const [receivers, setReceivers] = useState(rec);
+  const [selectValue, setSelectValue] = useState(null);
 
   const onSubmit = async (data, e) => {
     data.destinyId = data.destinySelect.value;
@@ -72,7 +73,9 @@ export function MailRegisterModal({
       sender: '',
       pesquisa_id: '',
       details: '',
+      destinySelect: '',
     });
+    //setSelectValue(null);
     e.target.reset(); //não é o indicado pela documentação, mas funciona
     setFocus('tracking');
   };
@@ -144,18 +147,22 @@ export function MailRegisterModal({
           </FormControl>
 
           <FormControl mt='3' isRequired>
+            <FormLabel fontWeight='semibold' color='gray.600'>
+              Destinatário:
+            </FormLabel>
             <Controller
               name='destinySelect'
               control={control}
-              defaultValue={getValues('pesquisa_id')}
               rules={{ required: true }}
               render={({ field }) => (
                 <Select
                   {...field}
+                  //value={selectValue}
                   options={receivers.map((receiver) => ({
                     value: receiver.id,
                     label: findReceiverName(receiver),
                   }))}
+                  placeholder='Selecione...'
                 />
               )}
             />

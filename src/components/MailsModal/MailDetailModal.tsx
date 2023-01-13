@@ -72,7 +72,7 @@ export function MailDetailModal({
         <Box ml='30px'>
           <Text>Rastreio: {mail.tracking}</Text>
           <Text>Remetente: {mail.sender}</Text>
-          <Text>Data de chegada: {mail.created_at}</Text>
+          <Text>Data de Chegada: {mail.created_at}</Text>
         </Box>
         <br />
         <hr />
@@ -107,12 +107,14 @@ export function MailDetailModal({
                   <Text>Nome de Guerra: {mail.receiver?.warName}</Text>
                   <Text>CPF: {mail.receiver?.cpf}</Text>
                   <Text>Identidade: {mail.receiver?.identity}</Text>
+                  <Text>Data de Recebimento: {mail.received_at}</Text>
                 </>
               )}
               {'name' in mail.receiver && ( //caso seja um setor
                 <>
                   <Text>Nome do Setor: {mail.receiver?.name}</Text>
                   <Text>Sigla: {mail.receiver?.abbreviation}</Text>
+                  <Text>Data de Recebimento: {mail.received_at}</Text>
                 </>
               )}
             </Box>
