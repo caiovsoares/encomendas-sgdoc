@@ -20,6 +20,7 @@ import { findReceiverName, findReceiverShortName } from '../../utils';
 import { Cadet, Mail, Staff, WorkPlace } from '../../interfaces';
 import { api } from '../../services/api';
 import Select from 'react-select';
+import { useState } from 'react';
 
 type MailReceiveProps = {
   onClose: () => void;
@@ -38,6 +39,7 @@ export function MailReceiveModal({
     formState: { isSubmitting },
     control,
   } = useForm({ mode: 'onChange' });
+  const [isSubmittingMailList, setisSubmittingMailList] = useState(false);
   const toast = useToast();
 
   const onSubmit = async (data) => {
@@ -63,6 +65,32 @@ export function MailReceiveModal({
         isClosable: true,
       });
     }
+  };
+
+  const onCreateMailList = async () => {
+    setisSubmittingMailList(true);
+    const ids = receiveMails.map((receiveMail) => receiveMail.id);
+    const result = await api.post('mail-list', { ids });
+    if (result.status < 300) {
+      toast({
+        title: 'Sucesso',
+        description: 'Lista criada com sucesso!',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      router.replace(router.asPath);
+      onClose();
+    } else {
+      toast({
+        title: 'Erro',
+        description: 'Houve um problema!',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+    setisSubmittingMailList(false);
   };
 
   return (
@@ -110,7 +138,7 @@ export function MailReceiveModal({
           </FormControl>
 
           <Button
-            isLoading={isSubmitting}
+            isLoading={isSubmitting || isSubmittingMailList}
             colorScheme='blue'
             mb='3'
             mt='3'
@@ -118,6 +146,15 @@ export function MailReceiveModal({
             type='submit'
           >
             Registrar
+          </Button>
+          <Button
+            isLoading={isSubmitting || isSubmittingMailList}
+            colorScheme='blue'
+            onClick={onCreateMailList}
+            mb='3'
+            mt='3'
+          >
+            Criar Lista dos Cadetes
           </Button>
           <Button onClick={onClose} mb='3' mt='3'>
             Cancelar

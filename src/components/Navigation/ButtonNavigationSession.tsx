@@ -1,10 +1,12 @@
 import { Box, Button, Image, useDisclosure } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { BiLogInCircle, BiLogOutCircle } from 'react-icons/bi';
 import { AuthContext } from '../../contexts/AuthContext';
 import { LoginModal } from './LoginModal';
 
 export const ButtonNavigationSession = () => {
+  const router = useRouter();
   const ranks = {
     FAB: 'FAB.png',
     S2: 'S2.png',
@@ -42,7 +44,11 @@ export const ButtonNavigationSession = () => {
           justifyContent='left'
         >
           <Box w='30px' h='30px' margin='10px' justifyContent='center'>
-            <Image src={`patentes/${ranks[user.rank]}`} h='30px' minW='30px' />
+            <Image
+              src={`${router.basePath}/patentes/${ranks[user.rank]}`}
+              h='30px'
+              minW='30px'
+            />
           </Box>
           {`${user.rank} ${user.warName}`}
         </Button>

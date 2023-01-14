@@ -58,3 +58,15 @@ export interface User {
     editMail: boolean;
   };
 }
+
+export interface MailListReceivement {
+  received_at: string;
+  receiver: WorkPlace | Cadet | Staff;
+}
+
+export interface MailList {
+  id: string;
+  created_at: string;
+  mails: Mail[];
+  mailListReceivements: MailListReceivement[];
+}

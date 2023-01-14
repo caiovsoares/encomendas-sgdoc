@@ -8,14 +8,17 @@ import {
   BiWorld,
   BiSmile,
   BiClipboard,
+  BiListUl,
 } from 'react-icons/bi';
 import { ImTrello } from 'react-icons/im';
 import { ButtonNavigationSession } from './ButtonNavigationSession';
 import { AuthContext } from '../../contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 export const Navigation = () => {
   const [isOpen, changeMenuState] = useState(false);
   const { user } = useContext(AuthContext);
+  const router = useRouter();
   return (
     <Flex
       direction='column'
@@ -29,7 +32,7 @@ export const Navigation = () => {
       onMouseLeave={() => changeMenuState(false)}
     >
       <Img
-        src='gladio.png'
+        src={`${router.basePath}/gladio.png`}
         alt='Gládio Alado'
         mt={5}
         height='80px'
@@ -40,9 +43,14 @@ export const Navigation = () => {
         Início{' '}
       </ButtonNavigation>
       {user?.permission?.editMail && (
-        <ButtonNavigation href='/encomendas' icon={<BiGift size='30px' />}>
-          Encomendas
-        </ButtonNavigation>
+        <>
+          <ButtonNavigation href='/encomendas' icon={<BiGift size='30px' />}>
+            Encomendas
+          </ButtonNavigation>
+          <ButtonNavigation href='/lista' icon={<BiListUl size='30px' />}>
+            Lista Cadetes
+          </ButtonNavigation>
+        </>
       )}
 
       {user?.permission?.editReceiver && (
