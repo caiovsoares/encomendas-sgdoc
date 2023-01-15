@@ -45,7 +45,9 @@ export const CadetList = ({ mails, date }: CadetListProps) => {
       <Table width='100%' variant='striped' size='sm'>
         <Thead>
           <Tr>
-            <br />
+            <Th colSpan={3}>
+              <br />
+            </Th>
           </Tr>
           <Tr>
             <Th>Rastreio</Th>
@@ -55,105 +57,7 @@ export const CadetList = ({ mails, date }: CadetListProps) => {
         </Thead>
         <Tbody>
           {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
-              <Td>{mail.tracking}</Td>
-              <Td>{mail.sender}</Td>
-              <Td>{findReceiverShortName(mail.destiny)}</Td>
-            </Tr>
-          ))}
-          {mails.map((mail) => (
-            <Tr>
+            <Tr key={mail.id}>
               <Td>{mail.tracking}</Td>
               <Td>{mail.sender}</Td>
               <Td>{findReceiverShortName(mail.destiny)}</Td>
@@ -177,7 +81,9 @@ export const CadetList = ({ mails, date }: CadetListProps) => {
             </Td>
           </Tr>
           <Tr>
-            <br />
+            <Td colSpan={3}>
+              <br />
+            </Td>
           </Tr>
         </Tfoot>
       </Table>

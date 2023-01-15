@@ -31,6 +31,7 @@ export interface Mail {
   receiver: WorkPlace | Cadet | Staff;
   received_at: string;
   details: string;
+  mailListDate: string;
 }
 
 export interface PublicMail {
@@ -40,6 +41,7 @@ export interface PublicMail {
   created_at: string;
   receiver: string;
   received_at: string;
+  mailListDate: string;
 }
 
 export interface User {

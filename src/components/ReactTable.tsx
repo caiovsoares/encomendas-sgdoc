@@ -91,10 +91,10 @@ function ReactTable({ tableOptions }) {
       </Flex>
       <Flex flexDir='column' width='80%' justifyContent='center'>
         <Flex boxShadow='md' overflowY='auto'>
-          <Table width='100%' variant='striped' {...getTableProps()}>
+          <Table width='100%' variant='striped' size='sm' {...getTableProps()}>
             <Thead>
               <Tr>
-                <Th colSpan={6}>
+                <Th colSpan={10}>
                   <GlobalFilter
                     filter={globalFilter}
                     setFilter={setGlobalFilter}
@@ -155,7 +155,7 @@ function ReactTable({ tableOptions }) {
               setPageSize(Number(e.target.value));
             }}
           >
-            {[5, 10, 20, 30, 40, 50].map((pageSize) => (
+            {[5, 10, 15, 20, 30, 40, 50].map((pageSize) => (
               <option color='text' key={pageSize} value={pageSize}>
                 Exibir {pageSize}
               </option>

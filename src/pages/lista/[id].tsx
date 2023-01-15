@@ -11,6 +11,7 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from '@chakra-ui/react';
 import {
   useTable,
@@ -22,17 +23,22 @@ import ReactTable from '../../components/ReactTable';
 import { PageButton } from '../../components/PageButton';
 import { getAPIClient } from '../../services/apiClient';
 import { GetServerSideProps } from 'next';
-import { Mail } from '../../interfaces';
+import { Cadet, Mail, Staff, WorkPlace } from '../../interfaces';
 import { findReceiverName, invertStringDate } from '../../utils';
 import { MailList } from '../../interfaces';
 import ReactToPrint from 'react-to-print';
 import { CadetList } from '../../components/CadetList';
+import MailListModal from '../../components/MailListModal';
+import { isBoolean } from 'util';
+import { BiPrinter } from 'react-icons/bi';
 
 type listaId = {
   mailList: MailList;
+  receivers: (Staff | WorkPlace | Cadet)[];
 };
 
-const ListaId = ({ mailList }: listaId) => {
+const ListaId = ({ mailList, receivers }: listaId) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const componentRef = useRef();
   const mails = mailList.mails;
 
@@ -66,6 +72,12 @@ const ListaId = ({ mailList }: listaId) => {
 
   return (
     <Flex width='100%' flexDir='column' alignItems='center'>
+      <MailListModal
+        id={mailList.id}
+        receivers={receivers}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
       <Flex
         flexDir='column'
         minH='30px'
@@ -79,13 +91,25 @@ const ListaId = ({ mailList }: listaId) => {
         <Box mt={3}>
           {mailList.mailListReceivements[0] ? (
             mailList.mailListReceivements.map(({ receiver }) => (
-              <Text>• {findReceiverName(receiver)}</Text>
+              <Text key={receiver.id}>• {findReceiverName(receiver)}</Text>
             ))
           ) : (
             <>
-              <PageButton onClick={null}>Registrar Recebimento</PageButton>
+              <PageButton onClick={onOpen}>Registrar Recebimento</PageButton>
               <ReactToPrint
-                trigger={() => <Button>Imprimir</Button>}
+                trigger={() => (
+                  <Button
+                    boxShadow='lg'
+                    size='sm'
+                    rounded='md'
+                    bgColor='menuButton'
+                    _hover={{ bg: 'menuButtonHover' }}
+                    color='menuButtonText'
+                    marginInline='10px'
+                  >
+                    <BiPrinter size='20px' />
+                  </Button>
+                )}
                 content={() => componentRef.current}
               />
               <Box hidden={true}>
@@ -121,11 +145,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
 
-  const mailList: MailList = await (
-    await apiClient.get(`mail-list/${id}`)
-  ).data;
+  const mailListPromise = apiClient.get(`mail-list/${id}`);
+  const receiversPromise = apiClient.get('receiver');
+
+  const [mailListRes, receiversRes] = await Promise.all([
+    mailListPromise,
+    receiversPromise,
+  ]);
+  const mailList: MailList[] = mailListRes.data;
+  const receivers: (Staff | Cadet | WorkPlace)[] = receiversRes.data;
+
   return {
-    props: { mailList },
+    props: { mailList, receivers },
   };
 };
 

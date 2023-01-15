@@ -9,7 +9,12 @@ import {
 } from 'react-table';
 import ReactTable from '../components/ReactTable';
 import { PageButton } from '../components/PageButton';
-import { BiCheckCircle, BiInfoCircle, BiXCircle } from 'react-icons/bi';
+import {
+  BiCheckCircle,
+  BiError,
+  BiInfoCircle,
+  BiXCircle,
+} from 'react-icons/bi';
 import MailsModal from '../components/MailsModal';
 import { useRouter } from 'next/router';
 import IndeterminateCheckbox from '../components/IndeterminateCheckbox';
@@ -66,17 +71,31 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
       },
       {
         Header: 'Recebido',
-        accessor: (mail: Mail) => findReceiverShortName(mail.receiver),
+        accessor: (mail: Mail) =>
+          mail.mailListDate
+            ? `Lista de ${invertStringDate(mail.mailListDate)}`
+            : findReceiverShortName(mail.receiver),
         id: 'receiver',
-        Cell: ({ cell: { value } }) => {
+        Cell: ({
+          cell: {
+            row: { original },
+          },
+        }) => {
           return (
             <>
-              {value ? (
+              {original?.receiver ? (
                 <Flex flexDir='row'>
                   <Box mr='5px' flexDir='row'>
                     <BiCheckCircle color='green' size='20px' />
                   </Box>
-                  {String(value)}
+                  {findReceiverShortName(original.receiver)}
+                </Flex>
+              ) : original?.mailListDate ? (
+                <Flex flexDir='row'>
+                  <Box mr='5px' flexDir='row'>
+                    <BiError color='orange' size='20px' />
+                  </Box>
+                  {`Lista de ${invertStringDate(original.mailListDate)}`}
                 </Flex>
               ) : (
                 <Box mr='5px'>
@@ -126,7 +145,8 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
             </div>
           ),
           Cell: ({ row }) =>
-            !row.original.receiver && (
+            !row.original.receiver &&
+            !row.original.mailListDate && (
               <div>
                 <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
               </div>
@@ -139,8 +159,9 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
 
   const getReceiveMails = () => {
     const ReceiveMails: Mail[] = tableOptions.selectedFlatRows
-      .filter((e) => !e.original.receiver)
-      .map((e) => e.original);
+      .map((e) => e.original)
+      .filter((e) => !e.receiver)
+      .filter((e: Mail) => !e.mailListDate);
     return ReceiveMails;
   };
 
