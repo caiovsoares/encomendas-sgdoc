@@ -78,7 +78,12 @@ const Index = ({ mails }: indexProps) => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const apiClient = getAPIClient(context);
-  const mails: PublicMail[] = await (await apiClient.get('')).data;
+
+  const mails: PublicMail[] = process.env.FALSE_DATA
+    ? []
+    : await (
+        await apiClient.get('')
+      ).data;
 
   return {
     props: { mails },

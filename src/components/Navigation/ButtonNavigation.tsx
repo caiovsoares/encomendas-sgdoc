@@ -8,8 +8,9 @@ export const ButtonNavigation = ({ href, children, icon }) => {
   return (
     <Link href={href}>
       <Button
-        margin={2}
-        marginTop={4}
+        marginInline={2}
+        marginTop={1}
+        _focus={{}}
         padding={0}
         variant='ghost'
         bg={asPath === href ? 'menuButtonHover' : ''}

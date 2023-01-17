@@ -22,67 +22,81 @@ export const Navigation = () => {
   return (
     <Flex
       direction='column'
-      height='100%'
       boxShadow='0px 0px 10px 5px #1A365D'
       bg='navigation'
+      height='100%'
       alignItems='center'
+      justifyContent='space-between'
       width={isOpen ? '200px' : '70px'}
       transition='width 1s'
       onMouseEnter={() => changeMenuState(true)}
       onMouseLeave={() => changeMenuState(false)}
     >
-      <Img
-        src={`${router.basePath}/gladio.png`}
-        alt='Gládio Alado'
-        mt={5}
-        height='80px'
-        objectFit='contain'
-        width='calc(100% - 10px)'
-      />
-      <ButtonNavigation href='/' icon={<BiHome size='30px' />}>
-        Início{' '}
-      </ButtonNavigation>
-      {user?.permission?.editMail && (
-        <>
-          <ButtonNavigation href='/encomendas' icon={<BiGift size='30px' />}>
-            Encomendas
+      <Flex flexDir='column' height='auto' alignItems='center' width='100%'>
+        <Img
+          src={`${router.basePath}/gladio.png`}
+          alt='Gládio Alado'
+          mt={5}
+          height='80px'
+          objectFit='contain'
+          width='calc(100% - 10px)'
+        />
+        <ButtonNavigation href='/' icon={<BiHome size='30px' />}>
+          Início{' '}
+        </ButtonNavigation>
+        {user?.permission?.editMail && (
+          <>
+            <ButtonNavigation href='/encomendas' icon={<BiGift size='30px' />}>
+              Encomendas
+            </ButtonNavigation>
+            <ButtonNavigation href='/lista' icon={<BiListUl size='30px' />}>
+              Lista Cadetes
+            </ButtonNavigation>
+          </>
+        )}
+
+        {user?.permission?.editReceiver && (
+          <ButtonNavigation
+            href='/destinatarios'
+            icon={<BiSmile size='30px' />}
+          >
+            Destinatarios{' '}
           </ButtonNavigation>
-          <ButtonNavigation href='/lista' icon={<BiListUl size='30px' />}>
-            Lista Cadetes
+        )}
+
+        {user?.permission?.editExpedition && (
+          <ButtonNavigation href='/expedicoes' icon={<BiWorld size='30px' />}>
+            Expedições{' '}
           </ButtonNavigation>
-        </>
-      )}
+        )}
 
-      {user?.permission?.editReceiver && (
-        <ButtonNavigation href='/destinatarios' icon={<BiSmile size='30px' />}>
-          Destinatarios{' '}
-        </ButtonNavigation>
-      )}
+        {user?.permission?.editUser && (
+          <ButtonNavigation
+            href='/usuarios'
+            icon={<BiUserCircle size='30px' />}
+          >
+            Usuários{' '}
+          </ButtonNavigation>
+        )}
 
-      {user?.permission?.editExpedition && (
-        <ButtonNavigation href='/expedicoes' icon={<BiWorld size='30px' />}>
-          Expedições{' '}
+        {user?.permission?.editPermission && (
+          <ButtonNavigation
+            href='/permissoes'
+            icon={<BiClipboard size='30px' />}
+          >
+            Permissões{' '}
+          </ButtonNavigation>
+        )}
+      </Flex>
+      <Flex flexDir='column' height='auto' alignItems='center' width='100%'>
+        <ButtonNavigation
+          href='https://trello.com/b/lCeNCQcB/encomendas-sgdoc'
+          icon={<ImTrello size='30px' />}
+        >
+          Trello
         </ButtonNavigation>
-      )}
-
-      {user?.permission?.editUser && (
-        <ButtonNavigation href='/usuarios' icon={<BiUserCircle size='30px' />}>
-          Usuários{' '}
-        </ButtonNavigation>
-      )}
-
-      {user?.permission?.editPermission && (
-        <ButtonNavigation href='/permissoes' icon={<BiClipboard size='30px' />}>
-          Permissões{' '}
-        </ButtonNavigation>
-      )}
-      <ButtonNavigation
-        href='https://trello.com/b/lCeNCQcB/encomendas-sgdoc'
-        icon={<ImTrello size='30px' />}
-      >
-        Trello
-      </ButtonNavigation>
-      <ButtonNavigationSession />
+        <ButtonNavigationSession />
+      </Flex>
     </Flex>
   );
 };

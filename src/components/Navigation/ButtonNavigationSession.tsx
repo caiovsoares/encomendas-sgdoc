@@ -33,11 +33,14 @@ export const ButtonNavigationSession = () => {
     return (
       <>
         <Button
-          margin={2}
-          marginTop={4}
+          marginInline={2}
+          marginTop={1}
           padding={0}
           variant='ghost'
-          _hover={{ bg: 'menuButtonHover' }}
+          _hover={{}}
+          _focus={{}}
+          _active={{}}
+          cursor='default'
           width='calc(100% - 20px)'
           overflow='clip'
           color='menuButtonText'
@@ -54,11 +57,12 @@ export const ButtonNavigationSession = () => {
         </Button>
         <Button
           onClick={signOut}
-          margin={2}
-          marginTop={4}
+          marginInline={2}
+          marginTop={1}
           padding={0}
           variant='ghost'
           _hover={{ bg: 'menuButtonHover' }}
+          _focus={{}}
           width='calc(100% - 20px)'
           overflow='clip'
           color='menuButtonText'
