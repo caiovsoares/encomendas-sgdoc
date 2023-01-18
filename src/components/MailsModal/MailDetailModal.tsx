@@ -68,7 +68,7 @@ export function MailDetailModal({
     <ModalContent>
       <ModalHeader>Detalhes</ModalHeader>
       <ModalCloseButton />
-      <ModalBody maxH='60vh' overflowX='clip' overflowY='scroll'>
+      <ModalBody maxH='70vh' overflowX='clip' overflowY='scroll'>
         <Heading size='sm'>Encomenda</Heading>
         <Box ml='30px'>
           <Text>Rastreio: {mail.tracking}</Text>
@@ -134,9 +134,11 @@ export function MailDetailModal({
             </Box>
           </>
         )}
-        <Text ml='30px'>
-          Data de Recebimento: {invertStringDate(mail.received_at)}
-        </Text>
+        {mail.received_at && (
+          <Text ml='30px'>
+            Data de Recebimento: {invertStringDate(mail.received_at)}
+          </Text>
+        )}
         {mail.details && (
           <>
             <br />

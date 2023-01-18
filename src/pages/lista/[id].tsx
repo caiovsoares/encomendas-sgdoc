@@ -81,11 +81,11 @@ const ListaId = ({ mailList, receivers }: listaId) => {
       <Flex
         flexDir='column'
         minH='30px'
-        h='15vh'
+        h='18vh'
         alignItems='center'
         justifyContent='center'
       >
-        <Heading>
+        <Heading size='sm'>
           Lista dos Cadetes do dia {invertStringDate(mailList.created_at)}
         </Heading>
         <Box mt={3}>
@@ -94,37 +94,32 @@ const ListaId = ({ mailList, receivers }: listaId) => {
               <Text key={receiver.id}>• {findReceiverName(receiver)}</Text>
             ))
           ) : (
-            <>
-              <PageButton onClick={onOpen}>Registrar Recebimento</PageButton>
-              <ReactToPrint
-                trigger={() => (
-                  <Button
-                    boxShadow='lg'
-                    size='sm'
-                    rounded='md'
-                    bgColor='menuButton'
-                    _hover={{ bg: 'menuButtonHover' }}
-                    color='menuButtonText'
-                    marginInline='10px'
-                  >
-                    <BiPrinter size='20px' />
-                  </Button>
-                )}
-                content={() => componentRef.current}
-              />
-              <Box hidden={true}>
-                <Box ref={componentRef}>
-                  <CadetList
-                    mails={mailList.mails}
-                    date={mailList.created_at}
-                  />
-                </Box>
-              </Box>
-            </>
+            <PageButton onClick={onOpen}>Registrar Recebimento</PageButton>
           )}
+          <ReactToPrint
+            trigger={() => (
+              <Button
+                boxShadow='lg'
+                size='sm'
+                rounded='md'
+                bgColor='menuButton'
+                _hover={{ bg: 'menuButtonHover' }}
+                color='menuButtonText'
+                marginInline='10px'
+              >
+                <BiPrinter size='20px' />
+              </Button>
+            )}
+            content={() => componentRef.current}
+          />
+          <Box hidden={true}>
+            <Box ref={componentRef}>
+              <CadetList mails={mailList.mails} date={mailList.created_at} />
+            </Box>
+          </Box>
         </Box>
       </Flex>
-      <Flex flexDir='row' alignItems='center' h='85vh' width='100%'>
+      <Flex flexDir='row' alignItems='center' h='82vh' width='100%'>
         <ReactTable tableOptions={tableOptions} />
       </Flex>
     </Flex>

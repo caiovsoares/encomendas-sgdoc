@@ -83,7 +83,7 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
         }) => {
           return (
             <>
-              {original?.receiver ? (
+              {original?.receiver[0] ? (
                 <Flex flexDir='row'>
                   <Box mr='5px' flexDir='row'>
                     <BiCheckCircle color='green' size='20px' />

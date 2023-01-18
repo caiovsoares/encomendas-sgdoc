@@ -79,37 +79,7 @@ const Index = ({ mails }: indexProps) => {
 export const getStaticProps: GetStaticProps = async (context) => {
   const apiClient = getAPIClient(context);
 
-  const mails: PublicMail[] = process.env.FALSE_DATA
-    ? [
-        {
-          created_at: 'a',
-          destiny: 'a',
-          mailListDate: 'a',
-          received_at: 'a',
-          receiver: 'a',
-          sender: 'a',
-          tracking: 'a',
-        },
-        {
-          created_at: 'a',
-          destiny: 'a',
-          mailListDate: 'a',
-          received_at: 'a',
-          receiver: 'a',
-          sender: 'a',
-          tracking: 'a',
-        },
-        {
-          created_at: 'a',
-          destiny: 'a',
-          mailListDate: 'a',
-          sender: 'a',
-          tracking: 'a',
-        },
-      ]
-    : await (
-        await apiClient.get('')
-      ).data;
+  const mails: PublicMail[] = await (await apiClient.get('')).data;
 
   return {
     props: { mails },
