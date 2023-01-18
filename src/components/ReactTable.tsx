@@ -55,7 +55,7 @@ function ReactTable({ tableOptions }) {
   // Render the UI for your table
   return (
     <Flex height='calc(100% - 20px)' width='100%' mt='10px' mb='10px'>
-      <Flex width='10%' justifyContent='center' alignItems='center'>
+      <Flex width='5%' justifyContent='center' alignItems='center'>
         <Box
           boxSize='-webkit-fit-content'
           boxShadow={
@@ -91,7 +91,7 @@ function ReactTable({ tableOptions }) {
           </Button>
         </Box>
       </Flex>
-      <Flex flexDir='column' width='80%' justifyContent='center'>
+      <Flex flexDir='column' width='90%' justifyContent='center'>
         <Flex boxShadow='md' overflowY='auto'>
           <Table width='100%' variant='striped' size='sm' {...getTableProps()}>
             <Thead>
@@ -165,7 +165,7 @@ function ReactTable({ tableOptions }) {
           </Select>
         </Flex>
       </Flex>
-      <Flex width='10%' justifyContent='center' alignItems='center'>
+      <Flex width='5%' justifyContent='center' alignItems='center'>
         <Box
           boxSize='-webkit-fit-content'
           boxShadow={
