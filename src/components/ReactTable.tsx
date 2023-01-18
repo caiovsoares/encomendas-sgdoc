@@ -66,6 +66,7 @@ function ReactTable({ tableOptions }) {
           borderRadius='6px'
         >
           <Button
+            size='xs'
             bgColor='menuButton'
             _hover={canPreviousPage && { bg: 'menuButtonHover' }}
             color='menuButtonText'
@@ -77,6 +78,7 @@ function ReactTable({ tableOptions }) {
             <BiChevronsLeft size='20px' />
           </Button>
           <Button
+            size='xs'
             bgColor='menuButton'
             _hover={canPreviousPage && { bg: 'menuButtonHover' }}
             color='menuButtonText'
@@ -174,6 +176,7 @@ function ReactTable({ tableOptions }) {
           borderRadius='6px'
         >
           <Button
+            size='xs'
             bgColor='menuButton'
             _hover={canNextPage && { bg: 'menuButtonHover' }}
             color='menuButtonText'
@@ -184,6 +187,7 @@ function ReactTable({ tableOptions }) {
             <BiChevronRight size='20px' />
           </Button>
           <Button
+            size='xs'
             bgColor='menuButton'
             _hover={canNextPage && { bg: 'menuButtonHover' }}
             color='menuButtonText'
