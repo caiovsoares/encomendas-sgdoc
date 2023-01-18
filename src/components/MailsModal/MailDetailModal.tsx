@@ -68,7 +68,7 @@ export function MailDetailModal({
     <ModalContent>
       <ModalHeader>Detalhes</ModalHeader>
       <ModalCloseButton />
-      <ModalBody>
+      <ModalBody maxH='60vh' overflowX='clip' overflowY='scroll'>
         <Heading size='sm'>Encomenda</Heading>
         <Box ml='30px'>
           <Text>Rastreio: {mail.tracking}</Text>
@@ -100,7 +100,9 @@ export function MailDetailModal({
             <br />
             <hr />
             <br />
-            <Heading size='sm'>{`Recebedor ${i}`}</Heading>
+            <Heading size='sm'>{`Recebedor${
+              mail.mailListDate ? ' ' + (i + 1) : ''
+            }`}</Heading>
             <Box ml='30px'>
               {'warName' in receiver && ( //caso seja um staff ou cadet
                 <>
@@ -132,7 +134,9 @@ export function MailDetailModal({
             </Box>
           </>
         )}
-        <Text>Data de Recebimento: {invertStringDate(mail.received_at)}</Text>
+        <Text ml='30px'>
+          Data de Recebimento: {invertStringDate(mail.received_at)}
+        </Text>
         {mail.details && (
           <>
             <br />
