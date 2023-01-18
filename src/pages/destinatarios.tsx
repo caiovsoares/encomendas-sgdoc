@@ -10,7 +10,6 @@ import {
 import ReactTable from '../components/ReactTable';
 import { PageButton } from '../components/PageButton';
 import { BiInfoCircle } from 'react-icons/bi';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import ReceiversModal from '../components/ReceiversModal';
 

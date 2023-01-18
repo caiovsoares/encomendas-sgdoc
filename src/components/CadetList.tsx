@@ -13,11 +13,11 @@ import {
   Tfoot,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { Mail } from '../interfaces';
+import { MailListMail } from '../interfaces';
 import { findReceiverShortName, invertStringDate } from '../utils';
 
 type CadetListProps = {
-  mails: Mail[];
+  mails: MailListMail[];
   date: string;
 };
 

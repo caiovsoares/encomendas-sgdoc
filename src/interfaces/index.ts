@@ -28,7 +28,7 @@ export interface Mail {
   sender: string;
   destiny: WorkPlace | Cadet | Staff;
   created_at: string;
-  receiver: WorkPlace | Cadet | Staff;
+  receiver: (WorkPlace | Cadet | Staff)[];
   received_at: string;
   details: string;
   mailListDate: string;
@@ -69,6 +69,14 @@ export interface MailListReceivement {
 export interface MailList {
   id: string;
   created_at: string;
-  mails: Mail[];
+  mails: MailListMail[];
   mailListReceivements: MailListReceivement[];
+}
+
+export interface MailListMail {
+  id: string;
+  tracking: string;
+  sender: string;
+  created_at: string;
+  destiny: Staff | Cadet | WorkPlace;
 }

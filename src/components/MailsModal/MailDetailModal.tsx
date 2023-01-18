@@ -21,7 +21,7 @@ import { useRouter } from 'next/router';
 import { BiEdit, BiTrash } from 'react-icons/bi';
 import { Mail } from '../../interfaces';
 import { api } from '../../services/api';
-import { invertStringDate } from '../../utils';
+import { findReceiverShortName, invertStringDate } from '../../utils';
 
 type MailDetailProps = {
   mail: Mail;
@@ -83,7 +83,7 @@ export function MailDetailModal({
           {'warName' in mail.destiny && ( //caso seja um staff ou cadet
             <>
               <Text>Nome Completo: {mail.destiny?.fullName}</Text>
-              <Text>Nome de Guerra: {mail.destiny?.warName}</Text>
+              <Text>Nome de Guerra: {findReceiverShortName(mail.destiny)}</Text>
               <Text>CPF: {mail.destiny?.cpf}</Text>
               <Text>Identidade: {mail.destiny?.identity}</Text>
             </>
@@ -95,36 +95,44 @@ export function MailDetailModal({
             </>
           )}
         </Box>
-        {mail.receiver && (
+        {mail.receiver.map((receiver, i) => (
           <>
             <br />
             <hr />
             <br />
-            <Heading size='sm'>Recebedor</Heading>
+            <Heading size='sm'>{`Recebedor ${i}`}</Heading>
             <Box ml='30px'>
-              {'warName' in mail.receiver && ( //caso seja um staff ou cadet
+              {'warName' in receiver && ( //caso seja um staff ou cadet
                 <>
-                  <Text>Nome Completo: {mail.receiver?.fullName}</Text>
-                  <Text>Nome de Guerra: {mail.receiver?.warName}</Text>
-                  <Text>CPF: {mail.receiver?.cpf}</Text>
-                  <Text>Identidade: {mail.receiver?.identity}</Text>
-                  <Text>
-                    Data de Recebimento: {invertStringDate(mail.received_at)}
-                  </Text>
+                  <Text>Nome Completo: {receiver?.fullName}</Text>
+                  <Text>Nome de Guerra: {findReceiverShortName(receiver)}</Text>
+                  <Text>CPF: {receiver?.cpf}</Text>
+                  <Text>Identidade: {receiver?.identity}</Text>
                 </>
               )}
-              {'name' in mail.receiver && ( //caso seja um setor
+              {'name' in receiver && ( //caso seja um setor
                 <>
-                  <Text>Nome do Setor: {mail.receiver?.name}</Text>
-                  <Text>Sigla: {mail.receiver?.abbreviation}</Text>
-                  <Text>
-                    Data de Recebimento: {invertStringDate(mail.received_at)}
-                  </Text>
+                  <Text>Nome do Setor: {receiver?.name}</Text>
+                  <Text>Sigla: {receiver?.abbreviation}</Text>
                 </>
               )}
             </Box>
           </>
+        ))}
+        {mail.mailListDate && (
+          <>
+            <br />
+            <hr />
+            <br />
+            <Heading size='sm'>Lista dos Cadetes</Heading>
+            <Box ml='30px'>
+              <Text>
+                Data de Criação: {invertStringDate(mail.mailListDate)}
+              </Text>
+            </Box>
+          </>
         )}
+        <Text>Data de Recebimento: {invertStringDate(mail.received_at)}</Text>
         {mail.details && (
           <>
             <br />

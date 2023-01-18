@@ -74,7 +74,7 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
         accessor: (mail: Mail) =>
           mail.mailListDate
             ? `Lista de ${invertStringDate(mail.mailListDate)}`
-            : findReceiverShortName(mail.receiver),
+            : findReceiverShortName(mail.receiver[0]),
         id: 'receiver',
         Cell: ({
           cell: {
@@ -88,7 +88,7 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
                   <Box mr='5px' flexDir='row'>
                     <BiCheckCircle color='green' size='20px' />
                   </Box>
-                  {findReceiverShortName(original.receiver)}
+                  {findReceiverShortName(original.receiver[0])}
                 </Flex>
               ) : original?.mailListDate ? (
                 <Flex flexDir='row'>
