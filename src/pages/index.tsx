@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
-import { invertStringDate } from '../utils';
+import { findReceiverShortName, invertStringDate } from '../utils';
 import ReactTable from '../components/ReactTable';
 import {
   useTable,
@@ -10,7 +10,7 @@ import {
   useSortBy,
 } from 'react-table';
 import { GetStaticProps } from 'next';
-import { BiCheckCircle, BiXCircle } from 'react-icons/bi';
+import { BiCheckCircle, BiError, BiXCircle } from 'react-icons/bi';
 import { getAPIClient } from '../services/apiClient';
 import { PublicMail } from '../interfaces';
 
@@ -31,16 +31,31 @@ const Index = ({ mails }: indexProps) => {
       },
       {
         Header: 'Recebido',
-        accessor: 'receiver',
-        Cell: ({ cell: { value } }) => {
+        accessor: (mail: PublicMail) =>
+          mail.mailListDate
+            ? `Lista de ${invertStringDate(mail.mailListDate)}`
+            : mail.receiver,
+        id: 'receiver',
+        Cell: ({
+          cell: {
+            row: { original },
+          },
+        }) => {
           return (
             <>
-              {value ? (
+              {original?.receiver ? (
                 <Flex flexDir='row'>
                   <Box mr='5px' flexDir='row'>
                     <BiCheckCircle color='green' size='20px' />
                   </Box>
-                  {String(value)}
+                  {original.receiver}
+                </Flex>
+              ) : original?.mailListDate ? (
+                <Flex flexDir='row'>
+                  <Box mr='5px' flexDir='row'>
+                    <BiError color='orange' size='20px' />
+                  </Box>
+                  {`Lista de ${invertStringDate(original.mailListDate)}`}
                 </Flex>
               ) : (
                 <Box mr='5px'>

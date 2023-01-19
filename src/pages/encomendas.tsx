@@ -145,7 +145,7 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
             </div>
           ),
           Cell: ({ row }) =>
-            !row.original.receiver &&
+            !row.original.receiver[0] &&
             !row.original.mailListDate && (
               <div>
                 <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
@@ -160,7 +160,7 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
   const getReceiveMails = () => {
     const ReceiveMails: Mail[] = tableOptions.selectedFlatRows
       .map((e) => e.original)
-      .filter((e) => !e.receiver)
+      .filter((e) => !e.receiver[0])
       .filter((e: Mail) => !e.mailListDate);
     return ReceiveMails;
   };

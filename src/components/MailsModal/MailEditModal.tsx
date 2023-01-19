@@ -15,6 +15,8 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 import { api } from '../../services/api';
 import { Cadet, Mail, Staff, WorkPlace } from '../../interfaces';
+import Select from 'react-select';
+import { findReceiverName } from '../../utils';
 
 type MailEditProps = {
   onClose: () => void;
@@ -41,6 +43,7 @@ export function MailEditModal({
 
   const onSubmit = async (data) => {
     data.id = mail.id;
+    data.destinyId = data.destinySelect.value;
     const result = await (await api.put('mail', data)).data;
 
     if (result.id) {
@@ -124,6 +127,58 @@ export function MailEditModal({
                 <Input
                   {...field}
                   placeholder='Exemplo: Fulano da Silva Junior'
+                />
+              )}
+            />
+          </FormControl>
+
+          <FormControl mt='3' isRequired>
+            <FormLabel fontWeight='semibold' color='gray.600'>
+              Destinatário:
+            </FormLabel>
+            <Controller
+              name='destinySelect'
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Select
+                  defaultValue={{
+                    label: findReceiverName(mail.destiny),
+                    value: mail.destiny.id,
+                  }}
+                  {...field}
+                  options={receivers.map((receiver) => ({
+                    value: receiver.id,
+                    label: findReceiverName(receiver),
+                  }))}
+                  placeholder='Selecione...'
+                />
+              )}
+            />
+          </FormControl>
+
+          <FormControl mt='3' isRequired>
+            <FormLabel fontWeight='semibold' color='gray.600'>
+              Recebedor:
+            </FormLabel>
+            <Controller
+              name='receiverSelect'
+              control={control}
+              render={({ field }) => (
+                <Select
+                  isDisabled={!!mail.mailListDate}
+                  defaultValue={
+                    mail.receiver[0] && {
+                      label: findReceiverName(mail.receiver[0]),
+                      value: mail.receiver[0].id,
+                    }
+                  }
+                  {...field}
+                  options={receivers.map((receiver) => ({
+                    value: receiver.id,
+                    label: findReceiverName(receiver),
+                  }))}
+                  placeholder='Selecione...'
                 />
               )}
             />

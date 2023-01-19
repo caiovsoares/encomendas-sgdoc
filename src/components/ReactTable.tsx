@@ -56,22 +56,15 @@ function ReactTable({ tableOptions }) {
   return (
     <Flex height='calc(100% - 20px)' width='100%' mt='10px' mb='10px'>
       <Flex width='5%' justifyContent='center' alignItems='center'>
-        <Box
-          boxSize='-webkit-fit-content'
-          boxShadow={
-            canPreviousPage
-              ? '-3px 4px 10px 0px ' + (colorMode == 'light' ? 'gray' : '#333')
-              : ''
-          }
-          borderRadius='6px'
-        >
+        <Flex flexDir='column-reverse' borderRadius='6px'>
           <Button
             size='xs'
             bgColor='menuButton'
             _hover={canPreviousPage && { bg: 'menuButtonHover' }}
             color='menuButtonText'
             boxShadow='lg'
-            borderRightRadius={0}
+            borderTopRadius={0}
+            _focus={{}}
             onClick={() => gotoPage(0)}
             disabled={!canPreviousPage}
           >
@@ -83,13 +76,14 @@ function ReactTable({ tableOptions }) {
             _hover={canPreviousPage && { bg: 'menuButtonHover' }}
             color='menuButtonText'
             boxShadow='lg'
-            borderLeftRadius={0}
+            borderBottomRadius={0}
+            _focus={{}}
             onClick={() => previousPage()}
             disabled={!canPreviousPage}
           >
             <BiChevronLeft size='20px' />
           </Button>
-        </Box>
+        </Flex>
       </Flex>
       <Flex flexDir='column' width='90%' justifyContent='center'>
         <Flex boxShadow='md' overflowY='auto'>
@@ -166,21 +160,14 @@ function ReactTable({ tableOptions }) {
         </Flex>
       </Flex>
       <Flex width='5%' justifyContent='center' alignItems='center'>
-        <Box
-          boxSize='-webkit-fit-content'
-          boxShadow={
-            canNextPage
-              ? '3px 4px 10px 0px ' + (colorMode == 'light' ? 'gray' : '#333')
-              : ''
-          }
-          borderRadius='6px'
-        >
+        <Flex flexDir='column' borderRadius='6px'>
           <Button
             size='xs'
             bgColor='menuButton'
             _hover={canNextPage && { bg: 'menuButtonHover' }}
             color='menuButtonText'
-            borderRightRadius={0}
+            borderBottomRadius={0}
+            _focus={{}}
             onClick={() => nextPage()}
             disabled={!canNextPage}
           >
@@ -191,13 +178,14 @@ function ReactTable({ tableOptions }) {
             bgColor='menuButton'
             _hover={canNextPage && { bg: 'menuButtonHover' }}
             color='menuButtonText'
-            borderLeftRadius={0}
+            borderTopRadius={0}
+            _focus={{}}
             onClick={() => gotoPage(pageCount - 1)}
             disabled={!canNextPage}
           >
             <BiChevronsRight size='20px' />
           </Button>
-        </Box>
+        </Flex>
       </Flex>
     </Flex>
   );

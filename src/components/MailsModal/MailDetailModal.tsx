@@ -68,7 +68,7 @@ export function MailDetailModal({
     <ModalContent>
       <ModalHeader>Detalhes</ModalHeader>
       <ModalCloseButton />
-      <ModalBody maxH='70vh' overflowX='clip' overflowY='scroll'>
+      <ModalBody maxH='70vh' overflowX='clip' overflowY='auto'>
         <Heading size='sm'>Encomenda</Heading>
         <Box ml='30px'>
           <Text>Rastreio: {mail.tracking}</Text>
@@ -95,32 +95,37 @@ export function MailDetailModal({
             </>
           )}
         </Box>
-        {mail.receiver.map((receiver, i) => (
-          <>
-            <br />
-            <hr />
-            <br />
-            <Heading size='sm'>{`Recebedor${
-              mail.mailListDate ? ' ' + (i + 1) : ''
-            }`}</Heading>
-            <Box ml='30px'>
-              {'warName' in receiver && ( //caso seja um staff ou cadet
-                <>
-                  <Text>Nome Completo: {receiver?.fullName}</Text>
-                  <Text>Nome de Guerra: {findReceiverShortName(receiver)}</Text>
-                  <Text>CPF: {receiver?.cpf}</Text>
-                  <Text>Identidade: {receiver?.identity}</Text>
-                </>
-              )}
-              {'name' in receiver && ( //caso seja um setor
-                <>
-                  <Text>Nome do Setor: {receiver?.name}</Text>
-                  <Text>Sigla: {receiver?.abbreviation}</Text>
-                </>
-              )}
-            </Box>
-          </>
-        ))}
+        {mail.receiver[0] &&
+          mail.receiver.map((receiver, i) => (
+            <>
+              <br />
+              <hr />
+              <br />
+              <Heading size='sm'>{`Recebedor${
+                mail.mailListDate ? ' ' + (i + 1) : ''
+              }`}</Heading>
+              <Box ml='30px'>
+                {receiver &&
+                  'warName' in receiver && ( //caso seja um staff ou cadet
+                    <>
+                      <Text>Nome Completo: {receiver?.fullName}</Text>
+                      <Text>
+                        Nome de Guerra: {findReceiverShortName(receiver)}
+                      </Text>
+                      <Text>CPF: {receiver?.cpf}</Text>
+                      <Text>Identidade: {receiver?.identity}</Text>
+                    </>
+                  )}
+                {receiver &&
+                  'name' in receiver && ( //caso seja um setor
+                    <>
+                      <Text>Nome do Setor: {receiver?.name}</Text>
+                      <Text>Sigla: {receiver?.abbreviation}</Text>
+                    </>
+                  )}
+              </Box>
+            </>
+          ))}
         {mail.mailListDate && (
           <>
             <br />

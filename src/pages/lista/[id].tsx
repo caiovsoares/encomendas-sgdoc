@@ -4,13 +4,7 @@ import {
   Button,
   Flex,
   Heading,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
   useDisclosure,
 } from '@chakra-ui/react';
 import {
@@ -29,7 +23,6 @@ import { MailList } from '../../interfaces';
 import ReactToPrint from 'react-to-print';
 import { CadetList } from '../../components/CadetList';
 import MailListModal from '../../components/MailListModal';
-import { isBoolean } from 'util';
 import { BiPrinter } from 'react-icons/bi';
 
 type listaId = {
@@ -88,7 +81,7 @@ const ListaId = ({ mailList, receivers }: listaId) => {
         <Heading size='sm'>
           Lista dos Cadetes do dia {invertStringDate(mailList.created_at)}
         </Heading>
-        <Box mt={3}>
+        <Flex flexDir='column' mt={3} alignItems='center'>
           {mailList.mailListReceivements[0] ? (
             mailList.mailListReceivements.map(({ receiver }) => (
               <Text key={receiver.id}>• {findReceiverName(receiver)}</Text>
@@ -99,6 +92,7 @@ const ListaId = ({ mailList, receivers }: listaId) => {
           <ReactToPrint
             trigger={() => (
               <Button
+                w='min'
                 boxShadow='lg'
                 size='sm'
                 rounded='md'
@@ -117,7 +111,7 @@ const ListaId = ({ mailList, receivers }: listaId) => {
               <CadetList mails={mailList.mails} date={mailList.created_at} />
             </Box>
           </Box>
-        </Box>
+        </Flex>
       </Flex>
       <Flex flexDir='row' alignItems='center' h='82vh' width='100%'>
         <ReactTable tableOptions={tableOptions} />
