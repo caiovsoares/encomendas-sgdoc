@@ -123,3 +123,7 @@ export function findReceiverShortName(receiver: Staff | WorkPlace | Cadet) {
 export function invertStringDate(date: string) {
   return date ? date.split('/').reverse().join('/') : '';
 }
+
+export function convertToDefaultDate(date: string) {
+  return date ? date.split('/').join('-') : '';
+}

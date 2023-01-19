@@ -10,13 +10,17 @@ import {
   FormLabel,
   Input,
   useToast,
-  Textarea,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
+  Box,
 } from '@chakra-ui/react';
 import { useForm, Controller } from 'react-hook-form';
 import { api } from '../../services/api';
 import { Cadet, Mail, Staff, WorkPlace } from '../../interfaces';
 import Select from 'react-select';
-import { findReceiverName } from '../../utils';
+import { convertToDefaultDate, findReceiverName } from '../../utils';
+import { BiXCircle } from 'react-icons/bi';
 
 type MailEditProps = {
   onClose: () => void;
@@ -24,26 +28,32 @@ type MailEditProps = {
   receivers: (Staff | Cadet | WorkPlace)[];
 };
 
-export function MailEditModal({
-  onClose,
-  mail,
-  receivers: rec,
-}: MailEditProps) {
+export function MailEditModal({ onClose, mail, receivers }: MailEditProps) {
   const router = useRouter();
   const {
     handleSubmit,
     formState: { errors, isSubmitting },
     control,
     setError,
-    getValues,
     setValue,
+    getValues,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
-  const [receivers, setReceivers] = useState(rec);
 
   const onSubmit = async (data) => {
     data.id = mail.id;
     data.destinyId = data.destinySelect.value;
+    data.receiverId = data.receiverSelect?.value || null;
+
+    if (!!data.received_at != !!data.receiverId)
+      return toast({
+        title: 'Erro',
+        description: 'Verifique "Recebedor" e "Recebido em"!',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+
     const result = await (await api.put('mail', data)).data;
 
     if (result.id) {
@@ -114,6 +124,21 @@ export function MailEditModal({
             />
           </FormControl>
 
+          <FormControl>
+            <Controller
+              name='created_at'
+              control={control}
+              rules={{ required: true }}
+              defaultValue={convertToDefaultDate(mail.created_at)}
+              render={({ field }) => (
+                <InputGroup>
+                  <InputLeftAddon children='Entregue em:' />
+                  <Input type='date' {...field} />
+                </InputGroup>
+              )}
+            />
+          </FormControl>
+
           <FormControl mt='3'>
             <FormLabel fontWeight='semibold' color='gray.600'>
               Remetente:
@@ -140,39 +165,14 @@ export function MailEditModal({
               name='destinySelect'
               control={control}
               rules={{ required: true }}
+              defaultValue={
+                mail.destiny && {
+                  label: findReceiverName(mail.destiny),
+                  value: mail.destiny.id,
+                }
+              }
               render={({ field }) => (
                 <Select
-                  defaultValue={{
-                    label: findReceiverName(mail.destiny),
-                    value: mail.destiny.id,
-                  }}
-                  {...field}
-                  options={receivers.map((receiver) => ({
-                    value: receiver.id,
-                    label: findReceiverName(receiver),
-                  }))}
-                  placeholder='Selecione...'
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl mt='3' isRequired>
-            <FormLabel fontWeight='semibold' color='gray.600'>
-              Recebedor:
-            </FormLabel>
-            <Controller
-              name='receiverSelect'
-              control={control}
-              render={({ field }) => (
-                <Select
-                  isDisabled={!!mail.mailListDate}
-                  defaultValue={
-                    mail.receiver[0] && {
-                      label: findReceiverName(mail.receiver[0]),
-                      value: mail.receiver[0].id,
-                    }
-                  }
                   {...field}
                   options={receivers.map((receiver) => ({
                     value: receiver.id,
@@ -186,6 +186,70 @@ export function MailEditModal({
 
           <FormControl mt='3'>
             <FormLabel fontWeight='semibold' color='gray.600'>
+              Recebedor:
+            </FormLabel>
+            <Controller
+              name='receiverSelect'
+              control={control}
+              defaultValue={
+                mail.receiver[0] && {
+                  label: findReceiverName(mail.receiver[0]),
+                  value: mail.receiver[0].id,
+                }
+              }
+              render={({ field }) => (
+                <Select
+                  isDisabled={!!mail.mailListDate}
+                  {...field}
+                  options={receivers.map((receiver) => ({
+                    value: receiver.id,
+                    label: findReceiverName(receiver),
+                  }))}
+                  placeholder='Selecione...'
+                />
+              )}
+            />
+          </FormControl>
+
+          <FormControl>
+            <Controller
+              name='received_at'
+              control={control}
+              defaultValue={convertToDefaultDate(mail.received_at)}
+              render={({ field }) => (
+                <InputGroup>
+                  <InputLeftAddon children='Recebido em:' />
+                  <Input
+                    type='date'
+                    disabled={!!mail.mailListDate}
+                    {...field}
+                  />
+                  <InputRightAddon
+                    p={0}
+                    w='40px'
+                    children={
+                      <Button
+                        w='40px'
+                        isDisabled={!!mail.mailListDate}
+                        onClick={() => {
+                          setValue('receiverSelect', null);
+                          setValue('received_at', '');
+                          console.log(getValues());
+                        }}
+                      >
+                        <Box w='40px'>
+                          <BiXCircle color='red' />
+                        </Box>
+                      </Button>
+                    }
+                  />
+                </InputGroup>
+              )}
+            />
+          </FormControl>
+
+          <FormControl mt='3'>
+            <FormLabel fontWeight='semibold' color='gray.600'>
               Observações:
             </FormLabel>
             <Controller
@@ -193,7 +257,7 @@ export function MailEditModal({
               control={control}
               defaultValue={mail.details}
               render={({ field }) => (
-                <Textarea
+                <Input
                   {...field}
                   isInvalid={errors.details}
                   placeholder='Algo a acrescentar?'
