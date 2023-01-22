@@ -51,8 +51,7 @@ export function MailDetailModal({
         isClosable: true,
       });
       onClose();
-      //o useMemo na ReactTable impede de atualizar os dados
-      router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
+      router.replace(router.asPath);
     } else {
       toast({
         title: 'Erro',

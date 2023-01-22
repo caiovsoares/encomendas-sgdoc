@@ -64,8 +64,8 @@ export function MailEditModal({ onClose, mail, receivers }: MailEditProps) {
         duration: 3000,
         isClosable: true,
       });
-      router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
-      onClose(); //ESSA LINHA FECHA A JANELA APÓS A EDIÇÃO
+      router.replace(router.asPath);
+      onClose();
     } else
       toast({
         title: 'Erro',
