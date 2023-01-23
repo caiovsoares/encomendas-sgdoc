@@ -79,7 +79,7 @@ export const Navigation = () => {
           </ButtonNavigation>
         )}
 
-        {user?.permission?.editPermission && (
+        {user?.permission?.editUser && (
           <ButtonNavigation
             href='/permissoes'
             icon={<BiClipboard size='30px' />}

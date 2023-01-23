@@ -38,13 +38,9 @@ export function LoginModal({ onClose, isOpen }) {
           <Flex flexDir='column' alignItems='center'>
             <Heading>SGDOC</Heading>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <FormLabel fontWeight='semibold' color='gray.600'>
-                Usuário
-              </FormLabel>
+              <FormLabel>Usuário</FormLabel>
               <Input {...register('login')} />
-              <FormLabel fontWeight='semibold' color='gray.600'>
-                Senha
-              </FormLabel>
+              <FormLabel>Senha</FormLabel>
               <Input type='password' {...register('password')} />
               <Button
                 isLoading={isSubmitting}

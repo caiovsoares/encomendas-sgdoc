@@ -18,7 +18,8 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { BiEdit, BiTrash } from 'react-icons/bi';
+import { useState } from 'react';
+import { BiEdit, BiListMinus, BiListPlus, BiTrash } from 'react-icons/bi';
 import { Mail } from '../../interfaces';
 import { api } from '../../services/api';
 import { findReceiverShortName, invertStringDate } from '../../utils';
@@ -36,8 +37,10 @@ export function MailDetailModal({
 }: MailDetailProps) {
   const router = useRouter();
   const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onDelete = async () => {
+    setIsLoading(true);
     const result = await (
       await api.delete('mail', { data: { id: mail.id } })
     ).data;
@@ -50,6 +53,7 @@ export function MailDetailModal({
         duration: 3000,
         isClosable: true,
       });
+      setIsLoading(false);
       onClose();
       router.replace(router.asPath);
     } else {
@@ -60,6 +64,37 @@ export function MailDetailModal({
         duration: 3000,
         isClosable: true,
       });
+      setIsLoading(false);
+    }
+  };
+
+  const removeMailFromList = async () => {
+    setIsLoading(true);
+    const result = await (
+      await api.patch('mail/removeMailList', { id: mail.id })
+    ).data;
+
+    if (result.id) {
+      toast({
+        title: 'Sucesso',
+        description: 'Encomenda removida da lista com sucesso com sucesso!',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      setIsLoading(false);
+      onClose();
+      router.replace(router.asPath);
+    } else {
+      toast({
+        title: 'Erro',
+        description:
+          'Houve um problema, a encomenda não foi removida da lista!',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      setIsLoading(false);
     }
   };
 
@@ -156,7 +191,38 @@ export function MailDetailModal({
         )}
       </ModalBody>
       <ModalFooter>
+        {mail.mailListDate ? (
+          <Button
+            isLoading={isLoading}
+            disabled={!!mail.received_at}
+            bg='menuButton'
+            color='menuButtonText'
+            _hover={{ bg: 'menuButtonHover' }}
+            mr={3}
+            paddingInline={2}
+            onClick={removeMailFromList}
+          >
+            <BiListMinus size={25} />
+            Remover da Lista
+          </Button>
+        ) : (
+          <></>
+          // <Button
+          //   isLoading={isLoading}
+          //   disabled={!!mail.received_at}
+          //   bg='menuButton'
+          //   color='menuButtonText'
+          //   _hover={{ bg: 'menuButtonHover' }}
+          //   mr={3}
+          //   paddingInline={2}
+          // >
+          //   <BiListPlus size={25} />
+          //   Inserir em uma Lista
+          // </Button>
+        )}
+
         <Button
+          isLoading={isLoading}
           mr='5px'
           paddingInline={2}
           bg='menuButton'
@@ -172,6 +238,7 @@ export function MailDetailModal({
         <Popover>
           <PopoverTrigger>
             <Button
+              isLoading={isLoading}
               paddingInline={2}
               bg='alertButton'
               color='menuButtonText'
@@ -187,6 +254,7 @@ export function MailDetailModal({
             <PopoverBody>
               Essa ação não poderá ser desfeita
               <Button
+                isLoading={isLoading}
                 bg='alertButton'
                 color='menuButtonText'
                 _hover={{ bg: 'alertButtonHover' }}

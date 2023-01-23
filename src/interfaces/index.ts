@@ -53,7 +53,6 @@ export interface User {
   email: string;
   permission: {
     name: string;
-    editPermission: boolean;
     editUser: boolean;
     editReceiver: boolean;
     editExpedition: boolean;
@@ -79,4 +78,13 @@ export interface MailListMail {
   sender: string;
   created_at: string;
   destiny: Staff | Cadet | WorkPlace;
+}
+
+export interface Permission {
+  id: string;
+  name: string;
+  editMail: boolean;
+  editExpedition: boolean;
+  editReceiver: boolean;
+  editUser: boolean;
 }
