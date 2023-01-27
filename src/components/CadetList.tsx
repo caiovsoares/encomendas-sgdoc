@@ -78,6 +78,9 @@ export const CadetList = ({ mails, date }: CadetListProps) => {
               <Text size='xsm' align='right'>
                 {invertStringDate(date)}
               </Text>
+              <Text size='xsm' align='left'>
+                Total: {mails.length}
+              </Text>
             </Td>
           </Tr>
           <Tr>
