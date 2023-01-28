@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
-import { Button, Flex, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
+  useDisclosure,
+  useToast,
+} from '@chakra-ui/react';
 import {
   useTable,
   usePagination,
@@ -11,22 +23,23 @@ import { PageButton } from '../components/PageButton';
 import { useRouter } from 'next/router';
 import { getAPIClient } from '../services/apiClient';
 import { GetServerSideProps } from 'next';
-import { Permission, User } from '../interfaces';
-import PermissionsModal from '../components/PermissionsModal';
-import { BiEdit, BiInfoCircle, BiTrash } from 'react-icons/bi';
+import { Permission, Staff, User } from '../interfaces';
+import { BiEdit, BiInfoCircle, BiShieldX, BiTrash } from 'react-icons/bi';
 import UsersModal from '../components/UsersModal';
+import { api } from '../services/api';
 
 type usuariosProps = {
   users: User[];
   permissions: Permission[];
+  staffs: Staff[];
 };
 
-const Usuarios = ({ users, permissions }: usuariosProps) => {
+const Usuarios = ({ users, permissions, staffs }: usuariosProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [modalType, setModalType] = useState('');
   const [user, setUser] = useState<User>();
-  const router = useRouter();
   const toast = useToast();
+  const router = useRouter();
 
   function HandleRegisterItem() {
     onOpen();
@@ -43,6 +56,51 @@ const Usuarios = ({ users, permissions }: usuariosProps) => {
     setUser(user);
     setModalType('edit');
     onOpen();
+  }
+
+  function HandleResetPassword(id: string) {
+    api.patch('user/resetPassword', { id }).then((res) => {
+      if (res.status < 300) {
+        toast({
+          title: 'Sucesso',
+          description: 'Senha resetada com sucesso!',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: 'Erro',
+          description: 'Houve um problema!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    });
+  }
+
+  function HandleRemoveUser(id: string) {
+    api.delete('user', { data: { id } }).then((res) => {
+      if (res.status < 300) {
+        toast({
+          title: 'Sucesso',
+          description: 'Usuário apagado com sucesso!',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+        router.replace(router.asPath);
+      } else {
+        toast({
+          title: 'Erro',
+          description: 'Houve um problema!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    });
   }
 
   const columns = React.useMemo(
@@ -76,20 +134,76 @@ const Usuarios = ({ users, permissions }: usuariosProps) => {
                 paddingInline={2}
                 bg='menuButton'
                 color='menuButtonText'
+                onClick={() => HandleEditItem(value)}
                 _hover={{ bg: 'menuButtonHover' }}
               >
                 <BiEdit size={20} />
               </Button>
-              <Button
-                size='sm'
-                ml={2}
-                paddingInline={2}
-                bg='alertButton'
-                color='menuButtonText'
-                _hover={{ bg: 'alertButtonHover' }}
-              >
-                <BiTrash size={20} />
-              </Button>
+
+              <Popover>
+                <PopoverTrigger>
+                  <Button
+                    size='sm'
+                    ml={2}
+                    paddingInline={2}
+                    bg='alertButton'
+                    color='menuButtonText'
+                    _hover={{ bg: 'alertButtonHover' }}
+                  >
+                    <BiShieldX size={20} />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverHeader>Tem certeza?</PopoverHeader>
+                  <PopoverBody>
+                    Isso irá RESETAR a senha deste usuário!
+                    <Button
+                      mt={2}
+                      bg='alertButton'
+                      color='menuButtonText'
+                      _hover={{ bg: 'alertButtonHover' }}
+                      onClick={() => HandleResetPassword(value.id)}
+                    >
+                      Confirmar
+                    </Button>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+              <Popover>
+                <PopoverTrigger>
+                  <Button
+                    size='sm'
+                    ml={2}
+                    paddingInline={2}
+                    bg='alertButton'
+                    color='menuButtonText'
+                    _hover={{ bg: 'alertButtonHover' }}
+                  >
+                    <BiTrash size={20} />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverHeader>Tem certeza?</PopoverHeader>
+                  <PopoverBody>
+                    Essa ação não poderá ser desfeita!
+                    <Button
+                      mt={2}
+                      bg='alertButton'
+                      color='menuButtonText'
+                      _hover={{ bg: 'alertButtonHover' }}
+                      onClick={() => {
+                        HandleRemoveUser(value.id);
+                      }}
+                    >
+                      Confirmar
+                    </Button>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
             </Flex>
           );
         },
@@ -115,6 +229,8 @@ const Usuarios = ({ users, permissions }: usuariosProps) => {
         onClose={onClose}
         user={user}
         type={modalType}
+        permissions={permissions}
+        staffs={staffs}
       />
       <Flex
         flexDir='row'
@@ -146,17 +262,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
 
   const usersPromise = apiClient.get('user');
+  const staffsPromise = apiClient.get('user/staffWithoutUser');
   const permissionsPromise = apiClient.get('permission');
 
-  const [usersRes, permissionsRes] = await Promise.all([
+  const [usersRes, permissionsRes, staffsRes] = await Promise.all([
     usersPromise,
     permissionsPromise,
+    staffsPromise,
   ]);
   const users = usersRes.data;
   const permissions = permissionsRes.data;
+  const staffs = staffsRes.data;
 
   return {
-    props: { users, permissions },
+    props: { users, permissions, staffs },
   };
 };
 

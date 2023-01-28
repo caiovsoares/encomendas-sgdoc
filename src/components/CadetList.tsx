@@ -75,11 +75,11 @@ export const CadetList = ({ mails, date }: CadetListProps) => {
               <Text align='center'>
                 NOME DE GUERRA - IDENTIDADE MILITAR - ASSINATURA
               </Text>
-              <Text size='xsm' align='right'>
-                {invertStringDate(date)}
-              </Text>
               <Text size='xsm' align='left'>
                 Total: {mails.length}
+              </Text>
+              <Text size='xsm' align='right'>
+                {invertStringDate(date)}
               </Text>
             </Td>
           </Tr>

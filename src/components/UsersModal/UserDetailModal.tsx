@@ -25,6 +25,7 @@ export function UserDetailModal({ user }: UserDetailProps) {
         <Box ml='30px'>
           <Text>Nome Completo: {user.fullName}</Text>
           <Text>Nome de Guerra: {user.warName}</Text>
+          <Text>Login: {user.login}</Text>
           <Text>CPF: {user.cpf}</Text>
           <Text>Identidade: {user.identity}</Text>
           <Text>Posto/Graduação: {user.rank}</Text>

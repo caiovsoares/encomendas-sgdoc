@@ -45,13 +45,16 @@ export interface PublicMail {
 }
 
 export interface User {
+  id: string;
   fullName: string;
   warName: string;
   cpf: string;
   identity: string;
   rank: string;
   email: string;
+  login: string;
   permission: {
+    id: string;
     name: string;
     editUser: boolean;
     editReceiver: boolean;

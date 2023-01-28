@@ -9,43 +9,47 @@ import {
   FormLabel,
   Input,
   useToast,
-  Textarea,
 } from '@chakra-ui/react';
 import { useForm, Controller } from 'react-hook-form';
 import { findReceiverName } from '../../utils';
 import { api } from '../../services/api';
-import { Cadet, Staff, WorkPlace } from '../../interfaces';
+import { Permission, Staff } from '../../interfaces';
 import Select from 'react-select';
 
 interface UserRegisterProps {
-  receivers: (Staff | Cadet | WorkPlace)[];
+  permissions: Permission[];
+  staffs: Staff[];
   onClose: () => void;
 }
 
-export function UserRegisterModal({ onClose, receivers }: UserRegisterProps) {
+export function UserRegisterModal({
+  onClose,
+  permissions,
+  staffs,
+}: UserRegisterProps) {
   const router = useRouter();
   const {
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
     control,
-    setError,
-    reset,
-    setFocus,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
 
   const onSubmit = async (data, e) => {
-    data.destinyId = data.destinySelect.value;
-    api.post('mail', data).then((res) => {
+    data.permissionId = data.permissionSelect.value;
+    data.staffId = data.staffSelect.value;
+    data.password = data.login;
+    api.post('user', data).then((res) => {
       if (res.status < 300) {
         toast({
           title: 'Sucesso',
-          description: 'Encomenda cadastrada com sucesso!',
+          description: 'Usuário cadastrado com sucesso!',
           status: 'success',
           duration: 3000,
           isClosable: true,
         });
         router.replace(router.asPath);
+        onClose();
       } else {
         toast({
           title: 'Erro',
@@ -57,98 +61,28 @@ export function UserRegisterModal({ onClose, receivers }: UserRegisterProps) {
         });
       }
     });
-
-    reset({
-      tracking: '',
-      sender: '',
-      pesquisa_id: '',
-      details: '',
-      destinySelect: '',
-    });
-    e.target.reset();
-    setFocus('tracking');
-  };
-
-  const customOnBlur = (fieldName, fieldMessage, fField) => {
-    if (!fField.value) {
-      setError(fieldName, {
-        type: 'manual',
-        message: fieldMessage,
-      });
-      toast({
-        title: 'Atenção',
-        description: fieldMessage,
-        status: 'warning',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
   };
 
   return (
     <ModalContent>
-      <ModalHeader>Cadastrar nova Encomenda</ModalHeader>
+      <ModalHeader>Cadastrar novo Usuário</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isRequired>
-            <FormLabel fontWeight='semibold' color='gray.600'>
-              Rastreamento:
-            </FormLabel>
-            <Controller
-              name='tracking'
-              control={control}
-              defaultValue=''
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  isInvalid={errors.tracking}
-                  placeholder='Exemplo: BR123123123BR '
-                  onBlur={() =>
-                    customOnBlur(
-                      'tracking',
-                      'Rastreamento é obrigatório',
-                      field
-                    )
-                  }
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
-              Remetente:
-            </FormLabel>
-            <Controller
-              name='sender'
-              control={control}
-              defaultValue=''
-              rules={{ required: false }}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder='Exemplo: Fulano da Silva Junior'
-                />
-              )}
-            />
-          </FormControl>
-
           <FormControl mt='3' isRequired>
             <FormLabel fontWeight='semibold' color='gray.600'>
-              Destinatário:
+              Militar:
             </FormLabel>
             <Controller
-              name='destinySelect'
+              name='staffSelect'
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
                 <Select
                   {...field}
-                  options={receivers.map((receiver) => ({
-                    value: receiver.id,
-                    label: findReceiverName(receiver),
+                  options={staffs.map((staff) => ({
+                    value: staff.id,
+                    label: findReceiverName(staff),
                   }))}
                   placeholder='Selecione...'
                 />
@@ -158,16 +92,53 @@ export function UserRegisterModal({ onClose, receivers }: UserRegisterProps) {
 
           <FormControl mt='3'>
             <FormLabel fontWeight='semibold' color='gray.600'>
-              Observações:
+              E-mail:
             </FormLabel>
             <Controller
-              name='details'
+              name='email'
               control={control}
+              defaultValue=''
+              rules={{ required: true }}
               render={({ field }) => (
-                <Textarea
+                <Input
                   {...field}
-                  isInvalid={errors.details}
-                  placeholder='Algo a acrescentar?'
+                  placeholder='Exemplo: tp.fulanofdsj@fab.mil.br'
+                />
+              )}
+            />
+          </FormControl>
+
+          <FormControl mt='3'>
+            <FormLabel fontWeight='semibold' color='gray.600'>
+              Login:
+            </FormLabel>
+            <Controller
+              name='login'
+              control={control}
+              defaultValue=''
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Input {...field} placeholder='Exemplo: fulanofdsj' />
+              )}
+            />
+          </FormControl>
+
+          <FormControl mt='3' isRequired>
+            <FormLabel fontWeight='semibold' color='gray.600'>
+              Permissão:
+            </FormLabel>
+            <Controller
+              name='permissionSelect'
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  options={permissions.map((permissions) => ({
+                    value: permissions.id,
+                    label: permissions.name,
+                  }))}
+                  placeholder='Selecione...'
                 />
               )}
             />

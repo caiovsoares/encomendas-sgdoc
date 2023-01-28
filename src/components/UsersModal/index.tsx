@@ -1,5 +1,5 @@
 import { Modal, ModalOverlay } from '@chakra-ui/react';
-import { Mail, Cadet, WorkPlace, Staff, User } from '../../interfaces';
+import { Staff, User, Permission } from '../../interfaces';
 import { UserDetailModal } from './UserDetailModal';
 import { UserEditModal } from './UserEditModal';
 import { UserRegisterModal } from './UserRegisterModal';
@@ -9,21 +9,38 @@ type UsersModalProps = {
   isOpen: boolean;
   user: User;
   type: string;
+  permissions: Permission[];
+  staffs: Staff[];
 };
 
-const UsersModal = ({ onClose, isOpen, user, type }: UsersModalProps) => {
+const UsersModal = ({
+  onClose,
+  isOpen,
+  user,
+  type,
+  permissions,
+  staffs,
+}: UsersModalProps) => {
   return (
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay backdropFilter='blur(5px)' />
       {type === 'detail' && <UserDetailModal user={user} />}
 
-      {/* {type === 'register' && (
-        <UserRegisterModal onClose={onClose} receivers={receivers} />
+      {type === 'register' && (
+        <UserRegisterModal
+          onClose={onClose}
+          permissions={permissions}
+          staffs={staffs}
+        />
       )}
 
       {type === 'edit' && (
-        <UserEditModal mail={mail} onClose={onClose} receivers={receivers} />
-      )} */}
+        <UserEditModal
+          user={user}
+          onClose={onClose}
+          permissions={permissions}
+        />
+      )}
     </Modal>
   );
 };
