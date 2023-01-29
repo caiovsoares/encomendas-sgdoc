@@ -34,11 +34,13 @@ export function AuthProvider({ children }) {
         .get('/user/auth')
         .then((res) => {
           const { data } = res;
-          const { email, permission, staff } = data;
+          const { email, permission, staff, id, login } = data;
           const { rank, person } = staff;
           const { cpf, fullName, identity, warName } = person;
 
           const user: User = {
+            id,
+            login,
             email,
             rank,
             cpf,
