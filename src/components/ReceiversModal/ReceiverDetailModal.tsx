@@ -17,26 +17,30 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { BiEdit, BiTrash } from 'react-icons/bi';
+import { Cadet, Staff, WorkPlace } from '../../interfaces';
+import { api } from '../../services/api';
+import { findReceiverShortName } from '../../utils';
 
-export function ReceiverDetailModal({ receiver, user, setModalType, onClose }) {
+type ReceiverDetailModal = {
+  receiver: Staff | Cadet | WorkPlace;
+  setModalType: React.Dispatch<React.SetStateAction<string>>;
+  onClose: () => void;
+};
+
+export function ReceiverDetailModal({
+  receiver,
+  setModalType,
+  onClose,
+}: ReceiverDetailModal) {
   const router = useRouter();
   const toast = useToast();
 
   const onDelete = async () => {
-    let result;
-    if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
-      result = await (
-        await axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/receivers/${receiver.id}`,
-          { data: { userId: user.id } }
-        )
-      ).data;
-    } else {
-      result = {};
-    }
+    const result = await (
+      await api.delete('receiver', { data: { id: receiver.id } })
+    ).data;
 
     if (result.id) {
       toast({
@@ -47,8 +51,7 @@ export function ReceiverDetailModal({ receiver, user, setModalType, onClose }) {
         isClosable: true,
       });
       onClose();
-      //o useMemo na ReactTable impede de atualizar os dados
-      router.replace(router.asPath); //ESSA LINHA PUXA NOVAMENTE OS DADOS DO SERVIDOR ATUALIZANDO A TABELA
+      router.replace(router.asPath);
     } else {
       toast({
         title: 'Erro',
@@ -65,13 +68,31 @@ export function ReceiverDetailModal({ receiver, user, setModalType, onClose }) {
       <ModalHeader>Detalhes</ModalHeader>
       <ModalCloseButton />
       <ModalBody>
-        <Heading size='sm'>Destinatário</Heading>
+        <Heading size='sm'>
+          {'classYear' in receiver
+            ? 'Cadete'
+            : 'name' in receiver
+            ? 'Seção'
+            : 'Militar'}
+        </Heading>
         <Box ml='30px'>
-          <Text>Nome Completo: {receiver.fullName}</Text>
-          <Text>Nome de Guerra: {receiver.warName}</Text>
-          <Text>Identidade: {receiver.identity}</Text>
-          <Text>CPF: {receiver.cpf}</Text>
-          <Text>Ano de Entrada: {receiver.classYear}</Text>
+          {'warName' in receiver && ( //caso seja um staff ou cadet
+            <>
+              <Text>Nome Completo: {receiver?.fullName}</Text>
+              <Text>Nome de Guerra: {findReceiverShortName(receiver)}</Text>
+              <Text>CPF: {receiver?.cpf}</Text>
+              <Text>Identidade: {receiver?.identity}</Text>
+              {'classYear' in receiver && (
+                <Text>Ano de Entrada: {receiver.classYear}</Text>
+              )}
+            </>
+          )}
+          {'name' in receiver && ( //caso seja um setor
+            <>
+              <Text>Nome do Setor: {receiver?.name}</Text>
+              <Text>Sigla: {receiver?.abbreviation}</Text>
+            </>
+          )}
         </Box>
       </ModalBody>
       <ModalFooter>

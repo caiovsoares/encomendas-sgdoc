@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Flex, useDisclosure, useToast } from '@chakra-ui/react';
-import { exampleReceivers } from '../utils';
+import { findReceiverName, findReceiverShortName } from '../utils';
 import {
   useTable,
   useSortBy,
@@ -12,8 +12,14 @@ import { PageButton } from '../components/PageButton';
 import { BiInfoCircle } from 'react-icons/bi';
 import { useRouter } from 'next/router';
 import ReceiversModal from '../components/ReceiversModal';
+import { Cadet, Staff, User, WorkPlace } from '../interfaces';
+import { getAPIClient } from '../services/apiClient';
 
-const Destinatarios = ({ user, receivers }) => {
+type DestinatariosProps = {
+  receivers: (Staff | Cadet | WorkPlace)[];
+};
+
+const Destinatarios = ({ receivers }: DestinatariosProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [receiver, setReceiver] = useState({});
   const [modalType, setModalType] = useState('');
@@ -47,11 +53,11 @@ const Destinatarios = ({ user, receivers }) => {
     () => [
       {
         Header: 'Nome de Guerra',
-        accessor: 'warName',
+        accessor: (receiver) => findReceiverShortName(receiver),
       },
       {
         Header: 'Nome Completo',
-        accessor: 'fullName',
+        accessor: (receiver) => findReceiverName(receiver),
       },
       {
         Header: 'Identidade',
@@ -98,7 +104,6 @@ const Destinatarios = ({ user, receivers }) => {
         onClose={onClose}
         receiver={receiver}
         type={modalType}
-        user={user}
         setModalType={setModalType}
       />
       <Flex
@@ -121,22 +126,24 @@ const Destinatarios = ({ user, receivers }) => {
 };
 
 export async function getServerSideProps(context) {
-  // if (!session || !session.user.permission.editReceiver)
-  //   return {
-  //     redirect: {
-  //       destination: '/',
-  //       permanent: false,
-  //     },
-  //   };
+  const apiClient = getAPIClient(context);
+  const userRes = await apiClient.get('/user/auth');
+  const user: User = userRes.data;
 
-  // const user = session.user;
-  const user = null;
-  let receivers;
+  if (userRes.status > 299 || !user?.permission?.editReceiver)
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
 
-  receivers = exampleReceivers(50);
+  const receivers: (Staff | Cadet | WorkPlace)[] = await (
+    await apiClient.get('receiver')
+  ).data;
 
   return {
-    props: { user, receivers },
+    props: { receivers },
   };
 }
 

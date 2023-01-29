@@ -23,6 +23,10 @@ export const ButtonNavigationSession = () => {
     MAJ: 'G11-FAB_Major.gif',
     TC: 'G12-FAB_Tenente-Coronel.gif',
     CEL: 'G13-FAB_Coronel.png',
+    BR: 'G14-FAB_Brigadeiro.png',
+    MBR: 'G15-FAB_Major-Brigadeiro.png',
+    TBR: 'G16-FAB_Tenente-Brigadeiro.png',
+    MAR: 'G17-FAB_Marechal-do-Ar.png',
   };
 
   const { isAuthenticated, signOut, user } = useContext(AuthContext);

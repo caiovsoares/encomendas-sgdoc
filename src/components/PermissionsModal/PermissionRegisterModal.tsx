@@ -28,9 +28,6 @@ export function PermissionRegisterModal({ onClose }: PermissionRegisterProps) {
     handleSubmit,
     formState: { errors, isSubmitting },
     control,
-    setError,
-    reset,
-    setFocus,
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
   const [editMail, setEditMail] = useState('');

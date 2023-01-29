@@ -1,48 +1,16 @@
-import { useRouter } from 'next/router';
 import {
-  Button,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalCloseButton,
-  useToast,
   Heading,
   Flex,
   Text,
 } from '@chakra-ui/react';
-import axios from 'axios';
-import { useForm } from 'react-hook-form';
 import { InputFile } from './InputFile';
 import { ShowTutorial } from './ShowTutorial';
 
-export function ReceiverRegisterManyModal({ onClose, user }) {
-  const router = useRouter();
-  const {
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    control,
-    setError,
-    reset,
-    setFocus,
-  } = useForm({ mode: 'onChange' });
-  const toast = useToast();
-
-  const customOnBlur = (fieldName, fieldMessage, fField) => {
-    if (!fField.value) {
-      setError(fieldName, {
-        type: 'manual',
-        message: fieldMessage,
-      });
-      toast({
-        title: 'Atenção',
-        description: fieldMessage,
-        status: 'warning',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
-
+export function ReceiverRegisterManyModal({ onClose }) {
   return (
     <ModalContent>
       <ModalHeader>Inserir Diversos</ModalHeader>
@@ -59,7 +27,7 @@ export function ReceiverRegisterManyModal({ onClose, user }) {
             O uso incorreto dessa ferramenta pode comprometer o sistema
           </Text>
           <ShowTutorial />
-          <InputFile onClose={onClose} user={user} />
+          <InputFile onClose={onClose} />
         </Flex>
       </ModalBody>
     </ModalContent>

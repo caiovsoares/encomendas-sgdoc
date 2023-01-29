@@ -17,7 +17,7 @@ import { userInfo } from 'os';
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 
-export const InputFile = ({ onClose, user }) => {
+export const InputFile = ({ onClose }) => {
   const [canUpload, setCanUpload] = useState(false);
   const [canSubmit, setCanSubmit] = useState(false);
   const [receiversData, setReceiversData] = useState([]);
@@ -83,7 +83,6 @@ export const InputFile = ({ onClose, user }) => {
   const onSubmit = async () => {
     let result;
     const data = {
-      userId: user.id,
       receiversData,
     };
 
