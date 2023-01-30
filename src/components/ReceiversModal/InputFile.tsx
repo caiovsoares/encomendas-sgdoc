@@ -11,14 +11,16 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
-import { userInfo } from 'os';
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
+import { api } from '../../services/api';
 
-export const InputFile = ({ onClose }) => {
-  const [canUpload, setCanUpload] = useState(false);
+type InputFileProps = {
+  onClose: () => void;
+};
+
+export const InputFile = ({ onClose }: InputFileProps) => {
   const [canSubmit, setCanSubmit] = useState(false);
   const [receiversData, setReceiversData] = useState([]);
   const { isOpen, onToggle } = useDisclosure();
@@ -81,58 +83,48 @@ export const InputFile = ({ onClose }) => {
   };
 
   const onSubmit = async () => {
-    let result;
-    const data = {
-      receiversData,
-    };
+    const receivers = receiversData.map((receiver) => ({
+      fullName: receiver['nome completo'],
+      warName: receiver['nome de guerra'],
+      cpf: receiver['cpf'],
+      identity: receiver['identidade'],
+      classYear: receiver['ano'] ? parseInt(receiver['ano']) : undefined,
+      rank: receiver['posto'],
+      name: receiver['nome'],
+      abbreviation: receiver['sigla'],
+    }));
 
-    if (process.env.NEXT_PUBLIC_ENVIRONMENT != 'DEV') {
-      result = (
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/receivers/registerMany`,
-          data
-        )
-      ).data;
-      /*
-       **********************************
-       GAMBIARRA PARA VERIFICAR SE ALGUM DESTINATARIO NÃO FOI INSERIDO*/
-      let mensagemAviso = false;
-      result.forEach((receiver) => {
-        if (receiver.error) {
-          mensagemAviso = true;
-          console.log(receiver);
-        }
-      });
+    const result = (
+      await api.post(
+        `${
+          receivers[0].classYear
+            ? 'cadet'
+            : receivers[0].rank
+            ? 'staff'
+            : 'work-place'
+        }/many`,
+        receivers
+      )
+    ).data;
 
-      if (!mensagemAviso)
-        toast({
-          title: 'Sucesso',
-          description: 'Destinatários inseridos com sucesso!',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
-      else
-        toast({
-          title: 'Informação',
-          description:
-            'Alguns dos destinatários não foram inseridos, confira o console de seu navegador!',
-          status: 'info',
-          duration: 3000,
-          isClosable: true,
-        });
-      onClose();
-      router.replace(router.asPath);
-    } else {
-      result = {};
+    if (result[0].id) {
       toast({
-        title: 'Erro',
-        description: 'Você está em ambiente de desenvolvimento!',
-        status: 'error',
+        title: 'Sucesso',
+        description: 'Destinatários inseridos com sucesso!',
+        status: 'success',
         duration: 3000,
         isClosable: true,
       });
-    }
+      router.replace(router.asPath);
+      onClose();
+    } else
+      toast({
+        title: 'Informação',
+        description: 'Houve um problema, os destinatários não foram inseridos!',
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      });
   };
 
   return (
