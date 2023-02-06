@@ -39,18 +39,31 @@ export function UserRegisterModal({
     data.permissionId = data.permissionSelect.value;
     data.staffId = data.staffSelect.value;
     data.password = data.login;
-    api.post('user', data).then((res) => {
-      if (res.status < 300) {
-        toast({
-          title: 'Sucesso',
-          description: 'Usuário cadastrado com sucesso!',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
-        router.replace(router.asPath);
-        onClose();
-      } else {
+    api
+      .post('user', data)
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Usuário cadastrado com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+          onClose();
+        } else {
+          toast({
+            title: 'Erro',
+            description:
+              'Houve um problema, verifique os dados e tente novamente!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((err) => {
         toast({
           title: 'Erro',
           description:
@@ -59,8 +72,7 @@ export function UserRegisterModal({
           duration: 3000,
           isClosable: true,
         });
-      }
-    });
+      });
   };
 
   return (

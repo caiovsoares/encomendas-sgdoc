@@ -39,28 +39,37 @@ const Permissoes = ({ permissions }: permissoesProps) => {
   }
 
   async function HandleRemoveItem(id: string) {
-    const result = await (
-      await api.delete('permission', { data: { id } })
-    ).data;
-
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Permissão excluída com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
+    api
+      .delete('permission', { data: { id } })
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Permissão excluída com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+        } else {
+          toast({
+            title: 'Erro',
+            description: 'Houve um problema, a permissão não foi excluída!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description: 'Houve um problema, a permissão não foi excluída!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       });
-      router.replace(router.asPath);
-    } else {
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema, a permissão não foi excluída!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
   }
 
   const columns = React.useMemo(
@@ -174,23 +183,33 @@ const Permissoes = ({ permissions }: permissoesProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const apiClient = getAPIClient(context);
-  const userRes = await apiClient.get('/user/auth');
-  const user = userRes.data;
+  try {
+    const apiClient = getAPIClient(context);
+    const userRes = await apiClient.get('/user/auth');
+    const user = userRes.data;
 
-  if (userRes.status > 299 || !user?.permission?.editUser)
+    if (userRes.status > 299 || !user?.permission?.editUser)
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+
+    const permissions = await (await apiClient.get('permission')).data;
+
+    return {
+      props: { permissions },
+    };
+  } catch (error) {
+    console.log(error);
     return {
       redirect: {
         destination: '/',
         permanent: false,
       },
     };
-
-  const permissions = await (await apiClient.get('permission')).data;
-
-  return {
-    props: { permissions },
-  };
+  }
 };
 
 export default Permissoes;

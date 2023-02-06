@@ -36,17 +36,30 @@ export function MailRegisterModal({ onClose, receivers }: MailRegisterProps) {
 
   const onSubmit = async (data, e) => {
     data.destinyId = data.destinySelect.value;
-    api.post('mail', data).then((res) => {
-      if (res.status < 300) {
-        toast({
-          title: 'Sucesso',
-          description: 'Encomenda cadastrada com sucesso!',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
-        router.replace(router.asPath);
-      } else {
+    api
+      .post('mail', data)
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Encomenda cadastrada com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+        } else {
+          toast({
+            title: 'Erro',
+            description:
+              'Houve um problema, verifique os dados e tente novamente!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((err) =>
         toast({
           title: 'Erro',
           description:
@@ -54,9 +67,8 @@ export function MailRegisterModal({ onClose, receivers }: MailRegisterProps) {
           status: 'error',
           duration: 3000,
           isClosable: true,
-        });
-      }
-    });
+        })
+      );
 
     reset({
       tracking: '',

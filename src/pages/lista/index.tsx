@@ -91,26 +91,36 @@ const Lista = ({ mailLists }: listaProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { from, to } = context.query;
-  const apiClient = getAPIClient(context);
-  const userRes = await apiClient.get('/user/auth');
-  const user = userRes.data;
+  try {
+    const { from, to } = context.query;
+    const apiClient = getAPIClient(context);
+    const userRes = await apiClient.get('/user/auth');
+    const user = userRes.data;
 
-  if (userRes.status > 299 || !user?.permission?.editMail)
+    if (userRes.status > 299 || !user?.permission?.editMail)
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+
+    const mailLists = await (
+      await apiClient.get('mail-list', { data: { from, to } })
+    ).data;
+
+    return {
+      props: { mailLists },
+    };
+  } catch (error) {
+    console.log(error);
     return {
       redirect: {
         destination: '/',
         permanent: false,
       },
     };
-
-  const mailLists = await (
-    await apiClient.get('mail-list', { data: { from, to } })
-  ).data;
-
-  return {
-    props: { mailLists },
-  };
+  }
 };
 
 export default Lista;

@@ -54,25 +54,38 @@ export function MailEditModal({ onClose, mail, receivers }: MailEditProps) {
         isClosable: true,
       });
 
-    const result = await (await api.put('mail', data)).data;
-
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Encomenda alterada com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      router.replace(router.asPath);
-      onClose();
-    } else
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema, verifique os dados e tente novamente!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
+    api
+      .put('mail', data)
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Encomenda alterada com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+          onClose();
+        } else
+          toast({
+            title: 'Erro',
+            description:
+              'Houve um problema, verifique os dados e tente novamente!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description:
+            'Houve um problema, verifique os dados e tente novamente!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       });
   };
 

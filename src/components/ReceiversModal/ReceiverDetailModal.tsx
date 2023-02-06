@@ -38,29 +38,38 @@ export function ReceiverDetailModal({
   const toast = useToast();
 
   const onDelete = async () => {
-    const result = await (
-      await api.delete('receiver', { data: { id: receiver.id } })
-    ).data;
-
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Destinatário excluído com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
+    api
+      .delete('receiver', { data: { id: receiver.id } })
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Destinatário excluído com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          onClose();
+          router.replace(router.asPath);
+        } else {
+          toast({
+            title: 'Erro',
+            description: 'Houve um problema, o destinatário não foi excluído!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description: 'Houve um problema, o destinatário não foi excluído!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       });
-      onClose();
-      router.replace(router.asPath);
-    } else {
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema, o destinatário não foi excluído!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
   };
 
   return (

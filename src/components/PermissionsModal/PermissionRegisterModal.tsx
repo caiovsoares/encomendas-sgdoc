@@ -41,25 +41,38 @@ export function PermissionRegisterModal({ onClose }: PermissionRegisterProps) {
     data.editReceiver = editReceiver === 'true';
     data.editUser = editUser === 'true';
 
-    const result = await (await api.post('permission', data)).data;
-
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Permissão criada com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      router.replace(router.asPath);
-      onClose();
-    } else
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema, verifique os dados e tente novamente!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
+    api
+      .post('permission', data)
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Permissão criada com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+          onClose();
+        } else
+          toast({
+            title: 'Erro',
+            description:
+              'Houve um problema, verifique os dados e tente novamente!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description:
+            'Houve um problema, verifique os dados e tente novamente!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       });
   };
 

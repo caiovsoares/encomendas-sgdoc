@@ -33,25 +33,38 @@ export function ReceiverRegisterModal({ onClose }) {
     data.rank = data.rankSelect?.value;
     data.classYear = parseInt(data.classYear);
 
-    const result = await (await api.post(receiverType, data)).data;
-
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Destinatário criado com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      router.replace(router.asPath);
-      onClose();
-    } else
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema, verifique os dados e tente novamente!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
+    api
+      .post(receiverType, data)
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Destinatário criado com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+          onClose();
+        } else
+          toast({
+            title: 'Erro',
+            description:
+              'Houve um problema, verifique os dados e tente novamente!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description:
+            'Houve um problema, verifique os dados e tente novamente!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       });
   };
 

@@ -45,51 +45,76 @@ export function MailReceiveModal({
   const onSubmit = async (data) => {
     const ids: string[] = receiveMails.map((mail) => mail.id);
     const receiverId = data.destinySelect.value;
-    const result = await api.patch('/mail', { ids, receiverId });
-    if (result.status < 300) {
-      toast({
-        title: 'Sucesso',
-        description: 'Recebimento(s) registrado(s) com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
+    api
+      .patch('/mail', { ids, receiverId })
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Recebimento(s) registrado(s) com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+          onClose();
+        } else {
+          toast({
+            title: 'Erro',
+            description: 'Houve um problema!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description: 'Houve um problema!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       });
-      router.replace(router.asPath);
-      onClose();
-    } else {
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
   };
 
   const onCreateMailList = async () => {
     setisSubmittingMailList(true);
     const ids = receiveMails.map((receiveMail) => receiveMail.id);
-    const result = await api.post('mail-list', { ids });
-    if (result.status < 300) {
-      toast({
-        title: 'Sucesso',
-        description: 'Lista criada com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
+    api
+      .post('mail-list', { ids })
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Lista criada com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+          onClose();
+        } else {
+          toast({
+            title: 'Erro',
+            description: 'Houve um problema!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description: 'Houve um problema!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       });
-      router.replace(router.asPath);
-      onClose();
-    } else {
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
+
     setisSubmittingMailList(false);
   };
 

@@ -76,51 +76,70 @@ const ListaId = ({ mailList, receivers }: listaId) => {
   );
 
   const deleteMailList = async () => {
-    const result = await (
-      await api.delete('mail-list', { data: { id: mailList.id } })
-    ).data;
-
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Lista excluída com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      router.push('/lista');
-    } else
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema, a lista não foi excluída!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
+    api
+      .delete('mail-list', { data: { id: mailList.id } })
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Lista excluída com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.push('/lista');
+        } else
+          toast({
+            title: 'Erro',
+            description: 'Houve um problema, a lista não foi excluída!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description: 'Houve um problema, a lista não foi excluída!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       });
   };
 
   const deleteReceivement = async () => {
-    const result = await (
-      await api.patch('mail-list/unreceive', { id: mailList.id })
-    ).data;
-
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Recebimento da lista excluído com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      router.replace(router.asPath);
-    } else
-      toast({
-        title: 'Erro',
-        description:
-          'Houve um problema, o recebimento da lista não foi excluído!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
+    api
+      .patch('mail-list/unreceive', { id: mailList.id })
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Recebimento da lista excluído com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+        } else
+          toast({
+            title: 'Erro',
+            description:
+              'Houve um problema, o recebimento da lista não foi excluído!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description:
+            'Houve um problema, o recebimento da lista não foi excluído!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       });
   };
 
@@ -247,32 +266,42 @@ const ListaId = ({ mailList, receivers }: listaId) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { id } = context.query;
-  const apiClient = getAPIClient(context);
-  const userRes = await apiClient.get('/user/auth');
-  const user = userRes.data;
+  try {
+    const { id } = context.query;
+    const apiClient = getAPIClient(context);
+    const userRes = await apiClient.get('/user/auth');
+    const user = userRes.data;
 
-  if (userRes.status > 299 || !user?.permission?.editMail)
+    if (userRes.status > 299 || !user?.permission?.editMail)
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+
+    const mailListPromise = apiClient.get(`mail-list/${id}`);
+    const receiversPromise = apiClient.get('receiver');
+
+    const [mailListRes, receiversRes] = await Promise.all([
+      mailListPromise,
+      receiversPromise,
+    ]);
+    const mailList: MailList[] = mailListRes.data;
+    const receivers: (Staff | Cadet | WorkPlace)[] = receiversRes.data;
+
+    return {
+      props: { mailList, receivers },
+    };
+  } catch (error) {
+    console.log(error);
     return {
       redirect: {
         destination: '/',
         permanent: false,
       },
     };
-
-  const mailListPromise = apiClient.get(`mail-list/${id}`);
-  const receiversPromise = apiClient.get('receiver');
-
-  const [mailListRes, receiversRes] = await Promise.all([
-    mailListPromise,
-    receiversPromise,
-  ]);
-  const mailList: MailList[] = mailListRes.data;
-  const receivers: (Staff | Cadet | WorkPlace)[] = receiversRes.data;
-
-  return {
-    props: { mailList, receivers },
-  };
+  }
 };
 
 export default ListaId;

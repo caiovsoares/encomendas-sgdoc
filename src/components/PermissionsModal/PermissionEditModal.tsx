@@ -51,25 +51,38 @@ export function PermissionEditModal({
     data.editReceiver = editReceiver === 'true';
     data.editUser = editUser === 'true';
 
-    const result = await (await api.put('permission', data)).data;
-
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Permissão alterada com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      router.replace(router.asPath);
-      onClose();
-    } else
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema, verifique os dados e tente novamente!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
+    api
+      .put('permission', data)
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Permissão alterada com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+          onClose();
+        } else
+          toast({
+            title: 'Erro',
+            description:
+              'Houve um problema, verifique os dados e tente novamente!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description:
+            'Houve um problema, verifique os dados e tente novamente!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       });
   };
 

@@ -34,18 +34,31 @@ export function UserEditModal({ onClose, user, permissions }: UserEditProps) {
     data.userId = user.id;
     data.permissionId = data.permissionSelect.value;
 
-    api.put('user', data).then((res) => {
-      if (res.status < 300) {
-        toast({
-          title: 'Sucesso',
-          description: 'Usuário editado com sucesso!',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
-        router.replace(router.asPath);
-        onClose();
-      } else {
+    api
+      .put('user', data)
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Usuário editado com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+          onClose();
+        } else {
+          toast({
+            title: 'Erro',
+            description:
+              'Houve um problema, verifique os dados e tente novamente!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((err) => {
         toast({
           title: 'Erro',
           description:
@@ -54,8 +67,7 @@ export function UserEditModal({ onClose, user, permissions }: UserEditProps) {
           duration: 3000,
           isClosable: true,
         });
-      }
-    });
+      });
   };
 
   return (

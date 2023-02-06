@@ -199,31 +199,41 @@ const Encomendas = ({ mails, receivers }: encomendasProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { from, to } = context.query;
-  const apiClient = getAPIClient(context);
-  const userRes = await apiClient.get('/user/auth');
-  const user = userRes.data;
+  try {
+    const { from, to } = context.query;
+    const apiClient = getAPIClient(context);
+    const userRes = await apiClient.get('/user/auth');
+    const user = userRes.data;
 
-  if (userRes.status > 299 || !user?.permission?.editMail)
+    if (userRes.status > 299 || !user?.permission?.editMail)
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+
+    const mailsPromise = apiClient.get('mail', { data: { from, to } });
+    const receiversPromise = apiClient.get('receiver');
+
+    const [mailsRes, receiversRes] = await Promise.all([
+      mailsPromise,
+      receiversPromise,
+    ]);
+    const mails: Mail[] = mailsRes.data;
+    const receivers: (Staff | Cadet | WorkPlace)[] = receiversRes.data;
+    return {
+      props: { mails, receivers },
+    };
+  } catch (error) {
+    console.log(error);
     return {
       redirect: {
         destination: '/',
         permanent: false,
       },
     };
-
-  const mailsPromise = apiClient.get('mail', { data: { from, to } });
-  const receiversPromise = apiClient.get('receiver');
-
-  const [mailsRes, receiversRes] = await Promise.all([
-    mailsPromise,
-    receiversPromise,
-  ]);
-  const mails: Mail[] = mailsRes.data;
-  const receivers: (Staff | Cadet | WorkPlace)[] = receiversRes.data;
-  return {
-    props: { mails, receivers },
-  };
+  }
 };
 
 export default Encomendas;

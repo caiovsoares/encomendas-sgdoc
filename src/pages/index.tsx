@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
-import { findReceiverShortName, invertStringDate } from '../utils';
+import { invertStringDate } from '../utils';
 import ReactTable from '../components/ReactTable';
 import {
   useTable,

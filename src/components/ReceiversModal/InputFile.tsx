@@ -94,8 +94,8 @@ export const InputFile = ({ onClose }: InputFileProps) => {
       abbreviation: receiver['sigla'],
     }));
 
-    const result = (
-      await api.post(
+    api
+      .post(
         `${
           receivers[0].classYear
             ? 'cadet'
@@ -105,25 +105,36 @@ export const InputFile = ({ onClose }: InputFileProps) => {
         }/many`,
         receivers
       )
-    ).data;
-
-    if (result[0].id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Destinatários inseridos com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      router.replace(router.asPath);
-      onClose();
-    } else
-      toast({
-        title: 'Informação',
-        description: 'Houve um problema, os destinatários não foram inseridos!',
-        status: 'info',
-        duration: 3000,
-        isClosable: true,
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Destinatários inseridos com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+          onClose();
+        } else
+          toast({
+            title: 'Informação',
+            description:
+              'Houve um problema, os destinatários não foram inseridos!',
+            status: 'info',
+            duration: 3000,
+            isClosable: true,
+          });
+      })
+      .catch((err) => {
+        toast({
+          title: 'Informação',
+          description:
+            'Houve um problema, os destinatários não foram inseridos!',
+          status: 'info',
+          duration: 3000,
+          isClosable: true,
+        });
       });
   };
 

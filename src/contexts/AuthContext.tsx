@@ -62,6 +62,8 @@ export function AuthProvider({ children }) {
             isClosable: true,
           });
         });
+    } else {
+      signOut();
     }
   }, []);
 

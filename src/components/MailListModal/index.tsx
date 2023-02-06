@@ -49,25 +49,28 @@ const MailListModal = ({
       .filter((obj) => obj)
       .map((obj) => obj.value);
 
-    const result = await (await api.patch('mail-list', data)).data;
-
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Lista recebida com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      router.replace(router.asPath);
-      onClose();
-    } else
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema, verifique os dados e tente novamente!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
+    api
+      .patch('mail-list', data)
+      .then((data) => {
+        toast({
+          title: 'Sucesso',
+          description: 'Lista recebida com sucesso!',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+        router.replace(router.asPath);
+        onClose();
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description:
+            'Houve um problema, verifique os dados e tente novamente!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
       });
   };
 

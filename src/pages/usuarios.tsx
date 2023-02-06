@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Button,
   Flex,
@@ -27,6 +27,7 @@ import { Permission, Staff, User } from '../interfaces';
 import { BiEdit, BiInfoCircle, BiShieldX, BiTrash } from 'react-icons/bi';
 import UsersModal from '../components/UsersModal';
 import { api } from '../services/api';
+import { AuthContext } from '../contexts/AuthContext';
 
 type usuariosProps = {
   users: User[];
@@ -59,16 +60,28 @@ const Usuarios = ({ users, permissions, staffs }: usuariosProps) => {
   }
 
   function HandleResetPassword(id: string) {
-    api.patch('user/resetPassword', { id }).then((res) => {
-      if (res.status < 300) {
-        toast({
-          title: 'Sucesso',
-          description: 'Senha resetada com sucesso!',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
-      } else {
+    api
+      .patch('user/resetPassword', { id })
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Senha resetada com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: 'Erro',
+            description: 'Houve um problema!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((err) => {
         toast({
           title: 'Erro',
           description: 'Houve um problema!',
@@ -76,22 +89,33 @@ const Usuarios = ({ users, permissions, staffs }: usuariosProps) => {
           duration: 3000,
           isClosable: true,
         });
-      }
-    });
+      });
   }
 
   function HandleRemoveUser(id: string) {
-    api.delete('user', { data: { id } }).then((res) => {
-      if (res.status < 300) {
-        toast({
-          title: 'Sucesso',
-          description: 'Usuário apagado com sucesso!',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
-        router.replace(router.asPath);
-      } else {
+    api
+      .delete('user', { data: { id } })
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Usuário apagado com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          router.replace(router.asPath);
+        } else {
+          toast({
+            title: 'Erro',
+            description: 'Houve um problema!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((err) => {
         toast({
           title: 'Erro',
           description: 'Houve um problema!',
@@ -99,8 +123,7 @@ const Usuarios = ({ users, permissions, staffs }: usuariosProps) => {
           duration: 3000,
           isClosable: true,
         });
-      }
-    });
+      });
   }
 
   const columns = React.useMemo(
@@ -249,34 +272,43 @@ const Usuarios = ({ users, permissions, staffs }: usuariosProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const apiClient = getAPIClient(context);
-  const userRes = await apiClient.get('/user/auth');
-  const user = userRes.data;
+  try {
+    const apiClient = getAPIClient(context);
+    const userRes = await apiClient.get('/user/auth');
+    const user = userRes.data;
 
-  if (userRes.status > 299 || !user?.permission?.editUser)
+    if (userRes.status > 299 || !user?.permission?.editUser)
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+
+    const usersPromise = apiClient.get('user');
+    const staffsPromise = apiClient.get('user/staffWithoutUser');
+    const permissionsPromise = apiClient.get('permission');
+
+    const [usersRes, permissionsRes, staffsRes] = await Promise.all([
+      usersPromise,
+      permissionsPromise,
+      staffsPromise,
+    ]);
+    const users = usersRes.data;
+    const permissions = permissionsRes.data;
+    const staffs = staffsRes.data;
+
+    return {
+      props: { users, permissions, staffs },
+    };
+  } catch (error) {
     return {
       redirect: {
         destination: '/',
         permanent: false,
       },
     };
-
-  const usersPromise = apiClient.get('user');
-  const staffsPromise = apiClient.get('user/staffWithoutUser');
-  const permissionsPromise = apiClient.get('permission');
-
-  const [usersRes, permissionsRes, staffsRes] = await Promise.all([
-    usersPromise,
-    permissionsPromise,
-    staffsPromise,
-  ]);
-  const users = usersRes.data;
-  const permissions = permissionsRes.data;
-  const staffs = staffsRes.data;
-
-  return {
-    props: { users, permissions, staffs },
-  };
+  }
 };
 
 export default Usuarios;

@@ -41,61 +41,83 @@ export function MailDetailModal({
 
   const onDelete = async () => {
     setIsLoading(true);
-    const result = await (
-      await api.delete('mail', { data: { id: mail.id } })
-    ).data;
 
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Encomenda excluída com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
+    api
+      .delete('mail', { data: { id: mail.id } })
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Encomenda excluída com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          setIsLoading(false);
+          onClose();
+          router.replace(router.asPath);
+        } else {
+          toast({
+            title: 'Erro',
+            description: 'Houve um problema, a encomenda não foi excluída!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description: 'Houve um problema, a encomenda não foi excluída!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setIsLoading(false);
       });
-      setIsLoading(false);
-      onClose();
-      router.replace(router.asPath);
-    } else {
-      toast({
-        title: 'Erro',
-        description: 'Houve um problema, a encomenda não foi excluída!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      setIsLoading(false);
-    }
   };
 
   const removeMailFromList = async () => {
     setIsLoading(true);
-    const result = await (
-      await api.patch('mail/removeMailList', { id: mail.id })
-    ).data;
-
-    if (result.id) {
-      toast({
-        title: 'Sucesso',
-        description: 'Encomenda removida da lista com sucesso com sucesso!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
+    api
+      .patch('mail/removeMailList', { id: mail.id })
+      .then((res) => {
+        if (res.status < 300) {
+          toast({
+            title: 'Sucesso',
+            description: 'Encomenda removida da lista com sucesso com sucesso!',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+          });
+          setIsLoading(false);
+          onClose();
+          router.replace(router.asPath);
+        } else {
+          toast({
+            title: 'Erro',
+            description:
+              'Houve um problema, a encomenda não foi removida da lista!',
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        toast({
+          title: 'Erro',
+          description:
+            'Houve um problema, a encomenda não foi removida da lista!',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+        setIsLoading(false);
       });
-      setIsLoading(false);
-      onClose();
-      router.replace(router.asPath);
-    } else {
-      toast({
-        title: 'Erro',
-        description:
-          'Houve um problema, a encomenda não foi removida da lista!',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      setIsLoading(false);
-    }
   };
 
   return (

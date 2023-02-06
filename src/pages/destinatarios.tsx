@@ -126,25 +126,35 @@ const Destinatarios = ({ receivers }: DestinatariosProps) => {
 };
 
 export async function getServerSideProps(context) {
-  const apiClient = getAPIClient(context);
-  const userRes = await apiClient.get('/user/auth');
-  const user: User = userRes.data;
+  try {
+    const apiClient = getAPIClient(context);
+    const userRes = await apiClient.get('/user/auth');
+    const user: User = userRes.data;
 
-  if (userRes.status > 299 || !user?.permission?.editReceiver)
+    if (userRes.status > 299 || !user?.permission?.editReceiver)
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+
+    const receivers: (Staff | Cadet | WorkPlace)[] = await (
+      await apiClient.get('receiver')
+    ).data;
+
+    return {
+      props: { receivers },
+    };
+  } catch (error) {
+    console.log(error);
     return {
       redirect: {
         destination: '/',
         permanent: false,
       },
     };
-
-  const receivers: (Staff | Cadet | WorkPlace)[] = await (
-    await apiClient.get('receiver')
-  ).data;
-
-  return {
-    props: { receivers },
-  };
+  }
 }
 
 export default Destinatarios;
