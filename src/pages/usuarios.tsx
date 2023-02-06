@@ -27,7 +27,6 @@ import { Permission, Staff, User } from '../interfaces';
 import { BiEdit, BiInfoCircle, BiShieldX, BiTrash } from 'react-icons/bi';
 import UsersModal from '../components/UsersModal';
 import { api } from '../services/api';
-import { AuthContext } from '../contexts/AuthContext';
 
 type usuariosProps = {
   users: User[];

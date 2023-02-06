@@ -92,6 +92,7 @@ export const InputFile = ({ onClose }: InputFileProps) => {
       rank: receiver['posto'],
       name: receiver['nome'],
       abbreviation: receiver['sigla'],
+      email: receiver['email'],
     }));
 
     api

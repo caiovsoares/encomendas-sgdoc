@@ -102,6 +102,7 @@ export function ReceiverDetailModal({
               <Text>Sigla: {receiver?.abbreviation}</Text>
             </>
           )}
+          <Text>Email: {receiver?.email}</Text>
         </Box>
       </ModalBody>
       <ModalFooter>

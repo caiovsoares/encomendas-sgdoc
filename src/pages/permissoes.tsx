@@ -12,7 +12,7 @@ import { BiCheckCircle, BiEdit, BiTrash, BiXCircle } from 'react-icons/bi';
 import { useRouter } from 'next/router';
 import { getAPIClient } from '../services/apiClient';
 import { GetServerSideProps } from 'next';
-import { Mail, Permission } from '../interfaces';
+import { Permission } from '../interfaces';
 import { api } from '../services/api';
 import PermissionsModal from '../components/PermissionsModal';
 
@@ -202,7 +202,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       props: { permissions },
     };
   } catch (error) {
-    console.log(error);
     return {
       redirect: {
         destination: '/',

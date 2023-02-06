@@ -2,6 +2,7 @@ export interface WorkPlace {
   id: string;
   name: string;
   abbreviation: string;
+  email: string;
 }
 
 export interface Cadet {
@@ -11,6 +12,7 @@ export interface Cadet {
   cpf: string;
   identity: string;
   classYear: number;
+  email: string;
 }
 
 export interface Staff {
@@ -20,6 +22,7 @@ export interface Staff {
   cpf: string;
   identity: string;
   rank: string;
+  email: string;
 }
 
 export interface Mail {

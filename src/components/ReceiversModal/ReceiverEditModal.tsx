@@ -305,6 +305,23 @@ export function ReceiverEditModal({
             </>
           )}
 
+          <FormLabel fontWeight='semibold' color='gray.600' mt={3} mb={0}>
+            Email:
+          </FormLabel>
+          <Controller
+            name='email'
+            control={control}
+            defaultValue={receiver.email}
+            render={({ field }) => (
+              <Input
+                isRequired={true}
+                {...field}
+                isInvalid={errors.email}
+                placeholder='Exemplo: fsilvafs@fab.mil.br '
+              />
+            )}
+          />
+
           <Button onClick={onClose} float='right' mb='3' mt='3'>
             Cancel
           </Button>

@@ -80,24 +80,6 @@ export function UserEditModal({ onClose, user, permissions }: UserEditProps) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl mt='3'>
             <FormLabel fontWeight='semibold' color='gray.600'>
-              E-mail:
-            </FormLabel>
-            <Controller
-              name='email'
-              control={control}
-              defaultValue={user.email}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder='Exemplo: tp.fulanofdsj@fab.mil.br'
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
               Login:
             </FormLabel>
             <Controller

@@ -29,6 +29,7 @@ export function UserDetailModal({ user }: UserDetailProps) {
           <Text>CPF: {user.cpf}</Text>
           <Text>Identidade: {user.identity}</Text>
           <Text>Posto/Graduação: {user.rank}</Text>
+          <Text>E-mail: {user.email}</Text>
         </Box>
         <Heading mt={3} size='sm'>
           Permissão

@@ -35,7 +35,7 @@ export function UserRegisterModal({
   } = useForm({ mode: 'onChange' });
   const toast = useToast();
 
-  const onSubmit = async (data, e) => {
+  const onSubmit = async (data) => {
     data.permissionId = data.permissionSelect.value;
     data.staffId = data.staffSelect.value;
     data.password = data.login;
@@ -97,24 +97,6 @@ export function UserRegisterModal({
                     label: findReceiverName(staff),
                   }))}
                   placeholder='Selecione...'
-                />
-              )}
-            />
-          </FormControl>
-
-          <FormControl mt='3'>
-            <FormLabel fontWeight='semibold' color='gray.600'>
-              E-mail:
-            </FormLabel>
-            <Controller
-              name='email'
-              control={control}
-              defaultValue=''
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder='Exemplo: tp.fulanofdsj@fab.mil.br'
                 />
               )}
             />

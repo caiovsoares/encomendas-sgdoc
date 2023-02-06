@@ -10,7 +10,6 @@ import {
 import ReactTable from '../components/ReactTable';
 import { PageButton } from '../components/PageButton';
 import { BiInfoCircle } from 'react-icons/bi';
-import { useRouter } from 'next/router';
 import ReceiversModal from '../components/ReceiversModal';
 import { Cadet, Staff, User, WorkPlace } from '../interfaces';
 import { getAPIClient } from '../services/apiClient';
@@ -23,7 +22,6 @@ const Destinatarios = ({ receivers }: DestinatariosProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [receiver, setReceiver] = useState({});
   const [modalType, setModalType] = useState('');
-  const router = useRouter();
   const toast = useToast();
 
   async function HandleDetailItem(receiver: {}) {
@@ -147,7 +145,6 @@ export async function getServerSideProps(context) {
       props: { receivers },
     };
   } catch (error) {
-    console.log(error);
     return {
       redirect: {
         destination: '/',

@@ -294,7 +294,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       props: { mailList, receivers },
     };
   } catch (error) {
-    console.log(error);
     return {
       redirect: {
         destination: '/',

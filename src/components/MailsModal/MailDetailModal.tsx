@@ -150,6 +150,7 @@ export function MailDetailModal({
               <Text>Sigla: {mail.destiny?.abbreviation}</Text>
             </>
           )}
+          <Text>Email: {mail.destiny?.email}</Text>
         </Box>
         {mail.receiver[0] &&
           mail.receiver.map((receiver, i) => (
@@ -179,6 +180,7 @@ export function MailDetailModal({
                       <Text>Sigla: {receiver?.abbreviation}</Text>
                     </>
                   )}
+                <Text>Email: {receiver.email}</Text>
               </Box>
             </>
           ))}
