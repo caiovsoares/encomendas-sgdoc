@@ -281,7 +281,6 @@ export function ReceiverRegisterModal({ onClose }) {
             defaultValue=''
             render={({ field }) => (
               <Input
-                isRequired={true}
                 {...field}
                 isInvalid={errors.email}
                 placeholder='Exemplo: fsilvafs@fab.mil.br '

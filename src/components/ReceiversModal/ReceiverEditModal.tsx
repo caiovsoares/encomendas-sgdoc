@@ -314,7 +314,6 @@ export function ReceiverEditModal({
             defaultValue={receiver.email}
             render={({ field }) => (
               <Input
-                isRequired={true}
                 {...field}
                 isInvalid={errors.email}
                 placeholder='Exemplo: fsilvafs@fab.mil.br '
