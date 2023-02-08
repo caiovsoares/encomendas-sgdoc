@@ -37,6 +37,12 @@ export function PermissionEditModal({
     permission.editReceiver ? 'true' : ''
   );
   const [editUser, setEditUser] = useState(permission.editUser ? 'true' : '');
+  const [editReport, setEditReport] = useState(
+    permission.editReport ? 'true' : ''
+  );
+  const [editShippingCompany, setEditShippingCompany] = useState(
+    permission.editShippingCompany ? 'true' : ''
+  );
   const {
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -149,6 +155,33 @@ export function PermissionEditModal({
 
           <FormLabel fontSize='sm'>Editar Usuário: </FormLabel>
           <RadioGroup onChange={setEditUser} value={editUser}>
+            <Stack direction='row'>
+              <Radio value='true'>
+                <BiCheckCircle color='green' size='20px' />
+              </Radio>
+              <Radio value=''>
+                <BiXCircle color='red' size='20px' />
+              </Radio>
+            </Stack>
+          </RadioGroup>
+
+          <FormLabel fontSize='sm'>Editar Reporte: </FormLabel>
+          <RadioGroup onChange={setEditReport} value={editReport}>
+            <Stack direction='row'>
+              <Radio value='true'>
+                <BiCheckCircle color='green' size='20px' />
+              </Radio>
+              <Radio value=''>
+                <BiXCircle color='red' size='20px' />
+              </Radio>
+            </Stack>
+          </RadioGroup>
+
+          <FormLabel fontSize='sm'>Editar Transportadora: </FormLabel>
+          <RadioGroup
+            onChange={setEditShippingCompany}
+            value={editShippingCompany}
+          >
             <Stack direction='row'>
               <Radio value='true'>
                 <BiCheckCircle color='green' size='20px' />

@@ -63,6 +63,8 @@ export interface User {
     editReceiver: boolean;
     editExpedition: boolean;
     editMail: boolean;
+    editShippingCompany: boolean;
+    editReport: boolean;
   };
 }
 
@@ -93,4 +95,22 @@ export interface Permission {
   editExpedition: boolean;
   editReceiver: boolean;
   editUser: boolean;
+  editShippingCompany: boolean;
+  editReport: boolean;
+}
+
+export interface Report {
+  id: string;
+  author: string;
+  content: string;
+  resolution: string;
+}
+
+export interface ShippingCompany {
+  id: string;
+  company: string;
+  name: string;
+  cpf: string;
+  vehicle: string;
+  plate: string;
 }

@@ -34,12 +34,16 @@ export function PermissionRegisterModal({ onClose }: PermissionRegisterProps) {
   const [editExpedition, setEditExpedition] = useState('');
   const [editReceiver, setEditReceiver] = useState('');
   const [editUser, setEditUser] = useState('');
+  const [editReport, setEditReport] = useState('');
+  const [editShippingCompany, setEditShippingCompany] = useState('');
 
   const onSubmit = async (data) => {
     data.editMail = editMail === 'true';
     data.editExpedition = editExpedition === 'true';
     data.editReceiver = editReceiver === 'true';
     data.editUser = editUser === 'true';
+    data.editReport = editReport === 'true';
+    data.editShippingCompany = editShippingCompany === 'true';
 
     api
       .post('permission', data)
@@ -138,6 +142,33 @@ export function PermissionRegisterModal({ onClose }: PermissionRegisterProps) {
 
           <FormLabel fontSize='sm'>Editar Usuário: </FormLabel>
           <RadioGroup onChange={setEditUser} value={editUser}>
+            <Stack direction='row'>
+              <Radio value='true'>
+                <BiCheckCircle color='green' size='20px' />
+              </Radio>
+              <Radio value=''>
+                <BiXCircle color='red' size='20px' />
+              </Radio>
+            </Stack>
+          </RadioGroup>
+
+          <FormLabel fontSize='sm'>Editar Reporte: </FormLabel>
+          <RadioGroup onChange={setEditReport} value={editReport}>
+            <Stack direction='row'>
+              <Radio value='true'>
+                <BiCheckCircle color='green' size='20px' />
+              </Radio>
+              <Radio value=''>
+                <BiXCircle color='red' size='20px' />
+              </Radio>
+            </Stack>
+          </RadioGroup>
+
+          <FormLabel fontSize='sm'>Editar Transportadora: </FormLabel>
+          <RadioGroup
+            onChange={setEditShippingCompany}
+            value={editShippingCompany}
+          >
             <Stack direction='row'>
               <Radio value='true'>
                 <BiCheckCircle color='green' size='20px' />

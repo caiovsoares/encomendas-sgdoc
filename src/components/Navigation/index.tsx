@@ -9,6 +9,7 @@ import {
   BiSmile,
   BiClipboard,
   BiListUl,
+  BiBug,
 } from 'react-icons/bi';
 import { ImTrello } from 'react-icons/im';
 import { ButtonNavigationSession } from './ButtonNavigationSession';
@@ -85,6 +86,12 @@ export const Navigation = () => {
             icon={<BiClipboard size='30px' />}
           >
             Permissões{' '}
+          </ButtonNavigation>
+        )}
+
+        {user?.permission?.editReport && (
+          <ButtonNavigation href='/reportes' icon={<BiBug size='30px' />}>
+            Reportes{' '}
           </ButtonNavigation>
         )}
       </Flex>

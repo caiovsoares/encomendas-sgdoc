@@ -116,6 +116,26 @@ const Permissoes = ({ permissions }: permissoesProps) => {
           ),
       },
       {
+        Header: 'Reporte',
+        accessor: 'editReport',
+        Cell: ({ cell }) =>
+          cell.row.original.editReport ? (
+            <BiCheckCircle color='green' size='20px' />
+          ) : (
+            <BiXCircle color='red' size='20px' />
+          ),
+      },
+      {
+        Header: 'Transportadora',
+        accessor: 'editShippingCompany',
+        Cell: ({ cell }) =>
+          cell.row.original.editShippingCompany ? (
+            <BiCheckCircle color='green' size='20px' />
+          ) : (
+            <BiXCircle color='red' size='20px' />
+          ),
+      },
+      {
         Header: 'Opções',
         acessor: (permission: Permission) => permission.name,
         Cell: ({ cell }) => (
