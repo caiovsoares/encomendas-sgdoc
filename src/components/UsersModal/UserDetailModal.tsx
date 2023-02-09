@@ -16,6 +16,7 @@ type UserDetailProps = {
 };
 
 export function UserDetailModal({ user }: UserDetailProps) {
+  console.log(user);
   return (
     <ModalContent>
       <ModalHeader>Detalhes</ModalHeader>
@@ -70,6 +71,26 @@ export function UserDetailModal({ user }: UserDetailProps) {
             <Flex flexDir='row' alignItems='center'>
               Editar Usuário:
               {user.permission.editUser ? (
+                <BiCheckCircle color='green' size='20px' />
+              ) : (
+                <BiXCircle color='red' size='20px' />
+              )}
+            </Flex>
+          </Text>
+          <Text>
+            <Flex flexDir='row' alignItems='center'>
+              Editar Reporte:
+              {user.permission.editReport ? (
+                <BiCheckCircle color='green' size='20px' />
+              ) : (
+                <BiXCircle color='red' size='20px' />
+              )}
+            </Flex>
+          </Text>
+          <Text>
+            <Flex flexDir='row' alignItems='center'>
+              Editar Transportadora:
+              {user.permission.editShippingCompany ? (
                 <BiCheckCircle color='green' size='20px' />
               ) : (
                 <BiXCircle color='red' size='20px' />

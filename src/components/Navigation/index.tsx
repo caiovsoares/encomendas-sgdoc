@@ -29,7 +29,7 @@ export const Navigation = () => {
       alignItems='center'
       justifyContent='space-between'
       width={isOpen ? '200px' : '70px'}
-      transition='width 1s'
+      transition='width 0.2s'
       onMouseEnter={() => changeMenuState(true)}
       onMouseLeave={() => changeMenuState(false)}
     >

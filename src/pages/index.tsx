@@ -13,6 +13,7 @@ import { GetStaticProps } from 'next';
 import { BiCheckCircle, BiError, BiXCircle } from 'react-icons/bi';
 import { getAPIClient } from '../services/apiClient';
 import { PublicMail } from '../interfaces';
+import { ReportButton } from '../components/ReportButton';
 
 type indexProps = {
   mails: PublicMail[];
@@ -88,7 +89,14 @@ const Index = ({ mails }: indexProps) => {
     useRowSelect
   );
 
-  return <ReactTable tableOptions={tableOptions} />;
+  return (
+    <>
+      <Box position='absolute' right={5} bottom={5}>
+        <ReportButton />
+      </Box>
+      <ReactTable tableOptions={tableOptions} />
+    </>
+  );
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {

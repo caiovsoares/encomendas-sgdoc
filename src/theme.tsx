@@ -1,4 +1,5 @@
-import { extendTheme } from '@chakra-ui/react';
+import { ComponentStyleConfig, extendTheme } from '@chakra-ui/react';
+import { switchAnatomy } from '@chakra-ui/anatomy';
 import { createBreakpoints } from '@chakra-ui/theme-tools';
 
 const fonts = { mono: `'Menlo', monospace` };
@@ -9,6 +10,20 @@ const breakpoints = createBreakpoints({
   lg: '64em',
   xl: '80em',
 });
+
+const Switch: ComponentStyleConfig = {
+  parts: ['track'],
+  variants: {
+    monoColor: {
+      track: {
+        bg: 'menuButton',
+        _checked: {
+          bg: 'menuButton',
+        },
+      },
+    },
+  },
+};
 
 const theme = extendTheme({
   semanticTokens: {
@@ -53,10 +68,17 @@ const theme = extendTheme({
         default: 'blue.700',
         _dark: 'blue.900',
       },
+      backgroundHover: {
+        default: 'gray.200',
+        _dark: 'gray.700',
+      },
     },
   },
   fonts,
   breakpoints,
+  components: {
+    Switch,
+  },
 });
 
 export default theme;
