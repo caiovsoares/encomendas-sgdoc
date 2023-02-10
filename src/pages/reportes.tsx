@@ -12,6 +12,9 @@ import { getAPIClient } from '../services/apiClient';
 import { GetServerSideProps } from 'next';
 import { Report, User } from '../interfaces';
 import { invertStringDate } from '../utils';
+import { BiMessageDetail } from 'react-icons/bi';
+import { PageButton } from '../components/PageButton';
+import { ReportsModalButton } from '../components/ReportsModalButton';
 
 type reportesProps = {
   reports: Report[];
@@ -34,7 +37,7 @@ const Reportes = ({ reports }: reportesProps) => {
         >
           <Heading
             fontSize={!showResolvedReports ? 'md' : 'sm'}
-            color={!showResolvedReports ? 'black' : 'gray.400'}
+            color={!showResolvedReports ? 'text' : 'gray.400'}
           >
             Abertos
           </Heading>
@@ -46,14 +49,14 @@ const Reportes = ({ reports }: reportesProps) => {
           />
           <Heading
             fontSize={showResolvedReports ? 'md' : 'sm'}
-            color={showResolvedReports ? 'black' : 'gray.400'}
+            color={showResolvedReports ? 'text' : 'gray.400'}
           >
             Resolvidos
           </Heading>
         </Flex>
         <Flex px={5} flexDir='column'>
           {reports
-            .filter((report) => showResolvedReports === !report.resolution)
+            .filter((report) => showResolvedReports === !!report.resolution)
             .map((report) => (
               <Flex
                 borderRadius={10}
@@ -63,7 +66,11 @@ const Reportes = ({ reports }: reportesProps) => {
               >
                 <Grid
                   w='100%'
-                  templateColumns='min-content 1fr'
+                  autoColumns='auto'
+                  templateColumns='min-content 1fr min-content'
+                  templateRows={`min-content min-content ${
+                    report.resolution ? 'min-content' : ''
+                  }`}
                   alignItems='center'
                   gap={2}
                 >
@@ -98,6 +105,14 @@ const Reportes = ({ reports }: reportesProps) => {
                       </GridItem>
                     </>
                   )}
+                  <GridItem
+                    gridColumnStart='3'
+                    gridColumnEnd='4'
+                    gridRowStart='1'
+                    gridRowEnd='-1'
+                  >
+                    <ReportsModalButton id={report.id} />
+                  </GridItem>
                 </Grid>
               </Flex>
             ))}
