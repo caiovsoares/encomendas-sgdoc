@@ -19,8 +19,6 @@ type reportesProps = {
 
 const Reportes = ({ reports }: reportesProps) => {
   const [showResolvedReports, setShowResolvedReports] = useState(false);
-  reports[0].resolution = 'teste';
-  reports[0].resolved_at = '2023/02/12';
   return (
     <Box w='100%' h='100%' pt={7} pb={3}>
       <Box h='100%' overflowY='auto'>
@@ -55,7 +53,7 @@ const Reportes = ({ reports }: reportesProps) => {
         </Flex>
         <Flex px={5} flexDir='column'>
           {reports
-            .filter((report) => !!report.resolution)
+            .filter((report) => showResolvedReports === !report.resolution)
             .map((report) => (
               <Flex
                 borderRadius={10}
