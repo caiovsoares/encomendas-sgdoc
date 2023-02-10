@@ -104,6 +104,8 @@ export interface Report {
   author: string;
   content: string;
   resolution: string;
+  created_at: string;
+  resolved_at: string;
 }
 
 export interface ShippingCompany {
