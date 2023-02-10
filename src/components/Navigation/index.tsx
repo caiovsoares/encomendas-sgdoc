@@ -17,21 +17,17 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { useRouter } from 'next/router';
 
 export const Navigation = () => {
-  const [isOpen, changeMenuState] = useState(false);
   const { user } = useContext(AuthContext);
   const router = useRouter();
   return (
     <Flex
       direction='column'
-      boxShadow='0px 0px 10px 5px #1A365D'
+      boxShadow='0px 0px 5px 2px #1A365D'
       bg='navigation'
       height='100%'
       alignItems='center'
       justifyContent='space-between'
-      width={isOpen ? '200px' : '70px'}
-      transition='width 0.2s'
-      onMouseEnter={() => changeMenuState(true)}
-      onMouseLeave={() => changeMenuState(false)}
+      width='fit-content'
     >
       <Flex flexDir='column' height='auto' alignItems='center' width='100%'>
         <Img
@@ -42,15 +38,15 @@ export const Navigation = () => {
           objectFit='contain'
           width='calc(100% - 10px)'
         />
-        <ButtonNavigation href='/' icon={<BiHome size='30px' />}>
-          Início{' '}
+        <ButtonNavigation href='/' icon={<BiHome size='20px' />}>
+          Início
         </ButtonNavigation>
         {user?.permission?.editMail && (
           <>
-            <ButtonNavigation href='/encomendas' icon={<BiGift size='30px' />}>
+            <ButtonNavigation href='/encomendas' icon={<BiGift size='20px' />}>
               Encomendas
             </ButtonNavigation>
-            <ButtonNavigation href='/lista' icon={<BiListUl size='30px' />}>
+            <ButtonNavigation href='/lista' icon={<BiListUl size='20px' />}>
               Lista Cadetes
             </ButtonNavigation>
           </>
@@ -59,46 +55,46 @@ export const Navigation = () => {
         {user?.permission?.editReceiver && (
           <ButtonNavigation
             href='/destinatarios'
-            icon={<BiSmile size='30px' />}
+            icon={<BiSmile size='20px' />}
           >
-            Destinatarios{' '}
+            Destinatarios
           </ButtonNavigation>
         )}
 
         {/* {user?.permission?.editExpedition && (
-          <ButtonNavigation href='/expedicoes' icon={<BiWorld size='30px' />}>
-            Expedições{' '}
+          <ButtonNavigation href='/expedicoes' icon={<BiWorld size='20px' />}>
+            Expedições
           </ButtonNavigation>
         )} */}
 
         {user?.permission?.editUser && (
           <ButtonNavigation
             href='/usuarios'
-            icon={<BiUserCircle size='30px' />}
+            icon={<BiUserCircle size='20px' />}
           >
-            Usuários{' '}
+            Usuários
           </ButtonNavigation>
         )}
 
         {user?.permission?.editUser && (
           <ButtonNavigation
             href='/permissoes'
-            icon={<BiClipboard size='30px' />}
+            icon={<BiClipboard size='20px' />}
           >
-            Permissões{' '}
+            Permissões
           </ButtonNavigation>
         )}
 
         {user?.permission?.editReport && (
-          <ButtonNavigation href='/reportes' icon={<BiBug size='30px' />}>
-            Reportes{' '}
+          <ButtonNavigation href='/reportes' icon={<BiBug size='20px' />}>
+            Reportes
           </ButtonNavigation>
         )}
       </Flex>
       <Flex flexDir='column' height='auto' alignItems='center' width='100%'>
         <ButtonNavigation
           href='https://trello.com/b/lCeNCQcB/encomendas-sgdoc'
-          icon={<ImTrello size='30px' />}
+          icon={<ImTrello size='20px' />}
         >
           Trello
         </ButtonNavigation>

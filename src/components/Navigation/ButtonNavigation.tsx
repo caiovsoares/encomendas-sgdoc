@@ -1,4 +1,4 @@
-import { Box, Button } from '@chakra-ui/react';
+import { Box, Button, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -8,22 +8,23 @@ export const ButtonNavigation = ({ href, children, icon }) => {
   return (
     <Link href={href}>
       <Button
-        marginInline={2}
         marginTop={1}
+        mx={2}
+        py={1}
+        pl={0}
+        pr={1}
+        w='90%'
+        h='fit-content'
         _focus={{}}
-        padding={0}
-        variant='ghost'
         bg={asPath === href ? 'menuButtonHover' : ''}
         _hover={{ bg: 'menuButtonHover' }}
-        width='calc(100% - 20px)'
-        overflow='clip'
         color='menuButtonText'
         justifyContent='left'
       >
-        <Box w='30px' h='30px' margin='10px'>
+        <Box w='20px' h='20px' mx='5px'>
           {icon}
         </Box>
-        {children}
+        <Text fontSize='sm'>{children}</Text>
       </Button>
     </Link>
   );

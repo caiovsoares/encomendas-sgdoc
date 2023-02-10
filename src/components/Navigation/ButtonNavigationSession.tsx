@@ -1,4 +1,4 @@
-import { Box, Button, Image, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Image, Text, useDisclosure } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { BiLogInCircle, BiLogOutCircle } from 'react-icons/bi';
@@ -37,45 +37,47 @@ export const ButtonNavigationSession = () => {
     return (
       <>
         <Button
-          marginInline={2}
           marginTop={1}
-          padding={0}
-          variant='ghost'
+          mx={2}
+          pl={0}
+          pr={1}
+          w='90%'
+          h='fit-content'
+          bg={''}
           _hover={{}}
           _focus={{}}
           _active={{}}
           cursor='default'
-          width='calc(100% - 20px)'
-          overflow='clip'
           color='menuButtonText'
           justifyContent='left'
         >
-          <Box w='30px' h='30px' margin='10px' justifyContent='center'>
+          <Box w='20px' h='20px' margin='5px' justifyContent='center'>
             <Image
               src={`${router.basePath}/patentes/${ranks[user.rank]}`}
-              h='30px'
-              minW='30px'
+              h='20px'
+              minW='20px'
             />
           </Box>
-          {`${user.rank} ${user.warName}`}
+          <Text fontSize='sm'>{`${user.rank} ${user.warName}`}</Text>
         </Button>
         <Button
           onClick={signOut}
-          marginInline={2}
-          marginTop={1}
-          padding={0}
-          variant='ghost'
+          my={1}
+          mx={2}
+          pl={0}
+          pr={1}
+          w='90%'
+          h='fit-content'
+          bg=''
           _hover={{ bg: 'menuButtonHover' }}
           _focus={{}}
-          width='calc(100% - 20px)'
-          overflow='clip'
           color='menuButtonText'
           justifyContent='left'
         >
-          <Box w='30px' h='30px' margin='10px'>
-            <BiLogOutCircle size='30px' />
+          <Box w='20px' h='20px' margin='5px'>
+            <BiLogOutCircle size='20px' />
           </Box>
-          Logout
+          <Text fontSize='sm'>Logout</Text>
         </Button>
       </>
     );
@@ -84,20 +86,21 @@ export const ButtonNavigationSession = () => {
       <>
         <Button
           onClick={onOpen}
-          margin={2}
-          marginTop={4}
-          padding={0}
-          variant='ghost'
+          marginTop={1}
+          mx={2}
+          pl={0}
+          pr={1}
+          w='90%'
+          h='fit-content'
+          bg=''
           _hover={{ bg: 'menuButtonHover' }}
-          width='calc(100% - 20px)'
-          overflow='clip'
           color='menuButtonText'
           justifyContent='left'
         >
-          <Box w='30px' h='30px' margin='10px'>
-            <BiLogInCircle size='30px' />
+          <Box w='20px' h='20px' margin='5px'>
+            <BiLogInCircle size='20px' />
           </Box>
-          Login
+          <Text fontSize='sm'>Login</Text>
         </Button>
         <LoginModal onClose={onClose} isOpen={isOpen} />
       </>
