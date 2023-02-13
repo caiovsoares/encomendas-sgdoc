@@ -10,6 +10,7 @@ import {
   BiClipboard,
   BiListUl,
   BiBug,
+  BiCar,
 } from 'react-icons/bi';
 import { ImTrello } from 'react-icons/im';
 import { ButtonNavigationSession } from './ButtonNavigationSession';
@@ -82,6 +83,15 @@ export const Navigation = () => {
             icon={<BiClipboard size='20px' />}
           >
             Permissões
+          </ButtonNavigation>
+        )}
+
+        {user?.permission?.editShippingCompany && (
+          <ButtonNavigation
+            href='/transportadoras'
+            icon={<BiCar size='20px' />}
+          >
+            Transportadoras
           </ButtonNavigation>
         )}
 
