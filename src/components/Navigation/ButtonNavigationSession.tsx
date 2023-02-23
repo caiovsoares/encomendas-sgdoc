@@ -1,4 +1,5 @@
 import { Box, Button, Image, Text, useDisclosure } from '@chakra-ui/react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { BiLogInCircle, BiLogOutCircle } from 'react-icons/bi';
@@ -36,30 +37,32 @@ export const ButtonNavigationSession = () => {
   if (isAuthenticated)
     return (
       <>
-        <Button
-          marginTop={1}
-          mx={2}
-          pl={0}
-          pr={1}
-          w='90%'
-          h='fit-content'
-          bg={''}
-          _hover={{}}
-          _focus={{}}
-          _active={{}}
-          cursor='default'
-          color='menuButtonText'
-          justifyContent='left'
-        >
-          <Box w='20px' h='20px' margin='5px' justifyContent='center'>
-            <Image
-              src={`${router.basePath}/patentes/${ranks[user.rank]}`}
-              h='20px'
-              minW='20px'
-            />
-          </Box>
-          <Text fontSize='sm'>{`${user.rank} ${user.warName}`}</Text>
-        </Button>
+        <Link href='/trocarsenha'>
+          <Button
+            marginTop={1}
+            mx={2}
+            pl={0}
+            pr={1}
+            w='90%'
+            h='fit-content'
+            bg={''}
+            _hover={{ bg: 'menuButtonHover' }}
+            _focus={{}}
+            _active={{}}
+            cursor='default'
+            color='menuButtonText'
+            justifyContent='left'
+          >
+            <Box w='20px' h='20px' margin='5px' justifyContent='center'>
+              <Image
+                src={`${router.basePath}/patentes/${ranks[user.rank]}`}
+                h='20px'
+                minW='20px'
+              />
+            </Box>
+            <Text fontSize='sm'>{`${user.rank} ${user.warName}`}</Text>
+          </Button>
+        </Link>
         <Button
           onClick={signOut}
           my={1}

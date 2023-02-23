@@ -87,10 +87,10 @@ export const ReportButton = () => {
           <ModalBody mt={10}>
             <Flex flexDir='column' alignItems='center'>
               <form onSubmit={handleSubmit(onSubmit)}>
-                <FormLabel>Nome (opcional)</FormLabel>
-                <Input {...register('author')} />
+                <FormLabel>Nome</FormLabel>
+                <Input {...register('author')} isRequired />
                 <FormLabel>Mensagem</FormLabel>
-                <Textarea {...register('content')} />
+                <Textarea {...register('content')} isRequired />
                 <Button
                   isLoading={isSubmitting}
                   bgColor='menuButton'
