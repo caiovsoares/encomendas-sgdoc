@@ -44,7 +44,7 @@ const Transportadoras = ({ shippingCompanies }: transportadorasProps) => {
   } = useForm({ mode: 'onChange' });
 
   const onSubmit = async (data) => {
-    data.id = company.id;
+    data.id = company?.id;
     await api
       .request({
         method: modalType == 'register' ? 'POST' : 'PUT',
