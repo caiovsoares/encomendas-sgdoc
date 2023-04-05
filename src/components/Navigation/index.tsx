@@ -62,11 +62,11 @@ export const Navigation = () => {
           </ButtonNavigation>
         )}
 
-        {/* {user?.permission?.editExpedition && (
+        {user?.permission?.editExpedition && (
           <ButtonNavigation href='/expedicoes' icon={<BiWorld size='20px' />}>
             Expedições
           </ButtonNavigation>
-        )} */}
+        )}
 
         {user?.permission?.editUser && (
           <ButtonNavigation

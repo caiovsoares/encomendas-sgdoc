@@ -88,6 +88,41 @@ export interface MailListMail {
   destiny: Staff | Cadet | WorkPlace;
 }
 
+export interface Expedition {
+  id: string;
+  cep: string;
+  method: string;
+  hasAR: boolean;
+  returnedAR: boolean;
+  contentType: string;
+  contentInfo: string;
+  tracking: string;
+  details?: string;
+  workPlace: WorkPlace;
+  expeditionList: ExpeditionList;
+  devolutionAt?: string;
+}
+
+export interface ExpeditionList {
+  id: string;
+  created_at: string;
+  expeditions: ExpeditionListExpedition[];
+}
+
+export interface ExpeditionListExpedition {
+  id: string;
+  cep: string;
+  method: string;
+  hasAR: boolean;
+  returnedAR: boolean;
+  contentType: string;
+  contentInfo: string;
+  tracking: string;
+  details?: string;
+  workPlace: WorkPlace;
+  devolutionAt?: string;
+}
+
 export interface Permission {
   id: string;
   name: string;

@@ -137,7 +137,7 @@ const Permissoes = ({ permissions }: permissoesProps) => {
       },
       {
         Header: 'Opções',
-        acessor: (permission: Permission) => permission.name,
+        accessor: (permission: Permission) => permission.name,
         Cell: ({ cell }) => (
           <>
             <Button
